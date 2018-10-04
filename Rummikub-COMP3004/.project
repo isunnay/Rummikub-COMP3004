@@ -20,4 +20,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Sprints/Team22Report1.docx</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Documents/School/4th%20year/COMP3004/Team22Report1.docx</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
