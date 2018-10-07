@@ -26,6 +26,7 @@ public class TileTest extends TestCase {
 		Tile tO = new Tile("O", 1);
 		Tile tG = new Tile("G", 1);
 		Tile tR = new Tile("R", 1);
+		Tile tR2 = new Tile(0,1);
 		
 		// Check if the tile object has a colour of Black
 		assertEquals("Black", tB.getColour());
@@ -38,5 +39,7 @@ public class TileTest extends TestCase {
 		
 		// Check if the tile object has a colour of Red
 		assertEquals("Red", tR.getColour());
+		
+		assertEquals("Red", tR2.getColour());
 	}
 }
