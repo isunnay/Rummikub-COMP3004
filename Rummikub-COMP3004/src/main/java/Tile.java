@@ -27,5 +27,16 @@ public class Tile {
 	
 	public String getColour() { return colours[this.colour]; } // Getter for tile colour
 	public int getValue() { return this.value; }	// Getter for tile value
+	
+	public String getTileName() {
+		String colourForName = String.valueOf(colour);
+		String valueForName = String.valueOf(value);
+		return colourForName + valueForName;
+	}
+	
+	public String toString(int colour, int value) {
+		return colours[colour] + String.valueOf(value);
+		
+	}
 
 }

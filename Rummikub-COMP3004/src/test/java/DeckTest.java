@@ -3,7 +3,7 @@ import junit.framework.TestCase;
 public class DeckTest extends TestCase {
 	public void testDeckExists() {
 		Deck deck = new Deck();
-		AssertNotNull(deck);	
+		assertNotNull(deck);	
 	}
 	
 	public void testNumberOfTiles() {
@@ -14,12 +14,12 @@ public class DeckTest extends TestCase {
 
 	public void testEveryTileExists(){
 		Deck deck = new Deck();
-		assertTrue("true",deck.doesEveryTileExist());		
+		assertTrue("true",deck.doesEveryTileExist(0));		
 	}
 	
 	public void testIsDeckShuffled() {
 		Deck deck = new Deck();
 		deck.shuffleTiles();
-		assertTrue("true",deck.isDeckShuffled());
+		assertFalse("false",deck.isDeckShuffled(0));
 	}
 }
