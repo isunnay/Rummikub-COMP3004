@@ -21,6 +21,10 @@ public class Deck {
 			}
 		}
 	}
+	
+	public ArrayList<Tile> getTileDeck() {
+		return tileDeck;
+	}
 
 	public int getDeckCount() {
 		size = tileDeck.size();
