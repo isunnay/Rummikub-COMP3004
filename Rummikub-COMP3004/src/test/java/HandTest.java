@@ -10,4 +10,9 @@ public class HandTest extends TestCase {
 		Hand hand = new Hand();
 		assertEquals(14, hand.getNumTiles());
 	}
+	
+	public void testMeld() {
+		Hand hand = new Hand();
+		assertTrue("true", hand.initialMeldExists());
+	}
 }
