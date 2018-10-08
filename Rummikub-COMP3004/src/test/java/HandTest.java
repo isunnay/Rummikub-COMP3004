@@ -13,6 +13,6 @@ public class HandTest extends TestCase {
 	
 	public void testMeld() {
 		Hand hand = new Hand();
-		assertTrue("true", hand.initialMeldExists());
+		assertTrue("true", hand.firstMeldExists());
 	}
 }
