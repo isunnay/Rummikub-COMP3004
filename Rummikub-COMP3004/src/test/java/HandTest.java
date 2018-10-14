@@ -38,4 +38,15 @@ public class HandTest extends TestCase {
 		
 		assertEquals(!meld, hand.dealNewTile(deck));
 	}
+	
+	public void testTileDealt() {
+		Hand hand = new Hand();
+		Deck deck = new Deck();
+		
+		hand.createHand(deck);
+		
+		int num = hand.getNumTiles();
+		
+		assertEquals(num + 1, hand.dealTile());
+	}
 }
