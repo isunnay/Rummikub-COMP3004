@@ -3,20 +3,17 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Hand {
-	private Deck deckToAccess;
 	private ArrayList<Tile> playerHand;
 	private int size;
 	
 	public Hand() {
-		playerHand = new ArrayList<Tile>();
-		deckToAccess = new Deck();
+		playerHand = new ArrayList<Tile>();;
 		size = 0;
-		createHand();
 	}
 	
-	private void createHand() {
+	public void createHand(Deck deck) {
 		for(int i=0; i<14; i++) {
-			playerHand.add(deckToAccess.getTileDeck().remove(deckToAccess.getDeckCount()- 1));
+			playerHand.add(deck.getTileDeck().remove(deck.getDeckCount()- 1));
 		}
 		
 		size = playerHand.size();
@@ -30,6 +27,10 @@ public class Hand {
 		public int compare(Tile x, Tile y) {
 			return x.getValue() - y.getValue();
 		}
+	}
+	
+	public ArrayList<Tile> getPlayerHand() {
+		return playerHand;
 	}
 	
 	public boolean meldExists() {
