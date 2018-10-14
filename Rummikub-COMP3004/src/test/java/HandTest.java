@@ -47,6 +47,6 @@ public class HandTest extends TestCase {
 		
 		int num = hand.getNumTiles();
 		
-		assertEquals(num + 1, hand.dealTile());
+		assertEquals(num + 1, hand.dealTile(deck));
 	}
 }
