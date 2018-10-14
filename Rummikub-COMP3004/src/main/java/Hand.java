@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Hand {
 	private Deck deckToAccess;
@@ -22,5 +24,76 @@ public class Hand {
 	
 	public int getNumTiles() {
 		return size;
+	}
+	
+	public class SortByValue implements Comparator<Tile> {
+		public int compare(Tile x, Tile y) {
+			return x.getValue() - y.getValue();
+		}
+	}
+	
+	public boolean meldExists() {
+		Collections.sort(playerHand, new SortByValue());
+		for(int i=0; i<playerHand.size(); i++) {
+			if(i != playerHand.size() - 2) {
+				if(playerHand.get(i).getValue() == playerHand.get(i+1).getValue() - 1) {
+					if(playerHand.get(i+1).getValue() == playerHand.get(i+2).getValue() - 1) {
+						if(playerHand.get(i+2).getValue() == playerHand.get(i+3).getValue() - 1) {
+							String color1 = playerHand.get(i).getColour();
+							String color2 = playerHand.get(i+1).getColour();
+							String color3 = playerHand.get(i+2).getColour();
+							if((color1 == color2) && (color2 == color3)) {
+								return true;
+							}
+							else {
+								continue;
+							}
+						}
+						else {
+							continue;
+						}
+					}
+					else {
+						continue;
+					}
+				}
+				else {
+					continue;
+				}
+			}
+			else {
+				break;
+			}
+		}
+
+		for(int i=0; i<playerHand.size(); i++) {
+			if(i != playerHand.size() - 2) {
+				int handValue = playerHand.get(i).getValue();
+				if(handValue == playerHand.get(i+1).getValue()) {
+					if(handValue == playerHand.get(i+2).getValue()) {
+						String color = playerHand.get(i).getColour();
+						String color2 = playerHand.get(i+1).getColour();
+						String color3 = playerHand.get(i+2).getColour();
+						if((color != color2) && (color != color3) && (color2 != color3)) {
+							return true;
+						}
+						else {
+							continue;
+						}
+					}
+					else {
+						continue;
+					}
+				}
+				else {
+					continue;
+				}
+			}
+			else {
+				break;
+			}
+		}
+		
+		return false;
 	}
 }
