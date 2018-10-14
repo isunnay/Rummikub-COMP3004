@@ -5,7 +5,7 @@ public class HandTest extends TestCase {
 		Hand hand = new Hand();
 		Deck deck = new Deck();
 		
-		hand.createHandFromDeck(deck);
+		hand.createHand(deck);
 		
 		assertNotNull(hand);
 	}
@@ -14,7 +14,7 @@ public class HandTest extends TestCase {
 		Hand hand = new Hand();
 		Deck deck = new Deck();
 		
-		hand.createHandFromDeck(deck);
+		hand.createHand(deck);
 		
 		assertEquals(14, hand.getNumTiles());
 	}
@@ -23,7 +23,7 @@ public class HandTest extends TestCase {
 		Hand hand = new Hand();
 		Deck deck = new Deck();
 		
-		hand.createHandFromDeck(deck);
+		hand.createHand(deck);
 		
 		assertTrue("true", hand.meldExists());
 	}
