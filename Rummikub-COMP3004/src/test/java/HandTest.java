@@ -27,4 +27,15 @@ public class HandTest extends TestCase {
 		
 		assertTrue("true", hand.meldExists());
 	}
+	
+	public void testNewTileDeal() {
+		Hand hand = new Hand();
+		Deck deck = new Deck();
+		
+		hand.createHand(deck);
+		
+		boolean meld = hand.meldExists();
+		
+		assertEquals(!meld, hand.dealNewTile(deck));
+	}
 }
