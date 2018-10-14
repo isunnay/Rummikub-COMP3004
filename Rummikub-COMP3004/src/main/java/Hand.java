@@ -19,6 +19,23 @@ public class Hand {
 		size = playerHand.size();
 	}
 	
+	public boolean dealNewTile(Deck deck) {
+		if(!meldExists()) {
+			dealTile(deck);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	//dealTile() method returns size of hand after a new tile is dealt to it
+	public int dealTile(Deck deck) {
+		playerHand.add(deck.getTileDeck().remove(deck.getDeckCount() - 1));
+		size++;
+		
+		return size;
+	}
+	
 	public int getNumTiles() {
 		return size;
 	}
