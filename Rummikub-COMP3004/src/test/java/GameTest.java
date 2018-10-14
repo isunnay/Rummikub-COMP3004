@@ -14,7 +14,7 @@ public class GameTest extends TestCase {
 		Game g = new Game();
 				
 		// Check if there are 4 players
-		assertEquals(4, g.playerCount());
+		assertEquals(4, g.getPlayerCount());
 	}
 	
 	public void testDeckExists() {
@@ -30,16 +30,16 @@ public class GameTest extends TestCase {
 		Game g = new Game();
 								
 		// Check if first player has 14 tiles
-		assertEquals(14, g.getPlayer(0).getHandTileCount());
+		assertEquals(14, g.getPlayer(0).getNumTiles());
 		
 		// Check if second player has 14 tiles
-		assertEquals(14, g.getPlayer(1).getHandTileCount());
+		assertEquals(14, g.getPlayer(1).getNumTiles());
 		
 		// Check if third player has 14 tiles
-		assertEquals(14, g.getPlayer(2).getHandTileCount());
+		assertEquals(14, g.getPlayer(2).getNumTiles());
 				
 		// Check if fourth player has 14 tiles
-		assertEquals(14, g.getPlayer(3).getHandTileCount());
+		assertEquals(14, g.getPlayer(3).getNumTiles());
 	}
 
 }
