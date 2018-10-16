@@ -2,10 +2,11 @@ import java.util.ArrayList;
 
 public class Game {
 	// Variables
-	//private Board board; (board class not done yet)
 	private boolean gameInProgress = false;
 	private Deck deck;
+	//private Board board; (board class not done yet)
 	private ArrayList<Hand> allPlayers = new ArrayList<Hand>();
+	//private GUI GUI; (GUI class not done yet)
 	
 	// Constructor
 	public Game () {
@@ -34,28 +35,50 @@ public class Game {
 		// Shuffle the deck
 		deck.shuffleTiles();
 		
-		// Draw tiles (Coming soon)
+		// Create everyones hand
+		p1.createHand(deck); p2.createHand(deck);
+		p3.createHand(deck); p4.createHand(deck);
 	}
 	
-	/*
-	 * 
-	 * More functions to come
-	 * 
-	 */
+	private int anyWinners() {
+		if (getPlayer(0).getNumTiles() == 0) {
+			return 1;
+		} else if (getPlayer(1).getNumTiles() == 0) {
+			return 2;
+		} else if (getPlayer(2).getNumTiles() == 0) {
+			return 3;
+		} else if (getPlayer(3).getNumTiles() == 0) {
+			return 4;
+		} else {
+			return 0;
+		}
+	}
 	
 	private void endGame() {
+		// Variables
+		int winner = getWinner();
+		
 		// Finish the game
 		gameInProgress = false;
 		
-		// Calculate the scores (Coming soon)
-		// Am i missing something else that happens at the end of the game?
+		// Winning message + calc score
+		if (winner == 1) {
+			System.out.println("Human (Player 1) Won!");
+		} else if (winner == 2) {
+			System.out.println("AI 1 (Player 2) Won!");
+		} else if (winner == 3) {
+			System.out.println("AI 2 (Player 3) Won!");
+		} else if (winner == 4) {
+			System.out.println("AI 3 (Player 4) Won!");
+		}
 	}
 	
 	public boolean inProgress() { return this.gameInProgress; }
-	//public Board getBoard() { return this.board; } (board class not done yet)
 	public Deck getDeck() { return this.deck; }
+	//public Board getBoard() { return this.board; } (board class not done yet)
 	public ArrayList<Hand> getAllPlayers() { return this.allPlayers; }
 	public Hand getPlayer(int i) { return this.getAllPlayers().get(i); }
 	public int getPlayerCount() { return this.getAllPlayers().size(); }
+	public int getWinner() { return anyWinners(); }
 	
 }
