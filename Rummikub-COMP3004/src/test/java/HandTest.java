@@ -39,4 +39,44 @@ public class HandTest extends TestCase {
 		assertTrue("true", hand.isTileDealt(deck));
 	}
 	
+	public void testSortByValue() {
+		Deck deck = new Deck();
+		Hand hand = new Hand();
+		deck.shuffleTiles();
+		hand.createHand(deck);
+		
+		hand.sortByValue();
+		
+		assertTrue("true", hand.isSortedByValue());
+		
+		
+		
+	}
+	
+	public void testSortByColor() {
+		Deck deck = new Deck();
+		Hand hand = new Hand();
+		deck.shuffleTiles();
+		hand.createHand(deck);
+		
+		hand.sortByColor();
+		
+		assertTrue("true", hand.isSortedByColor());
+		
+	}
+	
+	public void testSort() {
+		Deck deck = new Deck();
+		Hand hand = new Hand();
+		deck.shuffleTiles();
+		hand.createHand(deck);
+		
+		hand.sort();
+		
+		assertTrue("true", hand.isSorted());
+		
+	}
+	
+	
+	
 }
