@@ -45,7 +45,7 @@ public class HandTest extends TestCase {
 		deck.shuffleTiles();
 		hand.createHand(deck);
 		
-		hand.sortByValue();
+		hand.sortByValue(hand.getPlayerHand());
 		
 		assertTrue("true", hand.isSortedByValue());
 		
@@ -71,7 +71,7 @@ public class HandTest extends TestCase {
 		deck.shuffleTiles();
 		hand.createHand(deck);
 		
-		hand.sort();
+		hand.sortHand();
 		
 		assertTrue("true", hand.isSorted());
 		

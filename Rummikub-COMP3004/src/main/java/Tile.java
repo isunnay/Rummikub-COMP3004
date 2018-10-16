@@ -2,7 +2,7 @@ public class Tile {
 	// Variables
 	private int colour;
 	private int value;
-	private static final String[] colours = { "Red", "Green", "Black", "Orange" };
+	private static final String[] colours = { "Red", "Green", "Blue", "Orange" };
 	
 	// Constructor for string & int
 	public Tile (String colour, int value) {
@@ -36,7 +36,6 @@ public class Tile {
 	
 	public String toString(int colour, int value) {
 		return colours[colour] + String.valueOf(value);
-		
 	}
 
 }
