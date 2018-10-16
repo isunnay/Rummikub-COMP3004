@@ -41,5 +41,20 @@ public class GameTest extends TestCase {
 		// Check if fourth player has 14 tiles
 		assertEquals(14, g.getPlayer(3).getNumTiles());
 	}
+	
+	public void testWinner() {
+		// Create a game object
+		Game g = new Game();
+		
+		// Check if no one has won yet (returns 0)
+		assertEquals(0, g.getWinner());
+		
+		// "Play" all 14 tiles for first players hand
+		for (int i = 0; i < 14; i++) {
+			g.getPlayer(0).playTile(); // ??
+		}
+		// Check if first player won (returns 1)
+		assertEquals(1, g.getWinner());
+	}
 
 }
