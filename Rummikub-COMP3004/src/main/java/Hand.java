@@ -19,9 +19,8 @@ public class Hand {
 		size = playerHand.size();
 	}
 	
-	public boolean dealNewTile(Deck deck) {
-		if(!meldExists()) {
-			dealTile(deck);
+	public boolean isTileDealt(Deck deck) {
+		if(this.getNumTiles() > 14) {
 			return true;
 		}
 		
@@ -29,15 +28,13 @@ public class Hand {
 	}
 	
 	//dealTile() method returns size of hand after a new tile is dealt to it
-	public int dealTile(Deck deck) {
+	public void dealTile(Deck deck) {
 		playerHand.add(deck.getTileDeck().remove(deck.getDeckCount() - 1));
-		size++;
-		
-		return size;
+		this.size++;
 	}
 	
 	public int getNumTiles() {
-		return size;
+		return this.size;
 	}
 	
 	public class SortByValue implements Comparator<Tile> {
@@ -47,7 +44,11 @@ public class Hand {
 	}
 	
 	public ArrayList<Tile> getPlayerHand() {
-		return playerHand;
+		return this.playerHand;
+	}
+	
+	public void sortHand() {
+		
 	}
 	
 	public boolean meldExists() {

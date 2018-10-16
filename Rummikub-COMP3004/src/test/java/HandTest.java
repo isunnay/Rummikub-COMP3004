@@ -33,20 +33,10 @@ public class HandTest extends TestCase {
 		Deck deck = new Deck();
 		
 		hand.createHand(deck);
+		hand.dealTile(deck);
 		
-		boolean meld = hand.meldExists();
 		
-		assertEquals(!meld, hand.dealNewTile(deck));
+		assertTrue("true", hand.isTileDealt(deck));
 	}
 	
-	public void testTileDealt() {
-		Hand hand = new Hand();
-		Deck deck = new Deck();
-		
-		hand.createHand(deck);
-		
-		int num = hand.getNumTiles();
-		
-		assertEquals(num + 1, hand.dealTile(deck));
-	}
 }
