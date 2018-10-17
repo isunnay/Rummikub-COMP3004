@@ -229,13 +229,31 @@ public class Hand {
 
 	public boolean isSorted() {
 		for(int i=0; i<playerHand.size(); i++) {
-			for(int r=0; r<redHand.size();r++) {
-				if(playerHand.get(r).getColour()!="Red") {
+			if(playerHand.get(i).getColour() == "Red" && playerHand.get(i+1).getColour() == "Red") {
+				if(playerHand.get(i).getValue()>playerHand.get(i+1).getValue()) {
+					return false;
+				}
+				continue;
+			}
+			if(playerHand.get(i).getColour() == "Blue" && playerHand.get(i+1).getColour() == "Blue") {
+				if(playerHand.get(i).getValue()>playerHand.get(i+1).getValue()) {
+					return false;
+				}
+				continue;
+			}
+			if(playerHand.get(i).getColour() == "Green" && playerHand.get(i+1).getColour() == "Green") {
+				if(playerHand.get(i).getValue()>playerHand.get(i+1).getValue()) {
+					return false;
+				}
+				continue;
+			}
+			if(playerHand.get(i).getColour() == "Orange" && playerHand.size() != i+1 && playerHand.get(i+1).getColour() == "Orange") {
+				if(playerHand.get(i).getValue()>playerHand.get(i+1).getValue()) {
 					return false;
 				}
 			}
+			
 		}
+		return true;
 	}
-	
-
 }
