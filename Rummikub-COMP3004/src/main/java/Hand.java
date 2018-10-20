@@ -256,4 +256,17 @@ public class Hand {
 		}
 		return true;
 	}
+	
+	public Tile getTile(String colour, int value) {
+		for(int i=0; i<playerHand.size();i++) {
+			if((playerHand.get(i).getColour() == colour)&& (playerHand.get(i).getValue() == value)) {
+				return playerHand.get(i);
+			}
+		}
+		return null;
+	}
+	
+	public Tile getTile(int i) {
+		return playerHand.get(i);
+	}
 }

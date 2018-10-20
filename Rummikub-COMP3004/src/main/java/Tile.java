@@ -37,5 +37,9 @@ public class Tile {
 	public String toString(int colour, int value) {
 		return colours[colour] + String.valueOf(value);
 	}
+	
+	public Tile getTile() {
+		return this;
+	}
 
 }

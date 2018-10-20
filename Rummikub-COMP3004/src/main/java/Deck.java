@@ -17,10 +17,10 @@ public class Deck {
 		for(int colour=0;colour<4;colour++) {
 			for(int value=0;value<13;value++) {
 				Tile tile = new Tile(colour,value);
-				tileDeck.add(tile);
+				tileDeck.add(tile); 
 			}
 		}
-	}
+	} 
 	
 	public ArrayList<Tile> getTileDeck() {
 		return tileDeck;
