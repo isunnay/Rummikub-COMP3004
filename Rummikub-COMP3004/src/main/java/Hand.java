@@ -254,7 +254,9 @@ public class Hand {
 			}
 			
 		}
+
 		return true;
+
 	}
 	
 	public Tile getTile(String colour, int value) {
