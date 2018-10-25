@@ -17,13 +17,13 @@ public class FileInputTest extends TestCase {
 		Tile tile4 = new Tile("R", 7);
 		Tile tile5 = new Tile("R", 8);
 		
-		Tile[] tiles = {tile, tile2, tile3, tile4, tile5};
+		Tile[] meldTiles = {tile, tile2, tile3, tile4, tile5};
 		
 		Deck deck = new Deck();
 		
-		for(int i=0; i<tiles.length; i++) {
-			game.getPlayer(1).getPlayerHand().add(tiles[i]);
-			deck.getTileDeck().remove(tiles[i]);
+		for(int i=0; i<meldTiles.length; i++) {
+			game.getPlayer(1).getPlayerHand().add(meldTiles[i]);
+			deck.getTileDeck().remove(meldTiles[i]);
 		}
 		
 		for(int i=0; i<9; i++) {
