@@ -3,7 +3,7 @@ import junit.framework.TestCase;
 public class SpotTest extends TestCase{
 	
 	public void testSpotExists() {
-		Spot spot = new Spot();
+		Spot spot = new Spot(0,0);
 		assertNotNull(spot);
 	}
 	
