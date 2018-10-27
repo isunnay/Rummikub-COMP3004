@@ -271,4 +271,23 @@ public class Hand {
 	public Tile getTile(int i) {
 		return playerHand.get(i);
 	}
+	
+	public Tile playTile(String colour, int value) {
+		Tile tile = null;
+		
+		for(int i=0; i<playerHand.size(); i++) {
+			if((playerHand.get(i).getColour() == colour) && (playerHand.get(i).getValue() == value)) {
+				tile = playerHand.get(i);
+				playerHand.remove(i);
+				this.size--;
+				break;
+			}
+		}
+		
+		return tile;
+	}
+	
+	public boolean isTileInHand() {
+		
+	}
 }
