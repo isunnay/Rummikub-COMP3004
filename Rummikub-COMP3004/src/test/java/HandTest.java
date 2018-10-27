@@ -89,7 +89,7 @@ public class HandTest extends TestCase {
 		int index = num % 14;
 		
 		Tile tile = hand.getTile(index);
-		String colour = tile.getColour().substring(0, 1);
+		String colour = tile.getColour();
 		int value = tile.getValue();
 		
 		assertEquals(tile, hand.playTile(colour, value));
@@ -107,12 +107,18 @@ public class HandTest extends TestCase {
 		
 		Tile tile = hand.getTile(index);
 		
-		String colour = tile.getColour().substring(0,  1);
+		String colour = tile.getColour();
 		int value = tile.getValue();
 		
 		hand.playTile(colour, value);
 		
+		int num2 = rand.nextInt(13);
+		int index2 = num2 % 13;
+		
+		Tile tile2 = hand.getTile(index2);
+		
 		assertFalse("false", hand.isTileInHand(tile));
+		assertTrue("true", hand.isTileInHand(tile));
 	}
 	
 }
