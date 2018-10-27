@@ -1,4 +1,5 @@
 import junit.framework.TestCase;
+import java.util.Random;
 
 public class HandTest extends TestCase {
 	public void testHandExists() {
@@ -77,6 +78,41 @@ public class HandTest extends TestCase {
 		
 	}
 	
+	public void testPlayTile() {
+		Deck deck = new Deck();
+		Hand hand = new Hand();
+		deck.shuffleTiles();
+		hand.createHand(deck);
+		
+		Random rand = new Random();
+		int num = rand.nextInt(14);
+		int index = num % 14;
+		
+		Tile tile = hand.getTile(index);
+		String colour = tile.getColour().substring(0, 1);
+		int value = tile.getValue();
+		
+		assertEquals(tile, hand.playTile(colour, value));
+	}
 	
+	public void testIsTilePlayed() {
+		Deck deck = new Deck();
+		Hand hand = new Hand();
+		deck.shuffleTiles();
+		hand.createHand(deck);
+		
+		Random rand = new Random();
+		int num = rand.nextInt(14);
+		int index = num % 14;
+		
+		Tile tile = hand.getTile(index);
+		
+		String colour = tile.getColour().substring(0,  1);
+		int value = tile.getValue();
+		
+		hand.playTile(colour, value);
+		
+		assertFalse("false", hand.isTileInHand(tile));
+	}
 	
 }
