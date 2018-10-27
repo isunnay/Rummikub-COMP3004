@@ -287,7 +287,13 @@ public class Hand {
 		return tile;
 	}
 	
-	public boolean isTileInHand() {
+	public boolean isTileInHand(Tile tile) {
+		for(int i=0; i<playerHand.size(); i++) {
+			if(tile == playerHand.get(i)) {
+				return true;
+			}
+		}
 		
+		return false;
 	}
 }
