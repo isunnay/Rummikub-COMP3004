@@ -118,7 +118,7 @@ public class HandTest extends TestCase {
 		Tile tile2 = hand.getTile(index2);
 		
 		assertFalse("false", hand.isTileInHand(tile));
-		assertTrue("true", hand.isTileInHand(tile));
+		assertTrue("true", hand.isTileInHand(tile2));
 	}
 	
 }
