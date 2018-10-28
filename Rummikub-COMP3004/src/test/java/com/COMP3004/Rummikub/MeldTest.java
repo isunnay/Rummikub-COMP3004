@@ -49,7 +49,7 @@ public class MeldTest extends TestCase{
 		hand.createMeld();
 		Meld meld = hand.getMeld(0);
 		for(int i=0;i<3;i++) {
-			meld.addCard(hand.getTile(i));	
+			meld.addTile(hand.getTile(i));	
 		}
 		meld.removeTile(1);
 		

@@ -1,5 +1,4 @@
 package com.COMP3004.Rummikub;
-
 import junit.framework.TestCase;
 import java.util.Random;
 
@@ -121,6 +120,24 @@ public class HandTest extends TestCase {
 		
 		assertFalse("false", hand.isTileInHand(tile));
 		assertTrue("true", hand.isTileInHand(tile2));
+	}
+	
+	public void testAddMelds() {
+		Deck deck = new Deck();
+		Hand hand = new Hand();
+		deck.shuffleTiles();
+		hand.createHand(deck);
+		
+		hand.createMeld();
+		hand.createMeld();
+		Meld meld1 = hand.getMeld(0);
+		Meld meld2 = hand.getMeld(1);
+		
+		System.out.println(meld1);
+		System.out.println(meld2);
+		
+		assertEquals(2, hand.getNumberOfMelds());
+		
 	}
 	
 }
