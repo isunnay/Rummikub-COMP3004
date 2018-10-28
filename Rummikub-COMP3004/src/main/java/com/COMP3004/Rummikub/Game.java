@@ -1,3 +1,5 @@
+package com.COMP3004.Rummikub;
+
 import java.util.ArrayList;
 
 public class Game {
@@ -29,15 +31,17 @@ public class Game {
 		
 		// Create all 4 players
 		Human human = new Human(deck);
-		// AI 1
-		// AI 2
-		// AI 3
+		AI1 ai1 = new AI1(deck);
+		AI2 ai2 = new AI2(deck);
+		AI3 ai3 = new AI3(deck);
 		
 		// Put the players into the player ArrayList
 		allPlayers.add(human);
-		// AI 1
-		// AI 2
-		// AI 3
+		allPlayers.add(ai1);
+		allPlayers.add(ai2);
+		allPlayers.add(ai3);
+		
+		printAll();
 	}
 	
 	private int anyWinners() {
@@ -61,7 +65,7 @@ public class Game {
 		// Finish the game
 		gameInProgress = false;
 		
-		// Winning message + calc score
+		// Winning message + calculate score
 		if (winner == 1) {
 			System.out.println("Human (Player 1) Won!");
 		} else if (winner == 2) {
@@ -73,6 +77,29 @@ public class Game {
 		}
 	}
 	
+	public int whosTurn() {
+		if (allPlayers.get(0).myTurnStatus() == true) {
+			return 1;
+		} else if (allPlayers.get(1).myTurnStatus() == true) {
+			return 2;
+		} else if (allPlayers.get(2).myTurnStatus() == true) {
+			return 3;
+		} else if (allPlayers.get(3).myTurnStatus() == true) {
+			return 4;
+		} else {
+			return -1;
+		}
+	}
+	
+	public void printAll() {
+		System.out.println("Player 1 Hand: " + allPlayers.get(0).getHand().handToString());
+		System.out.println("Player 2 Hand: " + allPlayers.get(1).getHand().handToString());
+		System.out.println("Player 3 Hand: " + allPlayers.get(2).getHand().handToString());
+		System.out.println("Player 4 Hand: " + allPlayers.get(3).getHand().handToString());
+		System.out.println("Board: ");
+		System.out.println("Current turn: Player " + Integer.toString(whosTurn()));
+	}
+	
 	public boolean inProgress() { return this.gameInProgress; }
 	public Deck getDeck() { return this.deck; }
 	public Board getBoard() { return this.board; }
@@ -80,5 +107,4 @@ public class Game {
 	public PlayerType getPlayer(int i) { return this.getAllPlayers().get(i); }
 	public int getPlayerCount() { return this.getAllPlayers().size(); }
 	public int getWinner() { return anyWinners(); }
-	
 }

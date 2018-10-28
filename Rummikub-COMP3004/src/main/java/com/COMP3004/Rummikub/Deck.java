@@ -1,7 +1,7 @@
+package com.COMP3004.Rummikub;
+
 import java.util.ArrayList;
 import java.util.Collections;
-
-
 
 public class Deck {
 	private ArrayList<Tile> tileDeck;

@@ -1,3 +1,5 @@
+package com.COMP3004.Rummikub;
+
 public class Tile {
 	// Variables
 	private int colour;
@@ -36,6 +38,10 @@ public class Tile {
 		return colourForName + valueForName;
 	}
 	
+	public String tileToString() {
+		return colours[colour].charAt(0) + String.valueOf(value);
+	}
+	
 	public String toString(int colour, int value) {
 		return colours[colour] + String.valueOf(value);
 	}
@@ -55,6 +61,4 @@ public class Tile {
 	public Spot getSpot() {
 		return this.spot;
 	}
-	
-
 }

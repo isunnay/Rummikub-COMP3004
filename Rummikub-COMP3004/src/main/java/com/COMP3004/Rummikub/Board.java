@@ -1,3 +1,4 @@
+package com.COMP3004.Rummikub;
 
 public class Board {
 	int boardX = 15;
