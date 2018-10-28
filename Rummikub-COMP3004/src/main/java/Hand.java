@@ -9,8 +9,10 @@ public class Hand {
 	private ArrayList<Tile> redHand;
 	private ArrayList<Tile> orangeHand;
 	private ArrayList<Tile> sortedHand;
+	private ArrayList<Meld> melds;
 	
 	public int size;
+	private int numberOfMelds;
 	
 	public Hand() {
 		playerHand = new ArrayList<Tile>();
@@ -19,6 +21,7 @@ public class Hand {
 		redHand = new ArrayList<Tile>();
 		orangeHand = new ArrayList<Tile>();
 		sortedHand = new ArrayList<Tile>();
+		melds = new ArrayList<Meld>();
 
 	}
 	
@@ -27,9 +30,6 @@ public class Hand {
 			playerHand.add(deck.getTileDeck().remove(deck.getDeckCount()- 1));
 			size++;
 		}
-		
-		
-		//size = playerHand.size();
 	}
 	
 	public boolean isTileDealt(Deck deck) {
@@ -295,5 +295,19 @@ public class Hand {
 		}
 		
 		return false;
+	}
+	
+	public void createMeld() {
+		Meld meld = new Meld();
+		melds.add(meld);
+		numberOfMelds++;
+	}
+
+	public Meld getMeld(int i) {
+		return melds.get(i);
+	}
+	
+	public int getNumberOfMelds() {
+		return numberOfMelds;
 	}
 }
