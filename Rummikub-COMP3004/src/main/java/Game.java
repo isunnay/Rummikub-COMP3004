@@ -4,8 +4,8 @@ public class Game {
 	// Variables
 	private boolean gameInProgress = false;
 	private Deck deck;
-	//private Board board; (board class not done yet)
-	private ArrayList<Hand> allPlayers = new ArrayList<Hand>();
+	private Board board;
+	private ArrayList<PlayerType> allPlayers = new ArrayList<PlayerType>();
 	//private GUI GUI; (GUI class not done yet)
 	
 	// Constructor
@@ -19,15 +19,7 @@ public class Game {
 		gameInProgress = true;
 		
 		// Initialize the game board
-		// board = new Board(); (board class not done yet)
-		
-		// Create all 4 players
-		Hand p1 = new Hand(); Hand p2 = new Hand();
-		Hand p3 = new Hand(); Hand p4 = new Hand();
-		
-		// Put the players into the player ArrayList
-		allPlayers.add(p1); allPlayers.add(p2);
-		allPlayers.add(p3); allPlayers.add(p4);
+		board = new Board();
 		
 		// Initialize the deck
 		deck = new Deck();
@@ -35,19 +27,27 @@ public class Game {
 		// Shuffle the deck
 		deck.shuffleTiles();
 		
-		// Create everyones hand
-		p1.createHand(deck); p2.createHand(deck);
-		p3.createHand(deck); p4.createHand(deck);
+		// Create all 4 players
+		Human human = new Human(deck);
+		// AI 1
+		// AI 2
+		// AI 3
+		
+		// Put the players into the player ArrayList
+		allPlayers.add(human);
+		// AI 1
+		// AI 2
+		// AI 3
 	}
 	
 	private int anyWinners() {
-		if (getPlayer(0).getNumTiles() == 0) {
+		if (getPlayer(0).getHand().getNumTiles() == 0) {
 			return 1;
-		} else if (getPlayer(1).getNumTiles() == 0) {
+		} else if (getPlayer(1).getHand().getNumTiles() == 0) {
 			return 2;
-		} else if (getPlayer(2).getNumTiles() == 0) {
+		} else if (getPlayer(2).getHand().getNumTiles() == 0) {
 			return 3;
-		} else if (getPlayer(3).getNumTiles() == 0) {
+		} else if (getPlayer(3).getHand().getNumTiles() == 0) {
 			return 4;
 		} else {
 			return 0;
@@ -75,9 +75,9 @@ public class Game {
 	
 	public boolean inProgress() { return this.gameInProgress; }
 	public Deck getDeck() { return this.deck; }
-	//public Board getBoard() { return this.board; } (board class not done yet)
-	public ArrayList<Hand> getAllPlayers() { return this.allPlayers; }
-	public Hand getPlayer(int i) { return this.getAllPlayers().get(i); }
+	public Board getBoard() { return this.board; }
+	public ArrayList<PlayerType> getAllPlayers() { return this.allPlayers; }
+	public PlayerType getPlayer(int i) { return this.getAllPlayers().get(i); }
 	public int getPlayerCount() { return this.getAllPlayers().size(); }
 	public int getWinner() { return anyWinners(); }
 	

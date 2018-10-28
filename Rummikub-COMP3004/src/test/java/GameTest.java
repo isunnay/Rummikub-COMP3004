@@ -30,16 +30,16 @@ public class GameTest extends TestCase {
 		Game g = new Game();
 								
 		// Check if first player has 14 tiles
-		assertEquals(14, g.getPlayer(0).getNumTiles());
+		assertEquals(14, g.getPlayer(0).getHand().getNumTiles());
 		
 		// Check if second player has 14 tiles
-		assertEquals(14, g.getPlayer(1).getNumTiles());
+		assertEquals(14, g.getPlayer(1).getHand().getNumTiles());
 		
 		// Check if third player has 14 tiles
-		assertEquals(14, g.getPlayer(2).getNumTiles());
+		assertEquals(14, g.getPlayer(2).getHand().getNumTiles());
 				
 		// Check if fourth player has 14 tiles
-		assertEquals(14, g.getPlayer(3).getNumTiles());
+		assertEquals(14, g.getPlayer(3).getHand().getNumTiles());
 	}
 	
 	public void testWinner() {
@@ -50,9 +50,9 @@ public class GameTest extends TestCase {
 		assertEquals(0, g.getWinner());
 		
 		// "Play" all 14 tiles for first players hand
-		for (int i = 0; i < 14; i++) {
-			g.getPlayer(0).playTile(); // ??
-		}
+		//for (int i = 0; i < 14; i++) {
+		//	g.getPlayer(0).playTile(); // ??
+		//}
 		// Check if first player won (returns 1)
 		assertEquals(1, g.getWinner());
 	}
