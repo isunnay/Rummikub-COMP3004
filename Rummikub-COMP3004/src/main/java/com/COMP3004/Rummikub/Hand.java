@@ -1,3 +1,5 @@
+package com.COMP3004.Rummikub;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,9 +29,6 @@ public class Hand {
 			playerHand.add(deck.getTileDeck().remove(deck.getDeckCount()- 1));
 			size++;
 		}
-		
-		
-		//size = playerHand.size();
 	}
 	
 	public boolean isTileDealt(Deck deck) {
@@ -295,5 +294,16 @@ public class Hand {
 		}
 		
 		return false;
+	}
+	
+	public String handToString() {
+		String h = "";
+		
+		for (int i = 0; i < playerHand.size(); i++) {
+			h += this.getTile(i).tileToString();
+			if (i < playerHand.size()) { h += " "; }
+		}
+		
+		return h;
 	}
 }

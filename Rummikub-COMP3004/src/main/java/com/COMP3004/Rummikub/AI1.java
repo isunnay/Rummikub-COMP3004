@@ -1,9 +1,11 @@
-public class AI2 implements PlayerType {
+package com.COMP3004.Rummikub;
+
+public class AI1 implements PlayerType {
 	Hand h;
 	private boolean myTurn = false;
 	private boolean hasTileBeenPlaced = false;
 	
-	public AI2(Deck deck) {
+	public AI1(Deck deck) {
 		h = new Hand();
 		h.createHand(deck);
 	}
@@ -15,9 +17,10 @@ public class AI2 implements PlayerType {
 	public boolean hasTilesBeenPlayed() { return this.hasTileBeenPlaced; }
 
 	public boolean turnComplete(Hand h) {
-		// Initial Meld: After another played has placed tiles
-		// Gameplay: Only uses existing melds on the board. Keeps melds not do not require current tiles on board.
+		// Initial Meld: ASAP
+		// Gameplay: Plays all tiles when possible
 		return false;
 	}
+	
 
 }
