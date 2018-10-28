@@ -11,7 +11,7 @@ public class Hand {
 	private ArrayList<Tile> redHand;
 	private ArrayList<Tile> orangeHand;
 	private ArrayList<Tile> sortedHand;
-	private ArrayList<Meld> melds;
+	//private ArrayList<Meld> melds;
 	
 	public int size;
 	private int numberOfMelds;
@@ -23,7 +23,7 @@ public class Hand {
 		redHand = new ArrayList<Tile>();
 		orangeHand = new ArrayList<Tile>();
 		sortedHand = new ArrayList<Tile>();
-		melds = new ArrayList<Meld>();
+		//melds = new ArrayList<Meld>();
 
 	}
 	
@@ -299,6 +299,18 @@ public class Hand {
 		return false;
 	}
 	
+	public String handToString() {
+		String h = "";
+		
+		for (int i = 0; i < playerHand.size(); i++) {
+			h += this.getTile(i).tileToString();
+			if (i < playerHand.size()) { h += " "; }
+		}
+		
+		return h;
+	}
+	
+	/*
 	public void createMeld() {
 		Meld meld = new Meld();
 		melds.add(meld);
@@ -312,4 +324,5 @@ public class Hand {
 	public int getNumberOfMelds() {
 		return numberOfMelds;
 	}
+	*/
 }
