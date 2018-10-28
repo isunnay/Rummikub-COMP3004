@@ -14,21 +14,20 @@ public class BoardTest extends TestCase {
 		playerHand.createHand(deck);
 		String colour = playerHand.getTile(1).getColour();
 		int value = playerHand.getTile(1).getValue();
-		board.playTile(playerHand.getTile(colour, value), x, y);
+		board.playTile(playerHand.getTile(colour, value), 1,1);
 		
-		assertEquals(1, getNumberOfBoardTiles());		
+		assertEquals(1, board.numberOfTilesOnBoard);		
 	} 
 	
-	public void testGetBoardNumberOfTiles() {
+
+	public void testGetNumberOfBoardSpots() {
 		Board board = new Board();
 		Deck deck = new Deck();
 		Hand playerHand = new Hand();
 		playerHand.createHand(deck);
-		String colour = playerHand.getTile(1).getColour();
-		int value = playerHand.getTile(1).getValue();
-		board.playTile(playerHand.getTile(colour, value), 1, 1);
+		board.playTile(playerHand.getTile(1), 1, 1);
 		
-		assertEquals(1, getNumberOfBoardTiles());		
+		assertEquals(225, board.getNumberOfBoardSpots());		
 	}
 	
 	public void testBoardSize() {
@@ -36,7 +35,7 @@ public class BoardTest extends TestCase {
 		int x = board.getX();
 		int y = board.getY();
 		
-		assertEquals(15, x+y);
+		assertEquals(30, x+y);
 	}
 	
 	public void testIsLocationFilled() {
@@ -48,7 +47,7 @@ public class BoardTest extends TestCase {
 		int yLocation = 1;		
 		board.playTile(hand.getTile(1), xLocation, yLocation);
 
-		assertTue("true", isSpotFilled(xLocation, yLocation));		
+		assertTrue("true", board.isSpotFilled(xLocation, yLocation));		
 	}
 	
 	public void testMoveTiles() {
@@ -61,8 +60,9 @@ public class BoardTest extends TestCase {
 		board.playTile(hand.getTile(1), xLocation, yLocation);
 		int newX = 2;
 		int newY = 2;
-		board.moveTile(board.getTileAtSpot(xLocation,yLocation), newX, newY);
-		assertTrue("true", hasTileMoved(board.getTile(xLocation,yLocation)));	
+		Spot newSpot = board.getSpot(newX, newY);
+		board.moveTile(board.getTileAtSpot(xLocation,yLocation), newSpot);
+		assertFalse("false", board.isSpotFilled(xLocation, yLocation));	
 	}
 	
 	public void testIsValidMeld() {
@@ -107,11 +107,10 @@ public class BoardTest extends TestCase {
 		Deck deck = new Deck();
 		Hand playerHand = new Hand();
 		playerHand.createHand(deck);
-		String colour = playerHand.getTile(1).getColour();
-		int value = playerHand.getTile(1).getValue();
 		int x = 5; int y = 5;
-		board.playTile(playerHand.getTile(colour, value), x, y);
-		
+		board.playTile(playerHand.getTile(2), x, y);
 		board.removeTile(x,y);
+		
+		assertEquals(0, board.numberOfTilesOnBoard);
 	}
 }

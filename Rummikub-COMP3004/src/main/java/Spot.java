@@ -34,6 +34,7 @@ public class Spot {
 	public void playTile(Tile tile) {
 		if(this.tile==null) {
 			this.tile = tile;
+			isTaken = true;
 			System.out.println("Tile" + tile.getTileName() + "now occupies this spot-> x: " + this.getSpotX() + "y: " + this.getSpotY());
 		}
 		else {
@@ -45,10 +46,15 @@ public class Spot {
 	public void removeTile() {
 		if(this.tile!=null) {
 			this.tile=null;
+			isTaken = false;
 		}
 		else {
 			System.out.println("This spot is already free");
 		}
+	}
+	
+	public Tile getTile() {
+		return this.tile;
 	}
  
 
