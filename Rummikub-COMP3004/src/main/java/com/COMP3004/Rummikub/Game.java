@@ -65,7 +65,7 @@ public class Game {
 		// Finish the game
 		gameInProgress = false;
 		
-		// Winning message + calc score
+		// Winning message + calculate score
 		if (winner == 1) {
 			System.out.println("Human (Player 1) Won!");
 		} else if (winner == 2) {
