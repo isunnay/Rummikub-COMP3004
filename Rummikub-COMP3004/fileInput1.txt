@@ -43,3 +43,19 @@ AI1 places tile 01 on the board right before the meld O2 O3 O4
 AI1 also places tile G6 before the meld on the board G7 - G10
 
 AI Player 1 has 0 Tiles left, thus has WON THE GAME!
+
+
+~Case where Human Player wins on first turn
+Initial 14 Tiles of each player (Letter is Color - R: Red, B:Blue, G:Green, O:Orange and Number is the value):
+-Human Player Hand: R1 R2 R3 R14 011 012 013 014 G6 G7 G8 G9 G10 G14
+-AI Player 1 Hand: R12 R13 R17 B2 B4 B5 O9 O12 O13 G5 G6 G11 G13 G14 
+-AI Player 2 Hand: R1 R5 B1 B2 B3 B6 B7 O2 O4 O5 O7 O8 G1 G2 
+-AI Player 3 Hand: R9 R11 R12 B10 B11 B13 B14 O3 O4 O5 O6 G4 G5 G7
+
+*Human Player's Turn:
+He/She places their tiles G6 G7 G8 G9 G10 on the board as their initial meld
+He/She places their tiles R1 R2 R3 together on the board
+He/She places their tiles O11 O12 O13 together on the board
+He/She places their tiles R14 O14 G14 together on the board
+
+Human Player has 0 Tiles left, thus has WON THE GAME!
