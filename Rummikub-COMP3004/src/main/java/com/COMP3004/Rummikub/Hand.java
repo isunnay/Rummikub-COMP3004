@@ -325,4 +325,8 @@ public class Hand {
 		return numberOfMelds;
 	}
 	
+	public void addTile(Tile tile) {
+		playerHand.add(tile);
+	}
+	
 }

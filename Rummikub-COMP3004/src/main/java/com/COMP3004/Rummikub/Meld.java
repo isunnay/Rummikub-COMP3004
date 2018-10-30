@@ -1,6 +1,7 @@
 package com.COMP3004.Rummikub;
 
-import java.util.ArrayList;
+import java.util.*;
+
 
 public class Meld {
 	private ArrayList<Tile> tiles;
@@ -57,44 +58,57 @@ public class Meld {
 		return this.numberOfTiles;
 	}
 	
-	/*if (x.size() <= index || x.get(index) == null) {
-	    ...
-	}
 	
-	if (index < x.size() && x.get(index) != null) {
-	    ...
-	}*/
-	
-	public boolean isValidMeldValue() {
-		if (tiles.size() > 2) {
-			for (int i = 0; i < tiles.size(); i++) {
-				if (i < tiles.size() - 1 && tiles.get(i + 1) != null) {
-					if (tiles.get(i).getValue() == tiles.get((i + 1)).getValue()
-							&& tiles.get(i).getColour() == tiles.get((i + 1)).getColour()) {
-						// System.out.println("Hello?");
-						isValidMeld = false;
-						return false;
-					}
+	public boolean isValidSet() {
+		Tile tile;
+		ArrayList<String> colours = new ArrayList<String>();
+		colours.add(tiles.get(0).getColour());
+		int number = tiles.get(0).getValue();
+		if (tiles.size()!=3 || tiles.size()!=4) {
+			for(int i=1;i<tiles.size();i++) {
+				System.out.println(i);
+				tile = tiles.get(i);
+				if(tile.getValue()!=number) {
+					System.out.println("Wrong Value");
+					return false;
 				}
+				if((colours.contains(tile.getColour()))) {
+					System.out.println("Wrong Colour");
+					return false;
+				}
+				colours.add(tile.getColour());
 			}
 			return true;
+			
 		} else {
 			System.out.println("Melds are made up of 3 or more tiles");
 			return false;
 		}
 	}
+
 	
-	public boolean isValidMeldStraight() {
-		if (tiles.size() > 2) {
-			for (int i = 0; i < tiles.size(); i++) {
-				if (i < tiles.size() - 1 && tiles.get(i + 1) != null) {
-					if (tiles.get(i).getColour() != tiles.get((i + 1)).getColour() 
-						&& (tiles.get(i + 1).getValue() - tiles.get(i).getValue() != 1)) {
-						return false;
-					}
+	
+	public boolean isValidRun() {
+		Tile tile;
+		if(tiles.size()>2) {
+			String colour = tiles.get(0).getColour(); 
+			int previousNum = tiles.get(0).getValue(); 
+			for(int i = 1; i < tiles.size(); i++) {
+				tile = tiles.get(i); 
+				
+				if(!(colour.equals(tile.getColour()))) {
+					return false;
+				}
+				
+				if(tile.getValue() == previousNum + 1) {
+					previousNum++; 
+				}
+				else {
+					return false; 
 				}
 			}
 			return true;
+			
 		}
 		else {
 			System.out.println("Melds are made up of 3 or more tiles");
@@ -103,76 +117,12 @@ public class Meld {
 	}
 	
 	public boolean checkIfValidMeld(Meld meld) {
-		if(meld.isValidMeldStraight() == true || meld.isValidMeldValue() == true) {
+		if(meld.isValidRun() == true || meld.isValidMeldValue() == true) {
 			return true;
 		}
 		else {
 			return false;
 		}
 	}
-	
-	/*public void checkIfValidMeld() {
-		for(int i=0; i<tiles.size(); i++) {
-			if(i != tiles.size() - 2) {
-				if(tiles.get(i).getValue() == tiles.get(i+1).getValue() - 1) {
-					if(tiles.get(i+1).getValue() == tiles.get(i+2).getValue() - 1) {
-						if(tiles.get(i+2).getValue() == tiles.get(i+3).getValue() - 1) {
-							String color1 = tiles.get(i).getColour();
-							String color2 = tiles.get(i+1).getColour();
-							String color3 = tiles.get(i+2).getColour();
-							if((color1 == color2) && (color2 == color3)) {
-								isValidMeld = true;
-							}
-							else {
-								continue;
-							}
-						}
-						else {
-							continue;
-						}
-					}
-					else {
-						continue;
-					}
-				}
-				else {
-					continue;
-				}
-			}
-			else {
-				break;
-			}
-		}
-
-		for(int i=0; i<tiles.size(); i++) {
-			if(i != tiles.size() - 2) {
-				int handValue = tiles.get(i).getValue();
-				if(handValue == tiles.get(i+1).getValue()) {
-					if(handValue == tiles.get(i+2).getValue()) {
-						String color = tiles.get(i).getColour();
-						String color2 = tiles.get(i+1).getColour();
-						String color3 = tiles.get(i+2).getColour();
-						if((color != color2) && (color != color3) && (color2 != color3)) {
-							isValidMeld = true;
-						}
-						else {
-							continue;
-						}
-					}
-					else {
-						continue;
-					}
-				}
-				else {
-					continue;
-				}
-			}
-			else {
-				break;
-			}
-		}
-		
-		isValidMeld = false;
-	}*/
 
 }

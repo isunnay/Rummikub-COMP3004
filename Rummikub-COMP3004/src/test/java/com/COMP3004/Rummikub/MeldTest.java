@@ -17,7 +17,7 @@ public class MeldTest extends TestCase{
 	}
 	
 	
-	public void testIsValidMeldTrueStraight() {
+	public void testIsValidRunTrue() {
 		Deck deck = new Deck();
 		Hand hand = new Hand();
 		hand.createHand(deck);
@@ -29,11 +29,30 @@ public class MeldTest extends TestCase{
 		meld.addTile(tile2);
 		meld.addTile(tile1);
 		meld.addTile(tile);
+
 		
-		assertTrue("true", meld.checkIfValidMeld(meld));
+		assertTrue("true", meld.isValidRun());
 	}
 	
-	public void testIsValidMeldTrueValue() {
+	public void testIsValidRunFalse() {
+		Deck deck = new Deck();
+		deck.shuffleTiles();
+		Hand hand = new Hand();
+		hand.createHand(deck);
+		hand.createMeld();
+		Meld meld = hand.getMeld(0);
+		Tile tile = new Tile(0, 8);
+		Tile tile1 = new Tile(1, 7);
+		Tile tile2 = new Tile(0, 6);
+		meld.addTile(tile2);
+		meld.addTile(tile1);
+		meld.addTile(tile);
+
+
+		assertFalse("false", meld.isValidRun());
+	}
+	
+	public void testIsValidSetTrue() {
 		Deck deck = new Deck();
 		Hand hand = new Hand();
 		hand.createHand(deck);
@@ -42,32 +61,14 @@ public class MeldTest extends TestCase{
 		Tile tile = new Tile(0, 8);
 		Tile tile1 = new Tile(1, 8);
 		Tile tile2 = new Tile(2, 8);
-		meld.addTile(tile2);
-		meld.addTile(tile1);
 		meld.addTile(tile);
+		meld.addTile(tile1);
+		meld.addTile(tile2);
 		
-		assertTrue("true", meld.checkIfValidMeld(meld));
-	}
+		assertTrue("true", meld.isValidSet());
+		}
 	
-	public void testIsValidMeldFalseStraight() {
-		Deck deck = new Deck();
-		deck.shuffleTiles();
-		Hand hand = new Hand();
-		hand.createHand(deck);
-		hand.createMeld();
-		Meld meld = hand.getMeld(0);
-		Tile tile = new Tile(0, 9);
-		Tile tile1 = new Tile(0, 7);
-		Tile tile2 = new Tile(0, 6);
-		meld.addTile(tile2);
-		meld.addTile(tile1);
-		meld.addTile(tile);
-
-
-		assertFalse("false", meld.checkIfValidMeld(meld));
-	}
-	
-	public void testIsValidMeldFalseValue() {
+	public void testIsValidSetFalse() {
 		Deck deck = new Deck();
 		deck.shuffleTiles();
 		Hand hand = new Hand();
@@ -75,15 +76,13 @@ public class MeldTest extends TestCase{
 		hand.createMeld();
 		Meld meld = hand.getMeld(0);
 		Tile tile = new Tile(0, 6);
-		Tile tile1 = new Tile(1, 7);
+		Tile tile1 = new Tile(0, 6);
 		Tile tile2 = new Tile(2, 6);
 		meld.addTile(tile);
 		meld.addTile(tile1);
 		meld.addTile(tile2);
 		
-
-
-		assertFalse("false", meld.checkIfValidMeld(meld));
+		assertFalse("false", meld.isValidSet());
 	}
 	
 	public void testRemoveCardFromMeld() {

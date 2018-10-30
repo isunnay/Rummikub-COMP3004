@@ -25,7 +25,15 @@ public class HandTest extends TestCase {
 		Hand hand = new Hand();
 		Deck deck = new Deck();
 		
-		hand.createHand(deck);
+		//hand.createHand(deck);
+		Tile tile = new Tile(0, 6);
+		Tile tile1 = new Tile(0, 7);
+		Tile tile2 = new Tile(0, 8);
+		hand.addTile(tile);
+		hand.addTile(tile1);
+		hand.addTile(tile2);
+		
+		
 		
 		assertTrue("true", hand.meldExists());
 	}
