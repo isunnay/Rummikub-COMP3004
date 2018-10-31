@@ -100,9 +100,4 @@ public class MeldTest extends TestCase{
 	}
 	
 
-	
-	public void testTypeOfMeld() {
-		
-	}
-
 }

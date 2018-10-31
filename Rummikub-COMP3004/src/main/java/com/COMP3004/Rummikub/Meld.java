@@ -14,11 +14,19 @@ public class Meld {
 	public Meld() {
 		tiles = new ArrayList<Tile>();	
 		numberOfTiles = 0;
-		isValidMeld = true;
+		isValidMeld = false;
 	}
 	
 	public Meld getMeld() {
 		return this;
+	}
+	
+	public int getMeldSize() {
+		return tiles.size();
+	}
+	
+	public int getNumberOfTiles() {
+		return numberOfTiles;
 	}
 	
 	public boolean getIsValidMeld() {
@@ -47,16 +55,13 @@ public class Meld {
 	public void removeTile(Tile tile) {
 		int i = findTileIndex(tile);
 		tiles.remove(i);
+		numberOfTiles--;
 	}
 	
 	public void removeTile(int i) {
 		tiles.remove(i);
 		numberOfTiles--;
 	}
-
-	public int getNumberOfTiles() {
-		return this.numberOfTiles;
-	}	
 	
 	public boolean isValidSet() {
 		Tile tile;
@@ -68,11 +73,11 @@ public class Meld {
 				System.out.println(i);
 				tile = tiles.get(i);
 				if(tile.getValue()!=number) {
-					System.out.println("Wrong Value");
+					//System.out.println("Wrong Value");
 					return false;
 				}
 				if((colours.contains(tile.getColour()))) {
-					System.out.println("Wrong Colour");
+					//System.out.println("Wrong Colour");
 					return false;
 				}
 				colours.add(tile.getColour());
@@ -84,8 +89,6 @@ public class Meld {
 			return false;
 		}
 	}
-
-	
 	
 	public boolean isValidRun() {
 		Tile tile;
@@ -117,6 +120,15 @@ public class Meld {
 	
 	public boolean checkIfValidMeld(Meld meld) {
 		if(meld.isValidRun() == true || meld.isValidSet() == true) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public boolean checkIfValidMeld() {
+		if(this.isValidRun() == true || this.isValidSet() == true) {
 			return true;
 		}
 		else {

@@ -24,6 +24,7 @@ public class Hand {
 		orangeHand = new ArrayList<Tile>();
 		sortedHand = new ArrayList<Tile>();
 		melds = new ArrayList<Meld>();
+		numberOfMelds = 0;
 
 	}
 	

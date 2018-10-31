@@ -102,12 +102,12 @@ public class Board {
 		}
 	}
 	
+	//Check whether locations are available for meld to be placed in
 	public boolean canWePlaceMeld(Meld meld, int x, int y) {
 		for(int a=0;a<meld.getMeldSize();a++) {
 			if(this.isSpotFilled(x+a, y) != false) {
 				return false;
-				
-			}	
+				}	
 		}
 		return true;	
 	}
@@ -115,25 +115,25 @@ public class Board {
 	
 	public void addMeld(Meld meld) {
 		Scanner reader = new Scanner(System.in); 
-		System.out.println("Enter an x value for the beginning of the Meld: ");
+		System.out.println("Enter an x value for the beginning of the Meld (Between 0-14): ");
 		int x = reader.nextInt(); 
-		System.out.println("Enter an y value for the beginning of the Meld: ");
+		System.out.println("Enter an y value for the beginning of the Meld (Between 0-14): ");
 		int y = reader.nextInt(); 
 		reader.close();
 		Spot toPlace = spots[x][y].getSpot();
 		
 		if(toPlace!=null) {
-			System.out.println("We in first if");
 			if(this.canWePlaceMeld(meld,x,y)==true) {
-				System.out.println("We in Second if");
 				for(int i=0;i<meld.getNumberOfTiles();i++) {
 					Tile tile = meld.getTileInMeld(i);
 					this.playTile(tile, x+i, y);
 				}		
-				System.out.println(meld == null);
 				meldsOnBoard.add(meld);
 				numberOfMelds++;
-			}			
+			}
+			else {
+				System.out.println("Meld cannot be placed here. Please try a different Location. ");
+			}
 		}	
 	}
 	
