@@ -14,7 +14,11 @@ public class Human implements PlayerType {
 	
 	public boolean myTurnStatus() { return this.myTurn; }
 	
+	public void setTurnStatus(boolean b) { this.myTurn = b; }
+	
 	public boolean hasTilesBeenPlayed() { return this.hasTileBeenPlaced; }
+	
+	public void setTilesBeenPlayed(boolean b) { this.hasTileBeenPlaced = b; }
 
 	public boolean turnComplete(Hand h) {
 		// Do Nothing...
