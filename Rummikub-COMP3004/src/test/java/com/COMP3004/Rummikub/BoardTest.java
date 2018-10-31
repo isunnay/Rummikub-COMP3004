@@ -140,6 +140,31 @@ public class BoardTest extends TestCase {
 		spot6.playTile(hand.getTile(6));
 		spot7.playTile(hand.getTile(7));
 		
+		//board.boardToString();
+	}
+	
+	public void testAddMeld() {
+		Board board = new Board();
+		Deck deck = new Deck();
+		deck.shuffleTiles();
+		Hand hand = new Hand();
+		hand.createHand(deck);
+		hand.createMeld();
+		Meld meld = hand.getMeld(0);
+		Tile tile = new Tile(0, 6);
+		Tile tile1 = new Tile(1, 6);
+		Tile tile2 = new Tile(2, 6);
+		meld.addTile(tile);
+		meld.addTile(tile1);
+		meld.addTile(tile2);
+		board.addMeld(meld);
+		board.playTile(hand.getTile(0), 2, 0);
+		System.out.println(board.getSpot(2, 0).getSpotX());
 		board.boardToString();
+		
+		assertEquals(1,board.numberOfMelds);
+		
+		
+				
 	}
 }
