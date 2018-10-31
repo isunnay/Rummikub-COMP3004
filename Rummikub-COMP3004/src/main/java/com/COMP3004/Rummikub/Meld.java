@@ -56,8 +56,7 @@ public class Meld {
 
 	public int getNumberOfTiles() {
 		return this.numberOfTiles;
-	}
-	
+	}	
 	
 	public boolean isValidSet() {
 		Tile tile;
@@ -117,7 +116,7 @@ public class Meld {
 	}
 	
 	public boolean checkIfValidMeld(Meld meld) {
-		if(meld.isValidRun() == true || meld.isValidMeldValue() == true) {
+		if(meld.isValidRun() == true || meld.isValidSet() == true) {
 			return true;
 		}
 		else {

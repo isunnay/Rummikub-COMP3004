@@ -115,4 +115,31 @@ public class BoardTest extends TestCase {
 		
 		assertEquals(0, board.numberOfTilesOnBoard);
 	}
+	
+	public void testPrintBoard() {
+		Board board = new Board();
+		Deck deck = new Deck();
+		deck.shuffleTiles();
+		Hand hand = new Hand();
+		hand.createHand(deck);
+		Spot spot = board.getSpot(10,10);
+		Spot spot1 = board.getSpot(5,10);
+		Spot spot2 = board.getSpot(0,8);
+		Spot spot3 = board.getSpot(1,10);
+		Spot spot4 = board.getSpot(9,8);
+		Spot spot5 = board.getSpot(4,7);
+		Spot spot6 = board.getSpot(6,6);
+		Spot spot7 = board.getSpot(5,2);
+		
+		spot.playTile(hand.getTile(0));
+		spot1.playTile(hand.getTile(1));
+		spot2.playTile(hand.getTile(2));
+		spot3.playTile(hand.getTile(3));
+		spot4.playTile(hand.getTile(4));
+		spot5.playTile(hand.getTile(5));
+		spot6.playTile(hand.getTile(6));
+		spot7.playTile(hand.getTile(7));
+		
+		board.boardToString();
+	}
 }

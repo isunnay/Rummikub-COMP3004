@@ -69,12 +69,34 @@ public class Board {
 
 	public void moveTile(Tile tile, Spot newSpot) {
 		Spot oldSpot = tile.getSpot();
-		//Spot newSpot = getSpot(newX, newY);
 		oldSpot.removeTile();
 		tile.removeSpot(oldSpot);
 		newSpot.playTile(tile);
 		tile.setSpot(newSpot);
 	}
+	
+	public void boardToString() {
+		for (int i = 0; i < spots.length; i++) {
+		    for (int j = 0; j < spots[i].length; j++) {
+		        if(spots[i][j].getTile() != null) {
+		        	if(spots[i][j].getTile().tileToString().length() == 3) {
+		        		System.out.print("[" + spots[i][j].getTile().tileToString() + "]" );
+		        	}
+		        	if(spots[i][j].getTile().tileToString().length() == 2) {
+		        		System.out.print("[" + spots[i][j].getTile().tileToString() + " ]" );
+		        	}
+		        	
+		        	}
+		        else {
+		        	System.out.print("[   ]");
+		        }
+		    }
+		    System.out.println();
+		}
+	}
+	
+		
+		
 	
 
 }

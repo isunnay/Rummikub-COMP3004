@@ -57,6 +57,10 @@ public class Spot {
 	public Tile getTile() {
 		return this.tile;
 	}
+	
+	/*public void spotToString() {
+		System.out.println(x);
+	}*/
  
 
 }
