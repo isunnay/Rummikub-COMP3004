@@ -1,6 +1,8 @@
 package com.COMP3004.Rummikub;
 
-public interface PlayerType {
+import java.util.ArrayList;
+
+public interface PlayerType extends Observer{
 	
 	public Hand getHand();
 	public boolean myTurnStatus();
@@ -8,5 +10,7 @@ public interface PlayerType {
 	public boolean hasTilesBeenPlayed();
 	public void setTilesBeenPlayed(boolean b);
 	public boolean turnComplete(Hand h);
+	
+	public ArrayList<Spot> spotsTaken = new ArrayList<Spot>();
 
 }

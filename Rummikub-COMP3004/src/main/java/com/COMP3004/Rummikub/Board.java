@@ -9,6 +9,7 @@ public class Board {
 	int numberOfTilesOnBoard;
 	public ArrayList<Meld> meldsOnBoard;
 	int numberOfMelds;
+	private ArrayList<Observer> observers;
 
 	private Spot[][] spots = new Spot[15][15];
 	
@@ -21,6 +22,7 @@ public class Board {
 		meldsOnBoard = new ArrayList<Meld>();
 		numberOfTilesOnBoard = 0;
 		numberOfMelds = 0;
+		this.observers = new ArrayList<>();
 	}
 
 	public int getNumberOfBoardSpots() { return boardX * boardY; }
@@ -38,6 +40,7 @@ public class Board {
 		spot.playTile(tile);
 		tile.setSpot(spot);
 		numberOfTilesOnBoard++;
+		boardChanged(tile);
 	}
 	
 
@@ -47,6 +50,7 @@ public class Board {
 		spot.removeTile();
 		tileToRemove.removeSpot(spot);
 		numberOfTilesOnBoard--;
+		boardChanged(tileToRemove);
 		
 		
 	}
@@ -80,6 +84,7 @@ public class Board {
 		tile.removeSpot(oldSpot);
 		newSpot.playTile(tile);
 		tile.setSpot(newSpot);
+		//boardChanged();
 	}
 	
 	public void boardToString() {
@@ -130,6 +135,7 @@ public class Board {
 				}		
 				meldsOnBoard.add(meld);
 				numberOfMelds++;
+				boardChanged();
 			}
 			else {
 				System.out.println("Meld cannot be placed here. Please try a different Location. ");
@@ -148,6 +154,28 @@ public class Board {
 	public Spot getNextSpot(int x,int y) {
 		return spots[x+1][y];
 		
+	}
+	
+	public void registerObserver(Observer o) {
+		observers.add(o);
+	}
+	
+	public void removeObserver(Observer o) {
+		int observerIndex = observers.indexOf(o);
+		if(observerIndex>=0) {
+			observers.remove(observerIndex);
+		}
+	}
+	
+	public void notifyObservers(Tile tile) {
+		for(int i=0;i<observers.size();i++) {
+			Observer observer = (Observer)observers.get(i);
+			observer.update(tile);
+		}
+	}
+	
+	public void boardChanged(Tile tile) {
+		notifyObservers(tile);
 	}
 		
 		

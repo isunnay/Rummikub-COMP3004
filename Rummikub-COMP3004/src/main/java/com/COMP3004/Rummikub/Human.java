@@ -4,11 +4,14 @@ public class Human implements PlayerType {
 	Hand h;
 	private boolean myTurn = true;
 	private boolean hasTileBeenPlaced = false;
+	public Subject board;
+	
 	
 	public Human(Deck deck) {
 		h = new Hand();
 		h.createHand(deck);
 		h.sortHand();
+
 	}
 	
 	public Hand getHand() { return this.h; }
@@ -24,6 +27,13 @@ public class Human implements PlayerType {
 	public boolean turnComplete(Hand h) {
 		// Do Nothing...
 		return false;
+	}
+
+	@Override
+	public void update(Tile tile) {
+		
+		
+		
 	}
 
 }

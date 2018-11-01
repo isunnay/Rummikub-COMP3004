@@ -2,6 +2,8 @@ package com.COMP3004.Rummikub;
 
 public interface Observer {
 	
-	public void update(int x, int y);
+	public void update(Tile tile);
+	
+	//public void setSubject(Subject subject);
 
 }
