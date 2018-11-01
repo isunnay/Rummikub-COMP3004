@@ -127,12 +127,15 @@ public class Game {
 					// Draw tile
 					allPlayers.get(0).getHand().dealTile(deck);
 					System.out.println("Turn ended: Human has decided to draw a tile.");
+					//allPlayers.get(0).getHand().sortHand();
+					//System.out.println("Human Hand: " + allPlayers.get(0).getHand().handToString());
 					System.out.println("----------------------------------------");
 					// Switch turn
 					allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
 					allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
 					// Close the reader
 					reader.close();
+					
 				} else {
 					System.out.println("You may have entered the wrong character. Try again (P / S).");
 					decision = reader.next().toUpperCase().charAt(0);

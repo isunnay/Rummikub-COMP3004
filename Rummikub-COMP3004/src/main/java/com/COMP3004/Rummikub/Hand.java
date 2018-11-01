@@ -47,6 +47,7 @@ public class Hand {
 	public void dealTile(Deck deck) {
 		playerHand.add(deck.getTileDeck().remove(deck.getDeckCount() - 1));
 		this.size++;
+		this.sortHand();
 	}
 	
 	public int getNumTiles() {
@@ -64,8 +65,7 @@ public class Hand {
 	}
 	
 	public void sortByColor() {
-		
-		for(int i=0; i<this.size; i++) {
+		for(int i=0; i<playerHand.size(); i++) {
 			if(playerHand.get(i).getColour()=="Green")
 				greenHand.add(playerHand.get(i));
 			
@@ -78,8 +78,6 @@ public class Hand {
 			else if (playerHand.get(i).getColour()=="Orange")
 				orangeHand.add(playerHand.get(i));
 		}
-		
-
 	}
 	
 	
@@ -88,13 +86,28 @@ public class Hand {
 	}
 	
 	public void sortHand() {
+
+		if(greenHand.size()>0) {
+			greenHand.clear();
+		}
+		if(redHand.size()>0) {
+			redHand.clear();
+		}
+		if(blueHand.size()>0) {
+			blueHand.clear();
+		}
+		if(orangeHand.size()>0) {
+			orangeHand.clear();
+		}
+
+		//System.out.println(playerHand.size());
 		this.sortByColor();
-		
 		this.sortByValue(greenHand);
 		this.sortByValue(redHand);
 		this.sortByValue(blueHand);
 		this.sortByValue(orangeHand);
 		
+		sortedHand.clear();
 		for(int i=0; i<redHand.size(); i++) {
 			sortedHand.add(redHand.get(i));
 		}
@@ -104,16 +117,17 @@ public class Hand {
 		}
 		
 		for(int i=0; i<blueHand.size(); i++) {
-
 			sortedHand.add(blueHand.get(i));
 		}
 		
 		for(int i=0; i<orangeHand.size(); i++) {
 			sortedHand.add(orangeHand.get(i));
 		}	
-		playerHand = sortedHand;
-		
-		
+		//System.out.println(sortedHand.size());
+		//playerHand.clear();
+		//myObject = (ArrayList<Object>)myTempObject.clone();
+		//playerHand = (ArrayList<Tile>)sortedHand.clone();
+		playerHand = sortedHand;	
 	}
 	
 	public boolean meldExists() {

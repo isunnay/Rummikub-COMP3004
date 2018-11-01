@@ -8,6 +8,7 @@ public class Human implements PlayerType {
 	public Human(Deck deck) {
 		h = new Hand();
 		h.createHand(deck);
+		h.sortHand();
 	}
 	
 	public Hand getHand() { return this.h; }
