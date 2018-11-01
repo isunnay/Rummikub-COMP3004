@@ -1,9 +1,8 @@
-package com.COMP3004.Rummikub;
-
 public class AI1 implements PlayerType {
 	Hand h;
 	private boolean myTurn = false;
-	private boolean hasTileBeenPlaced = false;
+	private boolean isTurn = false;
+
 	
 	public AI1(Deck deck) {
 		h = new Hand();
@@ -25,6 +24,7 @@ public class AI1 implements PlayerType {
 		// Gameplay: Plays all tiles when possible
 		return false;
 	}
+
 	
 
 }
