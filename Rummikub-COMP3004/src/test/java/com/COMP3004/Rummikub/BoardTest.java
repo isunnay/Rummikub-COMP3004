@@ -115,4 +115,75 @@ public class BoardTest extends TestCase {
 		
 		assertEquals(0, board.numberOfTilesOnBoard);
 	}
+	
+	public void testPrintBoard() {
+		Board board = new Board();
+		Deck deck = new Deck();
+		deck.shuffleTiles();
+		Hand hand = new Hand();
+		hand.createHand(deck);
+		Spot spot = board.getSpot(10,10);
+		Spot spot1 = board.getSpot(5,10);
+		Spot spot2 = board.getSpot(0,8);
+		Spot spot3 = board.getSpot(1,10);
+		Spot spot4 = board.getSpot(9,8);
+		Spot spot5 = board.getSpot(4,7);
+		Spot spot6 = board.getSpot(6,6);
+		Spot spot7 = board.getSpot(5,2);
+		
+		spot.playTile(hand.getTile(0));
+		spot1.playTile(hand.getTile(1));
+		spot2.playTile(hand.getTile(2));
+		spot3.playTile(hand.getTile(3));
+		spot4.playTile(hand.getTile(4));
+		spot5.playTile(hand.getTile(5));
+		spot6.playTile(hand.getTile(6));
+		spot7.playTile(hand.getTile(7));
+		
+		//board.boardToString();
+	}
+	
+	public void testAddMeldTrue() {
+		Board board = new Board();
+		Deck deck = new Deck();
+		deck.shuffleTiles();
+		Hand hand = new Hand();
+		hand.createHand(deck);
+		hand.createMeld();
+		Meld meld = hand.getMeld(0);
+		Tile tile = new Tile(0, 6);
+		Tile tile1 = new Tile(1, 6);
+		Tile tile2 = new Tile(2, 6);
+		meld.addTile(tile);
+		meld.addTile(tile1);
+		meld.addTile(tile2);
+		board.addMeld(meld);
+		board.boardToString();
+		
+		assertEquals(1,board.numberOfMelds);	
+	}
+	
+	/*public void testAddMeldFalse() {
+		
+		Board board = new Board();
+		Deck deck = new Deck();
+		deck.shuffleTiles();
+		Hand hand = new Hand();
+		hand.createHand(deck);
+		hand.createMeld();
+		Meld meld = hand.getMeld(0);
+		Tile tile = new Tile(0, 6);
+		Tile tile1 = new Tile(1, 6);
+		Tile tile2 = new Tile(2, 6);
+		Tile failTile = new Tile(3, 6);
+		board.playTile(failTile, 1, 1); //When picking x and y for the test to run, pick any x between 0-2 with a y of 1
+		meld.addTile(tile);
+		meld.addTile(tile1);
+		meld.addTile(tile2);
+		board.addMeld(meld);
+		board.boardToString();
+		
+		assertEquals(0,board.numberOfMelds);	
+	}*/
+	
 }

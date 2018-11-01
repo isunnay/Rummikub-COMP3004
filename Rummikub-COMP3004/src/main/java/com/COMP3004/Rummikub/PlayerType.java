@@ -4,9 +4,11 @@ public interface PlayerType {
 	
 	public Hand getHand();
 	public boolean myTurnStatus();
-	public boolean getIsItPlayersTurn ();
-	public void setIsItPlayersTurn(boolean turn);
+
+	public void setTurnStatus(boolean b);
+
 	public boolean hasTilesBeenPlayed();
+	public void setTilesBeenPlayed(boolean b);
 	public boolean turnComplete(Hand h);
 
 }

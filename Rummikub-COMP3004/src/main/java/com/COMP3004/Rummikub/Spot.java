@@ -6,9 +6,9 @@ public class Spot {
 	Tile tile;
 	boolean isTaken;
 	
-	public Spot(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public Spot(int i, int j) {
+		this.x = i;
+		this.y = j;
 		tile = null;
 		isTaken = false;
 	}
@@ -35,8 +35,9 @@ public class Spot {
 	public void playTile(Tile tile) {
 		if(this.tile==null) {
 			this.tile = tile;
+			tile.setSpot(this);
 			isTaken = true;
-			System.out.println("Tile" + tile.getTileName() + "now occupies this spot-> x: " + this.getSpotX() + "y: " + this.getSpotY());
+
 		}
 		else {
 			System.out.println("This Spot is taken!");
@@ -51,12 +52,17 @@ public class Spot {
 		}
 		else {
 			System.out.println("This spot is already free");
+			isTaken = false;
 		}
 	}
 	
 	public Tile getTile() {
 		return this.tile;
 	}
+	
+	/*public void spotToString() {
+		System.out.println(x);
+	}*/
  
 
 }

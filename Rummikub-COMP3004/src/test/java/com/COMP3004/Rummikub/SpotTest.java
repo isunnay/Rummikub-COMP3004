@@ -12,6 +12,7 @@ public class SpotTest extends TestCase{
 	public void testGetSpotX() {
 		Board board = new Board();
 		Spot spot = board.getSpot(10,10);
+		//board.boardToString();
 		
 		assertEquals(10, spot.getSpotX());
 	}
@@ -36,7 +37,7 @@ public class SpotTest extends TestCase{
 		Hand hand = new Hand();
 		hand.createHand(deck);
 		Spot spot = board.getSpot(10,10);
-		spot.playTile(hand.getTile(0));
+		spot.playTile(hand.getTile(13));
 		
 		assertFalse("false",spot.isSpotEmpty());
 	}
