@@ -25,7 +25,7 @@ public class Hand {
 		sortedHand = new ArrayList<Tile>();
 		melds = new ArrayList<Meld>();
 		numberOfMelds = 0;
-
+		size = 0;
 	}
 	
 	public void createHand(Deck deck) {
@@ -342,6 +342,7 @@ public class Hand {
 	
 	public void addTile(Tile tile) {
 		playerHand.add(tile);
+		this.size++;
 	}
 	
 }
