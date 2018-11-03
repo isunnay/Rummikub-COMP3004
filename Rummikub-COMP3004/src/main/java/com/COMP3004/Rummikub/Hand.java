@@ -345,4 +345,15 @@ public class Hand {
 		this.size++;
 	}
 	
+	public Tile removeTile(int i) {
+		Tile tile = null;
+		
+		if(this.getNumTiles() > 0) {
+			tile = playerHand.remove(i);
+			this.size--;
+		}
+		
+		return tile;
+	}
+	
 }
