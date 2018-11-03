@@ -1,5 +1,6 @@
 package com.COMP3004.Rummikub;
 import junit.framework.TestCase;
+import java.util.ArrayList;
 
 public class GameTestPlan extends TestCase {
 	public void testGame1() {
@@ -68,6 +69,17 @@ public class GameTestPlan extends TestCase {
 		AI2 ai2 = (AI2)game.getAllPlayers().get(2);
 		AI3 ai3 = (AI3)game.getAllPlayers().get(3);
 		
-		
+		//Tiles are organized by color and value
+		ArrayList<PlayerType> players = game.getAllPlayers();
+		for(int i=0; i<players.size(); i++) {
+			//displaying the hand
+			System.out.println(players.get(i).getHand().handToString());
+			for(int j=0; j<players.get(i).getHand().getNumTiles() - 1; j++) {
+				if(players.get(i).getHand().getTile(j).getColour() == players.get(i).getHand().getTile(j+1).getColour()) {
+					System.out.println(players.get(i).getHand().getTile(j).getValue() + ", " + players.get(i).getHand().getTile(j+1).getValue());
+					assertTrue(players.get(i).getHand().getTile(j).getValue() <= players.get(i).getHand().getTile(j+1).getValue());
+				}
+			}
+		}
 	}
 }
