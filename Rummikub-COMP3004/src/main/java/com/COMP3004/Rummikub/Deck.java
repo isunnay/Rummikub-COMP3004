@@ -15,7 +15,7 @@ public class Deck {
 	
 	private void generateDeck() {
 		for(int colour=0;colour<4;colour++) {
-			for(int value=0;value<13;value++) {
+			for(int value=1;value<14;value++) {
 				Tile tile = new Tile(colour,value);
 				tileDeck.add(tile); 
 			}
@@ -35,7 +35,7 @@ public class Deck {
 	public boolean doesEveryTileExist(int count) {
 		int counter = count;
 		for(int i=0;i<4;i++) {
-			for(int x=0;x<13;x++){
+			for(int x=1;x<14;x++){
 				Tile tile = new Tile(i,x);
 				String aTileName = tileDeck.get(counter).getColour()+ tileDeck.get(counter).getValue();
 				Boolean bool = tile.toString(i,x).equals(aTileName);
@@ -56,7 +56,7 @@ public class Deck {
 	public boolean isDeckShuffled(int count) {
 		int counter = count;
 		for(int i=0;i<4;i++) {
-			for(int x=0;x<13;x++){
+			for(int x=1;x<14;x++){
 				Tile tile = new Tile(i,x);
 				String aTileName = tileDeck.get(counter).getColour()+ tileDeck.get(counter).getValue();
 				Boolean bool = tile.toString(i,x).equals(aTileName);
