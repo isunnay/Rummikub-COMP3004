@@ -291,7 +291,7 @@ public class Hand {
 	
 	public Tile playTile(String colour, int value) {
 		Tile tile = null;
-		
+
 		for(int i=0; i<playerHand.size(); i++) {
 			if((playerHand.get(i).getColour() == colour) && (playerHand.get(i).getValue() == value)) {
 				tile = playerHand.get(i);

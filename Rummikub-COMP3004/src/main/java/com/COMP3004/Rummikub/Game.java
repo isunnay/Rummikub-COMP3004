@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class Game {
+public class Game implements Subject{
 	// Variables
 	private boolean gameInProgress = false;
 	private Deck deck;
 	private Board board;
 	private ArrayList<PlayerType> allPlayers = new ArrayList<PlayerType>();
+	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	//private GUI GUI; (GUI class not done yet)
 	
 	// Constructor
@@ -32,7 +33,8 @@ public class Game {
 		deck.shuffleTiles();
 		
 		// Create all 4 players
-		Human human = new Human(deck);
+		Human human = new Human(deck, this);
+		observers.add(human);
 		AI1 ai1 = new AI1(deck);
 		AI2 ai2 = new AI2(deck);
 		AI3 ai3 = new AI3(deck);
@@ -86,6 +88,7 @@ public class Game {
 	}
 	
 	public void play() throws InterruptedException {
+		notifyObservers();
 		int timesTriedPlaying = 0;
 		while (anyWinners() == 0) {
 			if (whosTurn() == 1) {
@@ -115,7 +118,11 @@ public class Game {
 					}
 					// Check if valid meld
 					if (tileChoice < 0 && meld.checkIfValidMeld() == true) {
-						board.addMeld(meld);
+						allPlayers.get(0).playMeld(meld);
+						/*for(int i=0;i<meld.getNumberOfTiles();i++) {
+							notifyObservers();
+						}*/
+						notifyObservers();
 						allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
 						allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
 					} else {
@@ -216,4 +223,25 @@ public class Game {
 	public PlayerType getPlayer(int i) { return this.getAllPlayers().get(i); }
 	public int getPlayerCount() { return this.getAllPlayers().size(); }
 	public int getWinner() { return anyWinners(); }
+
+	public void registerObserver(Observer o) {
+		observers.add(o);
+	}
+	
+	public void removeObserver(Observer o) {
+		int observerIndex = observers.indexOf(o);
+		if(observerIndex>=0) {
+			observers.remove(observerIndex);
+		}
+	}
+	
+	public void notifyObservers() {
+		for(int i=0;i<observers.size();i++) {
+			Observer observer = (Observer)observers.get(i);
+			observer.update(board);
+		}
+	}
+	
+
+	
 }

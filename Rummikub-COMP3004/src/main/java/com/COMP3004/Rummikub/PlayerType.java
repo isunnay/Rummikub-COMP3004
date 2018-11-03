@@ -3,7 +3,7 @@ package com.COMP3004.Rummikub;
 import java.util.ArrayList;
 
 public interface PlayerType extends Observer{
-	
+//extends Observer{
 	public Hand getHand();
 	public boolean myTurnStatus();
 
@@ -13,6 +13,11 @@ public interface PlayerType extends Observer{
 	public void setTilesBeenPlayed(boolean b);
 	public boolean turnComplete(Hand h);
 	
-	public ArrayList<Spot> spotsTaken = new ArrayList<Spot>();
+	
+	public void update(Board board);
+	
+	public void playMeld(Meld meld);
+	public void addTile(Tile tile, int x, int y);
+	public boolean canWePlaceMeld(Meld meld, int x, int y);
 
 }

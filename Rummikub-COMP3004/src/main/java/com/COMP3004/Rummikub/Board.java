@@ -8,8 +8,10 @@ public class Board {
 	int boardY = 15;
 	int numberOfTilesOnBoard;
 	public ArrayList<Meld> meldsOnBoard;
+	//public ArrayList<Spot> availableSpots;
+	public ArrayList<Spot> filledSpots;
 	int numberOfMelds;
-	private ArrayList<Observer> observers;
+	//private ArrayList<Observer> observers;
 
 	private Spot[][] spots = new Spot[15][15];
 	
@@ -20,9 +22,10 @@ public class Board {
             }
         }
 		meldsOnBoard = new ArrayList<Meld>();
+		filledSpots = new ArrayList<Spot>();
 		numberOfTilesOnBoard = 0;
 		numberOfMelds = 0;
-		this.observers = new ArrayList<>();
+		//this.observers = new ArrayList<>();
 	}
 
 	public int getNumberOfBoardSpots() { return boardX * boardY; }
@@ -35,13 +38,15 @@ public class Board {
         return spots[x][y];
     }
 
-	public void playTile(Tile tile, int x, int y) {
+	/*public void playTile(Tile tile, int x, int y) {
 		Spot spot = getSpot(x,y);
 		spot.playTile(tile);
 		tile.setSpot(spot);
 		numberOfTilesOnBoard++;
-		boardChanged(tile);
-	}
+		filledSpots.add(spot);  
+		
+		//boardChanged(tile);
+	}*/
 	
 
 	public void removeTile(int x, int y) {
@@ -50,7 +55,8 @@ public class Board {
 		spot.removeTile();
 		tileToRemove.removeSpot(spot);
 		numberOfTilesOnBoard--;
-		boardChanged(tileToRemove);
+		filledSpots.remove(spot);
+		//boardChanged(tileToRemove);
 		
 		
 	}
@@ -108,18 +114,18 @@ public class Board {
 	}
 	
 	//Check whether locations are available for meld to be placed in
-	public boolean canWePlaceMeld(Meld meld, int x, int y) {
+	/*public boolean canWePlaceMeld(Meld meld, int x, int y) {
 		for(int a=0;a<meld.getMeldSize();a++) {
 			if(this.isSpotFilled(x+a, y) != false) {
 				return false;
 				}	
 		}
 		return true;	
-	}
+	}*/
 	
 	
-	public void addMeld(Meld meld) {
-		Scanner reader = new Scanner(System.in); 
+	/*public void addMeld(Meld meld) {
+		/*Scanner reader = new Scanner(System.in); 
 		System.out.println("Enter an x value for the beginning of the Meld (Between 0-14): ");
 		int x = reader.nextInt(); 
 		System.out.println("Enter an y value for the beginning of the Meld (Between 0-14): ");
@@ -132,16 +138,20 @@ public class Board {
 				for(int i=0;i<meld.getNumberOfTiles();i++) {
 					Tile tile = meld.getTileInMeld(i);
 					this.playTile(tile, x+i, y);
+					//boardChanged(tile);
 				}		
 				meldsOnBoard.add(meld);
 				numberOfMelds++;
-				boardChanged();
 			}
 			else {
 				System.out.println("Meld cannot be placed here. Please try a different Location. ");
 			}
 		}	
-	}
+		
+		meldsOnBoard.add(meld);
+		numberOfTilesOnBoard = numberOfTilesOnBoard + meld.getMeldSize();
+		numberOfMelds++;
+	}*/
 	
 	public Meld getMeld(int i) {
 		return meldsOnBoard.get(i);
@@ -156,27 +166,6 @@ public class Board {
 		
 	}
 	
-	public void registerObserver(Observer o) {
-		observers.add(o);
-	}
-	
-	public void removeObserver(Observer o) {
-		int observerIndex = observers.indexOf(o);
-		if(observerIndex>=0) {
-			observers.remove(observerIndex);
-		}
-	}
-	
-	public void notifyObservers(Tile tile) {
-		for(int i=0;i<observers.size();i++) {
-			Observer observer = (Observer)observers.get(i);
-			observer.update(tile);
-		}
-	}
-	
-	public void boardChanged(Tile tile) {
-		notifyObservers(tile);
-	}
 		
 		
 	
