@@ -71,6 +71,12 @@ public class RummikubMain extends Application{
 			System.out.println("-------------------------");
 			System.out.println("Creating new game...");
 			game = new Game();
+			try {
+				game.play();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
 		fileMenu.getItems().add(newGame);
 		fileMenu.getItems().add(new SeparatorMenuItem());

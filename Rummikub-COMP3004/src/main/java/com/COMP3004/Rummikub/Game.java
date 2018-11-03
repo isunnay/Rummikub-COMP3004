@@ -44,12 +44,12 @@ public class Game {
 		allPlayers.add(ai3);
 		
 		//printAll();
-		try {
+		/*try {
 			play();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	private int anyWinners() {
