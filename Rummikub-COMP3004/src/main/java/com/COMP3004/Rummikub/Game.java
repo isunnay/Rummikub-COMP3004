@@ -12,6 +12,7 @@ public class Game implements Subject {
 	private ArrayList<PlayerType> allPlayers = new ArrayList<PlayerType>();
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private int turnValue;
+	Scanner reader;
 	// private GUI GUI; (GUI class not done yet)
 
 	// Constructor
@@ -38,7 +39,7 @@ public class Game implements Subject {
 		observers.add(human);
 		AI1 ai1 = new AI1(deck);
 		AI2 ai2 = new AI2(deck);
-	//	AI3 ai3 = new AI3(deck);
+		//AI3 ai3 = new AI3(deck);
 
 		// Put the players into the player ArrayList
 		allPlayers.add(human);
@@ -60,9 +61,9 @@ public class Game implements Subject {
 			return 2;
 		} else if (getPlayer(2).getHand().getNumTiles() == 0) {
 			return 3;
-		} /*else if (getPlayer(3).getHand().getNumTiles() == 0) {
+		}/*else if (getPlayer(3).getHand().getNumTiles() == 0) {
 			return 4;
-		}*/ else {
+		}*/else {
 			return 0;
 		}
 	}
@@ -81,14 +82,15 @@ public class Game implements Subject {
 			System.out.println("AI 1 (Player 2) Won!");
 		} else if (winner == 3) {
 			System.out.println("AI 2 (Player 3) Won!");
-		} else if (winner == 4) {
+		}/*else if (winner == 4) {
 			System.out.println("AI 3 (Player 4) Won!");
-		}
+		}*/
 	}
 
 	public void play() throws InterruptedException {
 		notifyObservers();
 		int timesTriedPlaying = 0;
+		int maxPlaysForAI = 1;
 		while (anyWinners() == 0) {
 			if (whosTurn() == 1) {
 				turnValue = 0;
@@ -96,7 +98,7 @@ public class Game implements Subject {
 				System.out.println("Human Playing...");
 				
 				// Ask for humans decision
-				Scanner reader = new Scanner(System.in);
+				reader = new Scanner(System.in);
 				System.out.println("Would you like to (P)lay your turn or (S)kip and draw a tile? " );
 				char decision = reader.next().toUpperCase().charAt(0);
 				if (decision == 'P') {
@@ -223,49 +225,54 @@ public class Game implements Subject {
 						allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
 						allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
 						// Close the reader
-						reader.close();
-					}
-					else {
+						//reader.close();
+					} else {
 						System.out.println("You cannot draw a tile if you've already played a tile");
 					}
-					
 				} else {
 					System.out.println("You may have entered the wrong character. Try again (P / S).");
 					decision = reader.next().toUpperCase().charAt(0);
 				}
 			}
-			else if (whosTurn() == 2 && timesTriedPlaying < 4) {
+			else if (whosTurn() == 2 && timesTriedPlaying < maxPlaysForAI) {
 				printAll();
 				System.out.println("Try #" + (timesTriedPlaying+1) + ": AI1 Playing...");
 				timesTriedPlaying++;
 				TimeUnit.SECONDS.sleep(4);
-				if (allPlayers.get(1).turnComplete(allPlayers.get(1).getHand()) == true) {
+				//if (allPlayers.get(1).turnComplete(allPlayers.get(1).getHand()) == true) {
 					allPlayers.get(1).setTilesBeenPlayed(true); allPlayers.get(1).setTurnStatus(false);
 					allPlayers.get(2).setTilesBeenPlayed(false); allPlayers.get(2).setTurnStatus(true);
 					timesTriedPlaying = 0;
 					printAll();
-				}System.out.println("----------------------------------------");
-			}else if (whosTurn() == 3 && timesTriedPlaying < 4) {
+				//}
+				System.out.println("----------------------------------------");
+			}else if (whosTurn() == 3 && timesTriedPlaying < maxPlaysForAI) {
 				printAll();
 				System.out.println("Try #" + (timesTriedPlaying+1) + ": AI2 Playing...");
 				timesTriedPlaying++;
 				TimeUnit.SECONDS.sleep(4);
-				if (allPlayers.get(2).turnComplete(allPlayers.get(2).getHand()) == true) {
+				//if (allPlayers.get(2).turnComplete(allPlayers.get(2).getHand()) == true) {
 					allPlayers.get(2).setTilesBeenPlayed(true); allPlayers.get(2).setTurnStatus(false);
-					allPlayers.get(3).setTilesBeenPlayed(false); allPlayers.get(3).setTurnStatus(true);
+					//allPlayers.get(3).setTilesBeenPlayed(false); allPlayers.get(3).setTurnStatus(true);
+					// Remove below line and uncomment above line when you put AI3 back in.
+					allPlayers.get(0).setTilesBeenPlayed(false); allPlayers.get(0).setTurnStatus(true);
 					timesTriedPlaying = 0;
-				}System.out.println("----------------------------------------");
-			}/*else if (whosTurn() == 4 && timesTriedPlaying < 4) {
+					printAll();
+				//}
+				System.out.println("----------------------------------------");
+			}/*else if (whosTurn() == 4 && timesTriedPlaying < maxPlaysForAI) {
 				printAll();
 				System.out.println("Try #" + (timesTriedPlaying+1) + ": AI3 Playing...");
 				timesTriedPlaying++;
 				TimeUnit.SECONDS.sleep(4);
-				if (allPlayers.get(3).turnComplete(allPlayers.get(3).getHand()) == true) {
+				//if (allPlayers.get(3).turnComplete(allPlayers.get(3).getHand()) == true) {
 					allPlayers.get(3).setTilesBeenPlayed(true); allPlayers.get(3).setTurnStatus(false);
 					allPlayers.get(0).setTilesBeenPlayed(false); allPlayers.get(0).setTurnStatus(true);
 					timesTriedPlaying = 0;
-				}System.out.println("----------------------------------------");
-			}*/ else if (timesTriedPlaying >= 4) {
+					printAll();
+				//}
+				System.out.println("----------------------------------------");
+			}*/else if (timesTriedPlaying >= 4) {
 				System.out.println("There seems to be a problem with our AI!");
 				System.out.println("Either it had trouble playing or it hasn't been implemented yet.");
 				System.out.println("Please try restarting the game.");
@@ -287,9 +294,9 @@ public class Game implements Subject {
 			return 2;
 		} else if (allPlayers.get(2).myTurnStatus() == true) {
 			return 3;
-		} else if (allPlayers.get(3).myTurnStatus() == true) {
+		}/*else if (allPlayers.get(3).myTurnStatus() == true) {
 			return 4;
-		} else {
+		}*/else {
 			return -1;
 		}
 	}
