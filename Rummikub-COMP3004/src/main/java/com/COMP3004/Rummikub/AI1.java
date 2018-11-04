@@ -48,6 +48,7 @@ public class AI1 implements PlayerType {
 		//System.out.println("first in draw " + h.handToString());
 		if (! (h.meldExists()) ) {
 			Deck deck = new Deck();
+			//h.createHand(deck);
 			h.dealTile(deck);
 			//System.out.println("in draw " + h.handToString());
 		}

@@ -29,6 +29,7 @@ public class AI3 implements PlayerType {
 		return false;
 	}
 
+<<<<<<< Updated upstream
 	@Override
 	public void update(Board board) {
 		// TODO Auto-generated method stub
@@ -75,6 +76,18 @@ public class AI3 implements PlayerType {
 	public void moveTile(Tile tile, Spot newSpot) {
 		// TODO Auto-generated method stub
 		
+=======
+	public boolean thirtyPointsFirstTurn() {
+		return h.meldPoints();
+	}
+
+	public boolean thirtyPointsSubsequentTurn() {
+		Deck deck = new Deck();
+		h.dealTile(deck);
+		return h.meldPoints();
+		
+	
+>>>>>>> Stashed changes
 	}
 
 }

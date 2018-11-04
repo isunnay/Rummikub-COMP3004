@@ -40,6 +40,8 @@ public class HandTest extends TestCase {
 		
 	}
 	
+	
+	
 	public void testNumberOfMelds() {
 		Hand hand = new Hand();
 		Deck deck = new Deck();
@@ -56,6 +58,24 @@ public class HandTest extends TestCase {
 		System.out.println("AI1 hand: " + hand.handToString());
 		System.out.println("Number of Melds : " + hand.numberOfMelds());
 		
+		
+	}
+	
+	public void testMeldPoints() {
+		Hand hand = new Hand();
+		Deck deck = new Deck();
+		
+		hand.createHand(deck);
+		Tile tile = new Tile(0, 6);
+		Tile tile1 = new Tile(0, 7);
+		Tile tile2 = new Tile(0, 8);
+		hand.addTile(tile);
+		hand.addTile(tile1);
+		hand.addTile(tile2);
+		
+		
+		System.out.println("AI1 hand: " + hand.handToString());
+		System.out.println("Meld Points : " + hand.meldPoints());
 		
 	}
 	
