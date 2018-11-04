@@ -97,40 +97,75 @@ public class Game implements Subject{
 				
 				// Ask for humans decision
 				Scanner reader = new Scanner(System.in);
-				System.out.println("Would you like to (P)lay your turn or (S)kip and draw a tile? ");
+				System.out.println("Would you like to (P)lay your turn or (S)kip and draw a tile? " );
 				char decision = reader.next().toUpperCase().charAt(0);
-
 				if (decision == 'P') {
-					// Variables
-					int tileChoice = 0;
-					Meld meld = new Meld();
-					// Create meld within hand
-					allPlayers.get(0).getHand().createMeld();
-					// Ask for tiles for meld on loop
-					while(tileChoice >= 0) {
-						// Print hand out
-						System.out.println("Human Hand: " + allPlayers.get(0).getHand().handToString());
-						System.out.println("Which tile from your hand (Any negative value will close the sequence | tiles from 0-" + (allPlayers.get(0).getHand().getNumTiles()-1) + "): ");
-						tileChoice = reader.nextInt();
-						if (tileChoice >= 0) {
-							meld.addTile(allPlayers.get(0).getHand().getTile(tileChoice));
+					while(true) {
+						System.out.println("Would you like to play a (M)eld or an individual (T)ile? ");
+						System.out.println("Type e to exit at any time");
+						char nextDecision = reader.next().toUpperCase().charAt(0);
+						
+						if(nextDecision== 'E') {
+							break;
+						}
+						else if(nextDecision == 'M') {
+							printAll();
+							// Variables
+							int tileChoice = 0;
+							Meld meld = new Meld();
+							// Create meld within hand
+							allPlayers.get(0).getHand().createMeld();
+							// Ask for tiles for meld on loop
+							while(tileChoice >= 0) {
+								System.out.println("Current Meld: " + meld.meldToString());
+								// Print hand out
+								System.out.println("Human Hand: " + allPlayers.get(0).getHand().handToString());
+								System.out.println("Which tile from your hand (Any negative value will close the sequence | tiles from 0-" + (allPlayers.get(0).getHand().getNumTiles()-1) + "): ");
+								tileChoice = reader.nextInt();
+								if (tileChoice >= 0) {
+									meld.addTile(allPlayers.get(0).getHand().getTile(tileChoice));
+								}
+							}
+							// Check if valid meld
+							if (tileChoice < 0 && meld.checkIfValidMeld() == true) {
+								allPlayers.get(0).playMeld(meld,reader);
+								notifyObservers();
+								printAll();
+							} 
+							else {
+								System.out.println("Invalid meld. Please try again.");
+								System.out.println("----------------------------------------");
+								tileChoice = 0;
+							}
+						}
+						else if(nextDecision == 'T') {	
+							
+							//System.out.println("Human Hand: " + allPlayers.get(0).getHand().handToString());
+							System.out.println("Which tile from your hand (Any negative value will close the sequence | tiles from 0-" + (allPlayers.get(0).getHand().getNumTiles()-1) + "): ");
+							int tileChoice = reader.nextInt();
+							Tile tileToAdd = allPlayers.get(0).getHand().getTile(tileChoice);
+							System.out.println("Please enter an available location to play the tile.");
+							System.out.println("Enter an x value for the spot(Between 0-14): ");
+							int x = reader.nextInt(); 
+							System.out.println("Enter a y value for the spot(Between 0-14): ");
+							int y = reader.nextInt(); 
+							allPlayers.get(0).addTile(tileToAdd, x, y);	
+							printAll();
+							notifyObservers();
+							//allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
+							//allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
+						}
+						
+						else {
+							System.out.println("You may have entered the wrong character. Try again (M / T).");
+							nextDecision = reader.next().toUpperCase().charAt(0);
 						}
 					}
-					// Check if valid meld
-					if (tileChoice < 0 && meld.checkIfValidMeld() == true) {
-						allPlayers.get(0).playMeld(meld);
-						/*for(int i=0;i<meld.getNumberOfTiles();i++) {
-							notifyObservers();
-						}*/
-						notifyObservers();
-						allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
-						allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
-					} else {
-						System.out.println("Invalid meld. Please try again.");
-						System.out.println("----------------------------------------");
-						tileChoice = 0;
-					}
-				} else if (decision == 'S') {
+					allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
+					allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
+					
+				}	
+				else if (decision == 'S') {
 					// Draw tile
 					allPlayers.get(0).getHand().dealTile(deck);
 					System.out.println("Turn ended: Human has decided to draw a tile.");
@@ -147,7 +182,8 @@ public class Game implements Subject{
 					System.out.println("You may have entered the wrong character. Try again (P / S).");
 					decision = reader.next().toUpperCase().charAt(0);
 				}
-			}else if (whosTurn() == 2 && timesTriedPlaying < 4) {
+			}
+			else if (whosTurn() == 2 && timesTriedPlaying < 4) {
 				printAll();
 				System.out.println("Try #" + (timesTriedPlaying+1) + ": AI1 Playing...");
 				timesTriedPlaying++;

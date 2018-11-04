@@ -43,16 +43,11 @@ public class Human implements PlayerType {
 	}
 
 	@Override
-	public void playMeld(Meld meld) {
-		Scanner reader = new Scanner(System.in); 
+	public void playMeld(Meld meld, Scanner aReader) {
 		System.out.println("Enter an x value for the beginning of the Meld (Between 0-14): ");
-		int x = reader.nextInt(); 
+		int x = aReader.nextInt(); 
 		System.out.println("Enter an y value for the beginning of the Meld (Between 0-14): ");
-		int y = reader.nextInt(); 
-		reader.close();
-		System.out.println(x);
-		System.out.println(y);
-		System.out.println(board.getSpot(x, y));
+		int y = aReader.nextInt(); 
 		Spot beginningSpot = board.getSpot(x, y);
 		
 		
@@ -60,19 +55,16 @@ public class Human implements PlayerType {
 			if(canWePlaceMeld(meld,x,y)==true) {
 				for(int i=0;i<meld.getNumberOfTiles();i++) {
 					Tile tile = meld.getTileInMeld(i);
-					addTile(tile, x+i, y);
-					board.numberOfTilesOnBoard++;
+					addTile(tile, x+i, y);	
 				}		
 			}
 			else {
 				System.out.println("Meld cannot be placed here. Please try a different Location. ");
 			}
-		}
-		
+		}	
 		board.meldsOnBoard.add(meld);
 		//numberOfTilesOnBoard = numberOfTilesOnBoard + meld.getMeldSize();
-		board.numberOfMelds++;
-		
+		board.numberOfMelds++;	
 	}
 
 	@Override
@@ -82,6 +74,7 @@ public class Human implements PlayerType {
 		tile.setSpot(spot);
 		board.numberOfTilesOnBoard++;
 		board.filledSpots.add(spot);
+		h.removeTile(tile);
 		
 	}
 

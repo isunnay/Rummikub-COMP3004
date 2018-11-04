@@ -345,4 +345,9 @@ public class Hand {
 		this.size++;
 	}
 	
+	public void removeTile(Tile tile) {
+		playerHand.remove(tile);
+		this.size--;
+	}
+	
 }

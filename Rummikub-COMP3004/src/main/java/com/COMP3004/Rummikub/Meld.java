@@ -135,5 +135,16 @@ public class Meld {
 			return false;
 		}
 	}
+	
+	public String meldToString() {
+		String h = "";
+		
+		for (int i = 0; i < tiles.size(); i++) {
+			h += this.getTileInMeld(i).tileToString();
+			if (i < tiles.size()) { h += " "; }
+		}
+		
+		return h;
+	}
 
 }
