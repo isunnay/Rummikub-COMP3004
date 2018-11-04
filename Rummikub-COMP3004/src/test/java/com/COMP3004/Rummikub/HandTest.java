@@ -169,4 +169,18 @@ public class HandTest extends TestCase {
 		
 	}
 	
+	public void testRemoveTile() {
+		Hand hand = new Hand();
+		Deck deck = new Deck();
+		deck.shuffleTiles();
+		hand.createHand(deck);
+		
+		Random rand = new Random();
+		int num = rand.nextInt(14);
+		int index = num % 14;
+		
+		Tile tile = hand.getTile(index);
+		
+		assertEquals(tile, hand.removeTile(index));
+	}	
 }

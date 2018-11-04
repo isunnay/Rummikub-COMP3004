@@ -10,6 +10,7 @@ public class AI1 implements PlayerType {
 	public AI1(Deck deck) {
 		h = new Hand();
 		h.createHand(deck);
+		h.sortHand();
 	}
 	
 	public Hand getHand() { return this.h; }
