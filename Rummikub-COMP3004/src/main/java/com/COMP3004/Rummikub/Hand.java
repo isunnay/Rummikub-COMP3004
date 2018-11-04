@@ -132,6 +132,7 @@ public class Hand {
 	
 	public boolean meldExists() {
 		Collections.sort(playerHand, new SortByValue());
+
 		for(int i=0; i<playerHand.size(); i++) {
 			if(i != playerHand.size() - 2) {
 				if(playerHand.get(i).getValue() == playerHand.get(i+1).getValue() - 1) {
@@ -194,6 +195,56 @@ public class Hand {
 		
 		return false;
 	}
+	
+   //new method to test #of melds
+	public int numberOfMelds() {
+		
+		int numMelds = 0;
+		Collections.sort(playerHand, new SortByValue());
+		
+		for(int i=0; i<playerHand.size(); i++) {
+			if(i < playerHand.size() - 2) {
+				if(playerHand.get(i).getValue() == playerHand.get(i+1).getValue() - 1) {
+					if(playerHand.get(i+1).getValue() == playerHand.get(i+2).getValue() - 1) {
+						if(playerHand.get(i+2).getValue() == playerHand.get(i+3).getValue() - 1) {
+							String color1 = playerHand.get(i).getColour();
+							String color2 = playerHand.get(i+1).getColour();
+							String color3 = playerHand.get(i+2).getColour();
+							if((color1 == color2) && (color2 == color3)) {
+								numMelds = numMelds+1;
+								i = i+3;
+							}
+						}
+					}
+				}
+			}
+			//System.out.println("i = "+i);
+		}	
+
+
+
+		for(int i=0; i<playerHand.size(); i++) {
+			if(i < playerHand.size() - 2) {
+				int handValue = playerHand.get(i).getValue();
+				if(handValue == playerHand.get(i+1).getValue()) {
+					if(handValue == playerHand.get(i+2).getValue()) {
+						String color = playerHand.get(i).getColour();
+						String color2 = playerHand.get(i+1).getColour();
+						String color3 = playerHand.get(i+2).getColour();
+						if((color != color2) && (color != color3) && (color2 != color3)) {
+							numMelds = numMelds+1;
+							i = i+3;
+						}
+					}
+				}
+			}
+		}
+		
+		
+		
+		return numMelds;
+	}
+
 
 	public boolean isSortedByValue() {
 		for(int i=0;i<this.size-1;i++) {
@@ -345,9 +396,21 @@ public class Hand {
 		this.size++;
 	}
 	
+<<<<<<< HEAD
 	public void removeTile(Tile tile) {
 		playerHand.remove(tile);
 		this.size--;
+=======
+	public Tile removeFromHand(int i) {
+		Tile tile = null;
+		
+		if(this.getNumTiles() > 0) {
+			tile = playerHand.remove(i);
+			this.size--;
+		}
+		
+		return tile;
+>>>>>>> 82e32b05f1f9a6c4aa60621952a4df6b94ecb471
 	}
 	
 }

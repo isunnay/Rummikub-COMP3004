@@ -21,11 +21,30 @@ public class HandTest extends TestCase {
 		assertEquals(14, hand.getNumTiles());
 	}
 	
+	
 	public void testMeld() {
 		Hand hand = new Hand();
 		Deck deck = new Deck();
 		
-		//hand.createHand(deck);
+		hand.createHand(deck);
+		Tile tile = new Tile(0, 6);
+		Tile tile1 = new Tile(0, 7);
+		Tile tile2 = new Tile(0, 8);
+		hand.addTile(tile);
+		hand.addTile(tile1);
+		hand.addTile(tile2);
+		
+		assertTrue("true", hand.meldExists());
+		//System.out.println(hand.numberOfMelds());
+		//hand.numberOfMelds();
+		
+	}
+	
+	public void testNumberOfMelds() {
+		Hand hand = new Hand();
+		Deck deck = new Deck();
+		
+		hand.createHand(deck);
 		Tile tile = new Tile(0, 6);
 		Tile tile1 = new Tile(0, 7);
 		Tile tile2 = new Tile(0, 8);
@@ -34,8 +53,10 @@ public class HandTest extends TestCase {
 		hand.addTile(tile2);
 		
 		
+		System.out.println("AI1 hand: " + hand.handToString());
+		System.out.println("Number of Melds : " + hand.numberOfMelds());
 		
-		assertTrue("true", hand.meldExists());
+		
 	}
 	
 	public void testNewTileDeal() {
@@ -148,4 +169,18 @@ public class HandTest extends TestCase {
 		
 	}
 	
+	public void testRemoveTile() {
+		Hand hand = new Hand();
+		Deck deck = new Deck();
+		deck.shuffleTiles();
+		hand.createHand(deck);
+		
+		Random rand = new Random();
+		int num = rand.nextInt(14);
+		int index = num % 14;
+		
+		Tile tile = hand.getTile(index);
+		
+		assertEquals(tile, hand.removeFromHand(index));
+	}	
 }
