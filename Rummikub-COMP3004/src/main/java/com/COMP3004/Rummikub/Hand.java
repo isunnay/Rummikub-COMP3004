@@ -396,11 +396,13 @@ public class Hand {
 		this.size++;
 	}
 	
-<<<<<<< HEAD
+
 	public void removeTile(Tile tile) {
 		playerHand.remove(tile);
 		this.size--;
-=======
+
+	}
+	
 	public Tile removeFromHand(int i) {
 		Tile tile = null;
 		
@@ -410,7 +412,6 @@ public class Hand {
 		}
 		
 		return tile;
->>>>>>> 82e32b05f1f9a6c4aa60621952a4df6b94ecb471
 	}
 	
 }
