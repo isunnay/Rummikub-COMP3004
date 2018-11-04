@@ -6,6 +6,7 @@ import java.util.*;
 public class Meld {
 	private ArrayList<Tile> tiles;
 	private int numberOfTiles;
+	private int meldValue;
 	
 	private boolean isValidMeld;
 	
@@ -15,6 +16,7 @@ public class Meld {
 		tiles = new ArrayList<Tile>();	
 		numberOfTiles = 0;
 		isValidMeld = false;
+		meldValue = 0;
 	}
 	
 	public Meld getMeld() {
@@ -40,6 +42,7 @@ public class Meld {
 
 	public void addTile(Tile tile) {
 		tiles.add(tile);
+		meldValue = meldValue + tile.getValue();
 		numberOfTiles++;
 	}
 	
@@ -55,11 +58,14 @@ public class Meld {
 	public void removeTile(Tile tile) {
 		int i = findTileIndex(tile);
 		tiles.remove(i);
+		meldValue = meldValue - tile.getValue();
 		numberOfTiles--;
 	}
 	
 	public void removeTile(int i) {
+		Tile tile = tiles.get(i);
 		tiles.remove(i);
+		meldValue = meldValue - tile.getValue();
 		numberOfTiles--;
 	}
 	
@@ -146,5 +152,14 @@ public class Meld {
 		
 		return h;
 	}
+	
+	public int getMeldValue() {
+		return this.meldValue;
+		
+	}
+	
+	//public void deleteMeld() {
+		
+	//}
 
 }

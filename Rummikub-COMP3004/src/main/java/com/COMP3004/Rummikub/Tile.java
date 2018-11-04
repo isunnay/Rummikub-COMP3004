@@ -6,6 +6,7 @@ public class Tile {
 	private int value;
 	private static final String[] colours = { "Red", "Green", "Blue", "Orange" };
 	private Spot spot;
+	private Spot oldSpot;
 	
 	// Constructor for string & int
 	public Tile (String colour, int value) {
@@ -21,6 +22,7 @@ public class Tile {
 		// Set the value of the tile
 		this.value = value;
 		this.spot = null;
+		this.oldSpot = null;
 	}
 	
 	//Constructor to pass in two ints
@@ -51,14 +53,20 @@ public class Tile {
 	}
 	
 	public void setSpot(Spot spot) {
+		//oldSpot = this.spot;
 		this.spot = spot;
 	}
 	
 	public void removeSpot(Spot spot) {
+		oldSpot = this.spot;
 		this.spot = null;
 	}
 	
 	public Spot getSpot() {
 		return this.spot;
+	}
+	
+	public Spot getOldSpot() {
+		return this.oldSpot;
 	}
 }
