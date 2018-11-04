@@ -73,13 +73,73 @@ public class GameTestPlan extends TestCase {
 		ArrayList<PlayerType> players = game.getAllPlayers();
 		for(int i=0; i<players.size(); i++) {
 			//displaying the hand
-			System.out.println(players.get(i).getHand().handToString());
+			assertNotNull(players.get(i).getHand().handToString());
 			for(int j=0; j<players.get(i).getHand().getNumTiles() - 1; j++) {
 				if(players.get(i).getHand().getTile(j).getColour() == players.get(i).getHand().getTile(j+1).getColour()) {
-					System.out.println(players.get(i).getHand().getTile(j).getValue() + ", " + players.get(i).getHand().getTile(j+1).getValue());
+					//System.out.println(players.get(i).getHand().getTile(j).getValue() + ", " + players.get(i).getHand().getTile(j+1).getValue());
 					assertTrue(players.get(i).getHand().getTile(j).getValue() <= players.get(i).getHand().getTile(j+1).getValue());
 				}
 			}
 		}
+	}
+	
+	public void testGame4() {
+		Game game = new Game();
+		Human human = (Human)game.getAllPlayers().get(0);
+		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
+		AI2 ai2 = (AI2)game.getAllPlayers().get(2);
+		AI3 ai3 = (AI3)game.getAllPlayers().get(3);
+		
+		String[] colours = {"Red", "Green", "Blue"};
+		
+		//Rigging to get a meld equal to 30 and greater than 30 for human player
+		for(int i=0; i<6; i++) {
+			human.getHand().removeFromHand(human.getHand().getNumTiles() - 1);
+		}
+		for(int i=0; i<3; i++) {
+			human.getHand().addTile(new Tile(colours[i], 10));
+		}
+		for(int i=0; i<3; i++) {
+			human.getHand().addTile(new Tile(colours[0], i + 10));
+		}
+		
+		human.setTurnStatus(true);
+		//having two melds to play
+		human.getHand().createMeld();
+		human.getHand().createMeld();
+		human.getHand().getMeld(0).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 3));
+		human.getHand().getMeld(0).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 2));
+		human.getHand().getMeld(0).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 1));
+		/*for(int i=0; i<human.getHand().getMeld(0).getNumberOfTiles(); i++) {
+			System.out.println(human.getHand().getMeld(0).getTileInMeld(i).getTile().tileToString());
+		}*/
+		assertTrue(human.getHand().getMeld(0).checkIfValidMeld());
+		assertTrue(human.getHand().getMeld(0).isValidRun());
+		
+		int sum = 0;
+		for(int i=0; i<human.getHand().getMeld(0).getNumberOfTiles(); i++) {
+			sum += human.getHand().getMeld(0).getTileInMeld(i).getValue();
+		}
+		//The meld to be played is greater than 30
+		assertTrue(sum > 30);
+		
+		human.getHand().getMeld(1).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 1));
+		human.getHand().getMeld(1).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 1));
+		human.getHand().getMeld(1).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 1));
+		for(int i=0; i<human.getHand().getMeld(1).getNumberOfTiles(); i++) {
+			System.out.println(human.getHand().getMeld(1).getTileInMeld(i).getTile().tileToString());
+		}
+		
+		//assertTrue(human.getHand().getMeld(1).checkIfValidMeld());
+		//assertTrue(human.getHand().getMeld(1).isValidSet());
+		
+		int sum2 = 0;
+		for(int i=0; i<human.getHand().getMeld(1).getNumberOfTiles(); i++) {
+			sum2 += human.getHand().getMeld(1).getTileInMeld(i).getValue();
+		}
+		//The meld to be played is equal to 30
+		assertTrue(sum == 30);
+		
+		assertEquals(2, human.getHand().getNumberOfMelds());
 	}
 }
