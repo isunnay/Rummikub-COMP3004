@@ -7,6 +7,7 @@ public class Tile {
 	private static final String[] colours = { "Red", "Green", "Blue", "Orange" };
 	private Spot spot;
 	private Spot oldSpot;
+	private Meld memberOfMeld;
 	
 	// Constructor for string & int
 	public Tile (String colour, int value) {
@@ -23,6 +24,7 @@ public class Tile {
 		this.value = value;
 		this.spot = null;
 		this.oldSpot = null;
+		this.memberOfMeld = null;
 	}
 	
 	//Constructor to pass in two ints
@@ -69,4 +71,18 @@ public class Tile {
 	public Spot getOldSpot() {
 		return this.oldSpot;
 	}
+	
+	public void setMeld(Meld meld) {
+		this.memberOfMeld = meld;
+	}
+	
+	public Meld getMemberOfMeld() {
+		return this.memberOfMeld;
+	}
+	
+	public void removeMeld() {
+		this.memberOfMeld = null;
+	}
+	
+	
 }

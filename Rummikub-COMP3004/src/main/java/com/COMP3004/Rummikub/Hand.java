@@ -31,6 +31,7 @@ public class Hand {
 	public void createHand(Deck deck) {
 		for(int i=0; i<14; i++) {
 			playerHand.add(deck.getTileDeck().remove(deck.getDeckCount()- 1));
+			deck.getTileDeck().remove(deck.getDeckCount()- 1);
 			size++;
 		}
 	}

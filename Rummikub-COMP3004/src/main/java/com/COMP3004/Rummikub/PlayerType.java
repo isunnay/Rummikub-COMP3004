@@ -22,5 +22,6 @@ public interface PlayerType extends Observer{
 	public void undoTurn();
 	public void undoAddTile(Tile tile);
 	public void undoPlayMeld(Meld meld);
+	public void moveTile(Tile tile, Spot newSpot);
 
 }

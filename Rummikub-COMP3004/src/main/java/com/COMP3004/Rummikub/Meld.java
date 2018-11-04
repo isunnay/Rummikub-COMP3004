@@ -23,6 +23,10 @@ public class Meld {
 		return this;
 	}
 	
+	public ArrayList<Tile> getTiles(){
+		return tiles;
+	}
+	
 	public int getMeldSize() {
 		return tiles.size();
 	}
@@ -42,9 +46,18 @@ public class Meld {
 
 	public void addTile(Tile tile) {
 		tiles.add(tile);
+		tile.setMeld(this);
 		meldValue = meldValue + tile.getValue();
 		numberOfTiles++;
 	}
+	
+	public void addTileFront(Tile tile) {
+		tiles.add(0,tile);
+		tile.setMeld(this);
+		meldValue = meldValue+tile.getValue();
+		numberOfTiles++;
+	}
+	
 	
 	public int findTileIndex(Tile tile) {
 		for(int i=0;i<tiles.size();i++) {
@@ -58,6 +71,7 @@ public class Meld {
 	public void removeTile(Tile tile) {
 		int i = findTileIndex(tile);
 		tiles.remove(i);
+		tile.removeMeld();
 		meldValue = meldValue - tile.getValue();
 		numberOfTiles--;
 	}
@@ -65,6 +79,7 @@ public class Meld {
 	public void removeTile(int i) {
 		Tile tile = tiles.get(i);
 		tiles.remove(i);
+		tile.removeMeld();
 		meldValue = meldValue - tile.getValue();
 		numberOfTiles--;
 	}
@@ -155,11 +170,6 @@ public class Meld {
 	
 	public int getMeldValue() {
 		return this.meldValue;
-		
 	}
-	
-	//public void deleteMeld() {
-		
-	//}
 
 }

@@ -38,13 +38,13 @@ public class Game implements Subject {
 		observers.add(human);
 		AI1 ai1 = new AI1(deck);
 		AI2 ai2 = new AI2(deck);
-		AI3 ai3 = new AI3(deck);
+	//	AI3 ai3 = new AI3(deck);
 
 		// Put the players into the player ArrayList
 		allPlayers.add(human);
 		allPlayers.add(ai1);
 		allPlayers.add(ai2);
-		allPlayers.add(ai3);
+		//allPlayers.add(ai3);
 
 		// printAll();
 		/*
@@ -60,9 +60,9 @@ public class Game implements Subject {
 			return 2;
 		} else if (getPlayer(2).getHand().getNumTiles() == 0) {
 			return 3;
-		} else if (getPlayer(3).getHand().getNumTiles() == 0) {
+		} /*else if (getPlayer(3).getHand().getNumTiles() == 0) {
 			return 4;
-		} else {
+		}*/ else {
 			return 0;
 		}
 	}
@@ -101,7 +101,7 @@ public class Game implements Subject {
 				char decision = reader.next().toUpperCase().charAt(0);
 				if (decision == 'P') {
 					while(true) {
-						System.out.println("Would you like to play a (M)eld or an individual (T)ile? ");
+						System.out.println("Would you like to play a (M)eld, an individual (T)ile, or move a current (B)oard Tile? ");
 						System.out.println("Type e to exit at any time");
 						char nextDecision = reader.next().toUpperCase().charAt(0);
 						
@@ -164,7 +164,30 @@ public class Game implements Subject {
 								//allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
 							}
 							else {
-								System.out.println("You cannot play individual tiles on the board during your initial meld");
+								System.out.println("You cannot play individual tiles on the board during your initial meld.");
+							}
+						}
+						else if(nextDecision == 'B') {
+							if(timesTriedPlaying !=0) {
+								System.out.println("Which tile would you like to move on the board?");
+								System.out.println("Please enter the current Spot X value of the tile: ");
+								int tileToMoveX = reader.nextInt();
+								System.out.println("Please enter the current Spot Y value of the tile: ");
+								int tileToMoveY = reader.nextInt();
+								Spot oldSpot = board.getSpot(tileToMoveX, tileToMoveY);
+								Tile tile = oldSpot.getTile();
+								System.out.println("Where would you like to move it?");
+								System.out.println("Please enter the new X value of the tile: ");
+								int newX = reader.nextInt();
+								System.out.println("Please enter the new Y value of the tile: ");
+								int newY = reader.nextInt();
+								Spot newSpot = board.getSpot(newX, newY);
+								allPlayers.get(0).moveTile(tile, newSpot);	
+								printAll();
+								
+							}
+							else {
+								System.out.println("You cannot manipulate the board during your initial meld.");
 							}
 						}
 						
@@ -172,7 +195,8 @@ public class Game implements Subject {
 							System.out.println("You may have entered the wrong character. Try again (M / T).");
 							nextDecision = reader.next().toUpperCase().charAt(0);
 						}
-					}if(timesTriedPlaying==0) {
+					}
+					if(timesTriedPlaying==0) {
 						if(turnValue>=30) {
 							notifyObservers();
 							allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
@@ -184,23 +208,26 @@ public class Game implements Subject {
 							notifyObservers();
 							
 						}
-					}
-
-					
+					}	
 				}	
 				else if (decision == 'S') {
-					// Draw tile
-					allPlayers.get(0).getHand().dealTile(deck);
-					System.out.println("Turn ended: Human has decided to draw a tile.");
-					//allPlayers.get(0).getHand().sortHand();
-					//System.out.println("Human Hand: " + allPlayers.get(0).getHand().handToString());
-					System.out.println("----------------------------------------");
-					// Switch turn
-					notifyObservers();
-					allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
-					allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
-					// Close the reader
-					reader.close();
+					if(allPlayers.get(0).hasTilesBeenPlayed()==false) {
+						// Draw tile
+						allPlayers.get(0).getHand().dealTile(deck);
+						System.out.println("Turn ended: Human has decided to draw a tile.");
+						//allPlayers.get(0).getHand().sortHand();
+						//System.out.println("Human Hand: " + allPlayers.get(0).getHand().handToString());
+						System.out.println("----------------------------------------");
+						// Switch turn
+						notifyObservers();
+						allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
+						allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
+						// Close the reader
+						reader.close();
+					}
+					else {
+						System.out.println("You cannot draw a tile if you've already played a tile");
+					}
 					
 				} else {
 					System.out.println("You may have entered the wrong character. Try again (P / S).");
@@ -228,7 +255,7 @@ public class Game implements Subject {
 					allPlayers.get(3).setTilesBeenPlayed(false); allPlayers.get(3).setTurnStatus(true);
 					timesTriedPlaying = 0;
 				}System.out.println("----------------------------------------");
-			}else if (whosTurn() == 4 && timesTriedPlaying < 4) {
+			}/*else if (whosTurn() == 4 && timesTriedPlaying < 4) {
 				printAll();
 				System.out.println("Try #" + (timesTriedPlaying+1) + ": AI3 Playing...");
 				timesTriedPlaying++;
@@ -238,7 +265,7 @@ public class Game implements Subject {
 					allPlayers.get(0).setTilesBeenPlayed(false); allPlayers.get(0).setTurnStatus(true);
 					timesTriedPlaying = 0;
 				}System.out.println("----------------------------------------");
-			} else if (timesTriedPlaying >= 4) {
+			}*/ else if (timesTriedPlaying >= 4) {
 				System.out.println("There seems to be a problem with our AI!");
 				System.out.println("Either it had trouble playing or it hasn't been implemented yet.");
 				System.out.println("Please try restarting the game.");
@@ -249,7 +276,8 @@ public class Game implements Subject {
 				System.out.println("----------------------------------------");
 				break;
 			}
-		}endGame();
+		}
+		endGame();
 	}
 
 	public int whosTurn() {

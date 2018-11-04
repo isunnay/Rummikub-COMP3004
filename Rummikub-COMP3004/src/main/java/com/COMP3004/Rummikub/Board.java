@@ -35,6 +35,7 @@ public class Board {
 	public int getY() { return boardY; }
 	
     public Spot getSpot(int x, int y) {
+    	System.out.println(spots[x][y]);
         return spots[x][y];
     }
 
@@ -79,19 +80,45 @@ public class Board {
 		}
 	}
 	
+	public void deleteMeld(Meld meld) {
+		for(int i=0;i<meld.getMeldSize();i++) {
+			Spot spot = meld.getTileInMeld(i).getSpot();
+			spot.removeTile();
+			meld.getTileInMeld(i).removeSpot(spot);
+			this.numberOfTilesOnBoard--;
+			this.filledSpots.remove(spot);
+		}
+		this.meldsOnBoard.remove(meld);
+		this.numberOfMelds--;	
+		meld=null;
+		
+	}
+	
+	/*public Meld getMeldAtEnd(Spot spot) {
+		
+		
+	}
+	
+	public Meld getMeldAtBeg(Spot spot) {
+		int x = spot.getSpotX();
+		int y = spot.getSpotY();
+		Tile tile = this.getTileAtSpot(x, y);
+		Meld meld = tile.getPartOfMeld();
+	}*/
+	
 	public Spot getLocationOfTile(Tile tile) {
 		Spot spot = tile.getSpot();
 		return spot;
 	}
 
-	public void moveTile(Tile tile, Spot newSpot) {
+	/*public void moveTile(Tile tile, Spot newSpot) {
 		Spot oldSpot = tile.getSpot();
 		oldSpot.removeTile();
 		tile.removeSpot(oldSpot);
 		newSpot.playTile(tile);
 		tile.setSpot(newSpot);
 		//boardChanged();
-	}
+	}*/
 	
 	public void boardToString() {
 		for (int i = 0; i < spots.length; i++) {
