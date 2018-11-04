@@ -181,6 +181,6 @@ public class HandTest extends TestCase {
 		
 		Tile tile = hand.getTile(index);
 		
-		assertEquals(tile, hand.removeTile(index));
+		assertEquals(tile, hand.removeFromHand(index));
 	}	
 }
