@@ -136,7 +136,7 @@ public class Game implements Subject {
 								
 							}
 							// Check if valid meld
-							if (tileChoice == -1 && meld.getMeldSize()>0 && meld.checkIfValidMeld() == true ) {
+							if (tileChoice == -1 && meld.getMeldSize()>=3 && meld.checkIfValidMeld() == true ) {
 								allPlayers.get(0).playMeld(meld,reader);
 								//notifyObservers();
 								turnValue = turnValue + meld.getMeldValue();

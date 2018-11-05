@@ -35,7 +35,6 @@ public class Board {
 	public int getY() { return boardY; }
 	
     public Spot getSpot(int x, int y) {
-    	System.out.println(spots[x][y]);
         return spots[x][y];
     }
 

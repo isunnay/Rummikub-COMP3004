@@ -49,22 +49,50 @@ public class Human implements PlayerType {
 		this.board = board;
 	}
 	
+	// && x+a<board.getX() && x+meld.getMeldSize() <= board.getX()
 	@Override
 	public boolean canWePlaceMeld(Meld meld, int x, int y) {
 		//Spot beginningSpot = board.getSpot(x, y);
 		for(int a=0;a<meld.getMeldSize();a++) {
-			if(x+a<board.getX()) {
-				//int nextX = x+meld.getMeldSize();
-				if(board.getSpot(x-1, y).isTaken != true && board.getSpot(x+meld.getMeldSize(), y).isTaken != true) {
-					Spot spot = board.getSpot(x+a, y);
-					if(this.spotsTaken.contains(spot)) {
+			if(x+a>=board.getSpot(0, 0).getSpotX() && x+meld.getMeldSize()<=board.getX()) {
+				if(x==0) {
+					if(board.getSpot(x+meld.getMeldSize(), y).isTaken = true) {
+						Spot spot = board.getSpot(x+a, y);
+						if(this.spotsTaken.contains(spot)) {
+							return false;
+							}
+					}
+					else {
+						System.out.println("ERROR: Your meld cannot be touching other melds.");
 						return false;
-						}
+					}
 				}
+				else if(x==12) {
+					if(board.getSpot(x+meld.getMeldSize()-1, y).isTaken = true) {
+						Spot spot = board.getSpot(x+a, y);
+						if(this.spotsTaken.contains(spot)) {
+							return false;
+							}
+					}
+					else {
+						System.out.println("ERROR: Your meld cannot be touching other melds.");
+						return false;
+					}
+					
+				}
+				
 				else {
-					System.out.println("ERROR: Your meld cannot be touching other melds.");
-					return false;
-				}
+					if(board.getSpot(x-1, y).isTaken != true && board.getSpot(x+meld.getMeldSize(), y).isTaken != true) {
+						Spot spot = board.getSpot(x+a, y);
+						if(this.spotsTaken.contains(spot)) {
+							return false;
+							}
+					}
+					else {
+						System.out.println("ERROR: Your meld cannot be touching other melds.");
+						return false;
+					}
+			}
 			}
 			else {
 				System.out.println("ERROR: Make sure your meld is placed within the board spots.");
