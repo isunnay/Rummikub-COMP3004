@@ -138,9 +138,27 @@ public class Game implements Subject {
 								}
 							}	
 							if (meld.getMeldSize() >= 3 && meld.checkIfValidMeld() == true) {
-								allPlayers.get(0).playMeld(meld, reader);
-								turnValue = turnValue + meld.getMeldValue();
-								printAll();
+								if (allPlayers.get(0).hasInitialMeldBeenPlayed()) {
+									allPlayers.get(0).playMeld(meld, reader);
+									turnValue = turnValue + meld.getMeldValue();
+									printAll();
+								} else {
+									if (meld.getMeldValue() >= 30) {
+										allPlayers.get(0).playMeld(meld, reader);
+										turnValue = turnValue + meld.getMeldValue();
+										printAll();
+										allPlayers.get(0).setHasInitialMeldBeenPlayed(true);
+										allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
+										allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
+										break;
+									} else {
+										System.out.println("The initial meld score must be greater or equal to 30.");
+										System.out.println("Your initial meld score was: " + meld.getMeldValue());
+										for (int i = 0; i < meld.getMeldSize(); i++) {
+											allPlayers.get(0).getHand().addTile(meld.getTileInMeld(i));
+										}allPlayers.get(0).getHand().sortHand();
+									}
+								}
 							} else {
 								System.out.println("Invalid meld. Please try again.");
 								System.out.println("----------------------------------------");
@@ -151,28 +169,32 @@ public class Game implements Subject {
 							}
 						}
 						else if(nextDecision == 'T') {	
-							if(timesTriedPlaying != 0) {
-								//System.out.println("Human Hand: " + allPlayers.get(0).getHand().handToString());
-								System.out.println("Which tile from your hand (Any negative value will close the sequence | tiles from 0-" + (allPlayers.get(0).getHand().getNumTiles()-1) + "): ");
-								int tileChoice = reader.nextInt();
-								Tile tileToAdd = allPlayers.get(0).getHand().getTile(tileChoice);
-								System.out.println("Please enter an available location to play the tile.");
-								System.out.println("Enter an x value for the spot(Between 0-14): ");
-								int x = reader.nextInt(); 
-								System.out.println("Enter a y value for the spot(Between 0-14): ");
-								int y = reader.nextInt(); 
-								allPlayers.get(0).addTile(tileToAdd, x, y);	
+							if(allPlayers.get(0).hasInitialMeldBeenPlayed() == true) {
 								printAll();
-								//notifyObservers();
-								//allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
-								//allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
-							}
-							else {
+								String tileChoice = "";
+								
+								System.out.println("Which tile would you like to add to your meld (Type 'D' when you are done): ");
+								tileChoice = reader.next().toUpperCase();
+								System.out.println("Please enter an available location to play the tile.");
+								System.out.println("Enter an x value for the spot (Between 0-14): ");
+								int x = reader.nextInt(); 
+								System.out.println("Enter a y value for the spot (Between 0-14): ");
+								int y = reader.nextInt(); 
+								
+								for (int i = 0; i < allPlayers.get(0).getHand().size; i++) {
+									if (allPlayers.get(0).getHand().getTile(i).tileToString().equals(tileChoice)) {
+										allPlayers.get(0).addTile(allPlayers.get(0).getHand().getTile(i), x, y);
+										break;
+									} else if (i == (allPlayers.get(0).getHand().size - 1) && !(tileChoice.equals("D"))) {
+										System.out.println("It seems that the tile " + tileChoice + " isn't in your posession. Please try again.");
+									}
+								}
+							} else {
 								System.out.println("You cannot play individual tiles on the board during your initial meld.");
 							}
 						}
 						else if(nextDecision == 'B') {
-							if(timesTriedPlaying !=0) {
+							if (allPlayers.get(0).hasInitialMeldBeenPlayed() == true) {
 								System.out.println("Which tile would you like to move on the board?");
 								System.out.println("Please enter the current Spot X value of the tile: ");
 								int tileToMoveX = reader.nextInt();
@@ -188,46 +210,27 @@ public class Game implements Subject {
 								Spot newSpot = board.getSpot(newX, newY);
 								allPlayers.get(0).moveTile(tile, newSpot);	
 								printAll();
-								
-							}
-							else {
+							}else {
 								System.out.println("You cannot manipulate the board during your initial meld.");
 							}
-						}
-						
-						else {
+						} else {
 							System.out.println("You may have entered the wrong character. Please try again.");
 							nextDecision = reader.next().toUpperCase().charAt(0);
-						}
-					}
-					if(timesTriedPlaying==0) {
-						if(turnValue>=30) {
-							notifyObservers();
-							allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
-							allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
-						}
-						else {
-							System.out.println("Your initial meld must be valued at a minimum of 30 points. Please try again");
-							allPlayers.get(0).undoTurn();
-							notifyObservers();
-							
 						}
 					}	
 				}	
 				else if (decision == 'S') {
 					if(allPlayers.get(0).hasTilesBeenPlayed()==false) {
 						// Draw tile
-						allPlayers.get(0).getHand().dealTile(deck);
+						Tile t = allPlayers.get(0).getHand().dealTile(deck);
 						System.out.println("Turn ended: Human has decided to draw a tile.");
-						//allPlayers.get(0).getHand().sortHand();
-						//System.out.println("Human Hand: " + allPlayers.get(0).getHand().handToString());
+						System.out.println("Tile drawn: " + t.tileToString());
 						System.out.println("----------------------------------------");
+						TimeUnit.SECONDS.sleep(4);
 						// Switch turn
 						notifyObservers();
 						allPlayers.get(0).setTilesBeenPlayed(true); allPlayers.get(0).setTurnStatus(false);
 						allPlayers.get(1).setTilesBeenPlayed(false); allPlayers.get(1).setTurnStatus(true);
-						// Close the reader
-						//reader.close();
 					} else {
 						System.out.println("You cannot draw a tile if you've already played a tile");
 					}

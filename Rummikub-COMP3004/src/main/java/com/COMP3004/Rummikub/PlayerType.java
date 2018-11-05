@@ -13,6 +13,9 @@ public interface PlayerType extends Observer{
 	public void setTilesBeenPlayed(boolean b);
 	public boolean turnComplete(Hand h);
 	
+	public boolean hasInitialMeldBeenPlayed();
+	public void setHasInitialMeldBeenPlayed(boolean b);
+	
 	
 	public void update(Board board);
 	
