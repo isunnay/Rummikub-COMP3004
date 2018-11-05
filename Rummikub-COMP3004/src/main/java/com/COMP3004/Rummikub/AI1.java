@@ -13,12 +13,12 @@ public class AI1 implements PlayerType {
 	//private boolean isTurn = false;
 	private boolean hasTileBeenPlaced = false;
 	public ArrayList<Meld> melds;
+	public ArrayList<Meld> sets;
 	public Subject game;
 	public ArrayList<Spot> spotsTaken;
 	public ArrayList<Tile> turnTiles;
 	public ArrayList<Meld> turnMelds;
 	public ArrayList<Tile> turnMoves;
-	public ArrayList<Meld> testMelds;
 	private Board board;
 
 	
@@ -32,7 +32,7 @@ public class AI1 implements PlayerType {
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
 		turnMoves = new ArrayList<Tile>();
-		testMelds = new ArrayList<Meld>();
+		sets = new ArrayList<Meld>();
 	}
 	
 	public Hand getHand() { return this.h; }
@@ -235,6 +235,75 @@ public class AI1 implements PlayerType {
 		// TODO Auto-generated method stub
 		
 	}
+	public void findAllMelds() {
+		findAllSets();
+		findAllRuns();
+		
+		
+	}
+	
+	public void findAllSets() {
+		Meld tempMeld = new Meld();
+		ArrayList<Integer> completedValues = new ArrayList<Integer>();
+
+		for (int i = 0; i < this.h.size; i++) {
+			Tile aTile = this.h.getTile(i);
+			tempMeld.addTile(aTile);
+			int currValue = this.h.getTile(i).getValue();
+			for (int x = 0; x < this.h.size; x++) {
+				Tile toCompare = this.h.getTile(x);
+				//System.out.println(toCompare.getColour());
+				if (toCompare.getValue() == currValue && aTile.getColour() != toCompare.getColour() && !(completedValues.contains(toCompare.getValue()))) {
+					tempMeld.addTile(toCompare);
+					// tempMeld.addTile(toCompare);
+				}
+			}
+			completedValues.add(currValue);
+			//System.out.println(tempMeld.meldToString());
+			if (tempMeld.getMeldSize() > 2 && tempMeld.getMeldSize()<5) {
+				if (tempMeld.isValidSet() == true) {
+					melds.add(tempMeld);
+				}
+				else {
+					tempMeld = new Meld();
+				}
+			}
+			tempMeld = new Meld();
+			
+
+		}
+	}
+	
+	
+	
+	/*public void findAllSets() {
+		for(int i=0; i<this.h.size; i++) {
+			if(i < this.h.size - 3) {
+				int handValue = this.h.getTile(i).getValue();
+				if(handValue == this.h.getTile(i+1).getValue()) {
+					if(handValue == this.h.getTile(i+2).getValue()) {
+						if(handValue == this.h.getTile(i+3).getValue()) {
+							String color = this.h.getTile(i).getColour();
+							String color2 = this.h.getTile(i+1).getColour();
+							String color3 = this.h.getTile(i+2).getColour();
+							String color4 = this.h.getTile(i+3).getColour();
+							if((color != color2) && (color != color3)&& (color != color4) && (color2 != color3) && (color2 != color4) && (color3!=color4)) {
+								Meld newMeld = new Meld();
+								newMeld.addTile(this.h.getTile(i));
+								newMeld.addTile(this.h.getTile(i+1));
+								newMeld.addTile(this.h.getTile(i+2));
+								newMeld.addTile(this.h.getTile(i+3));
+								//System.out.println(newMeld.checkIfValidMeld());
+								this.melds.add(newMeld);
+								//System.out.println(testMelds.size());
+							}
+						}
+					}
+				}
+			}
+		}
+	}*/
+	
 	
 	public void findAllRuns() {
 		int numRuns = 0;
@@ -242,33 +311,29 @@ public class AI1 implements PlayerType {
 		ArrayList<Tile> greenTiles = new ArrayList<Tile>();
 		ArrayList<Tile> blueTiles = new ArrayList<Tile>();
 		ArrayList<Tile> orangeTiles = new ArrayList<Tile>();
-	
-		for(int i=0;i<this.h.size;i++) {
+
+		for (int i = 0; i < this.h.size; i++) {
 			Tile tile = this.h.getTile(i);
-			if(tile.getColour()=="Green") {
+			if (tile.getColour() == "Green") {
 				greenTiles.add(tile);
-			}
-			else if(tile.getColour()=="Red") {
+			} else if (tile.getColour() == "Red") {
 				redTiles.add(tile);
-			}
-			else if(tile.getColour()=="Blue") {
+			} else if (tile.getColour() == "Blue") {
 				blueTiles.add(tile);
-			}
-			else if(tile.getColour()=="Orange") {
+			} else if (tile.getColour() == "Orange") {
 				orangeTiles.add(tile);
 			}
-
 		}
 
 		if (redTiles.size() > 2) {
 			Meld tempMeld = new Meld();
 			for (int i = 0; i <= redTiles.size() - 1; i++) {
 				Tile tile = redTiles.get(i);
-				//System.out.println(tile.tileToString());
+				// System.out.println(tile.tileToString());
 				if (i != redTiles.size() - 1) {
 					if (redTiles.get(i).getValue() != redTiles.get(i + 1).getValue()) {
 						if (redTiles.get(i + 1).getValue() - tile.getValue() == 1) {
-							//System.out.println("Subtracting red");
+							// System.out.println("Subtracting red");
 							tempMeld.addTile(tile);
 						} else if (tempMeld.getMeldSize() < 3
 								&& redTiles.get(i + 1).getValue() - tile.getValue() != 1) {
@@ -276,7 +341,7 @@ public class AI1 implements PlayerType {
 						} else if (tempMeld.getMeldSize() >= 3
 								&& redTiles.get(i + 1).getValue() - tile.getValue() != 1) {
 							tempMeld.addTile(tile);
-							//System.out.println("WERE IN THE LOOP");
+							// System.out.println("WERE IN THE LOOP");
 							melds.add(tempMeld);
 							// tempMeld.getTiles().clear();
 							tempMeld = new Meld();
@@ -284,7 +349,7 @@ public class AI1 implements PlayerType {
 					}
 
 					else {
-						//System.out.println("Same value");
+						// System.out.println("Same value");
 					}
 				} else if (i == redTiles.size() - 1) {
 					int num = 0;
@@ -296,7 +361,7 @@ public class AI1 implements PlayerType {
 								melds.add(tempMeld);
 							}
 						} else {
-						//	System.out.println("BLAHBLAHBLAH");
+							// System.out.println("BLAHBLAHBLAH");
 						}
 					} else if (redTiles.get(i).getValue() != redTiles.get(i - 2).getValue() && num != 1) {
 						num = 2;
@@ -310,19 +375,18 @@ public class AI1 implements PlayerType {
 						System.out.println("Impossible. ");
 					}
 				}
-
 			}
 		}
-		
+
 		if (greenTiles.size() > 2) {
 			Meld tempMeld = new Meld();
 			for (int i = 0; i <= greenTiles.size() - 1; i++) {
 				Tile tile = greenTiles.get(i);
-				//System.out.println(tile.tileToString());
+				// System.out.println(tile.tileToString());
 				if (i != greenTiles.size() - 1) {
 					if (greenTiles.get(i).getValue() != greenTiles.get(i + 1).getValue()) {
 						if (greenTiles.get(i + 1).getValue() - tile.getValue() == 1) {
-							//System.out.println("Subtracting green");
+							// System.out.println("Subtracting green");
 							tempMeld.addTile(tile);
 						} else if (tempMeld.getMeldSize() < 3
 								&& greenTiles.get(i + 1).getValue() - tile.getValue() != 1) {
@@ -330,7 +394,7 @@ public class AI1 implements PlayerType {
 						} else if (tempMeld.getMeldSize() >= 3
 								&& greenTiles.get(i + 1).getValue() - tile.getValue() != 1) {
 							tempMeld.addTile(tile);
-							//System.out.println("WERE IN THE LOOP");
+							// System.out.println("WERE IN THE LOOP");
 							melds.add(tempMeld);
 							// tempMeld.getTiles().clear();
 							tempMeld = new Meld();
@@ -350,7 +414,7 @@ public class AI1 implements PlayerType {
 								melds.add(tempMeld);
 							}
 						} else {
-							//System.out.println("BLAHBLAHBLAH");
+							// System.out.println("BLAHBLAHBLAH");
 						}
 					} else if (greenTiles.get(i).getValue() != greenTiles.get(i - 2).getValue() && num != 1) {
 						num = 2;
@@ -364,19 +428,18 @@ public class AI1 implements PlayerType {
 						System.out.println("Impossible. ");
 					}
 				}
-
 			}
 		}
-		
+
 		if (blueTiles.size() > 2) {
 			Meld tempMeld = new Meld();
 			for (int i = 0; i <= blueTiles.size() - 1; i++) {
 				Tile tile = blueTiles.get(i);
-				//System.out.println(tile.tileToString());
+				// System.out.println(tile.tileToString());
 				if (i != blueTiles.size() - 1) {
 					if (blueTiles.get(i).getValue() != blueTiles.get(i + 1).getValue()) {
 						if (blueTiles.get(i + 1).getValue() - tile.getValue() == 1) {
-							//System.out.println("Subtracting green");
+							// System.out.println("Subtracting green");
 							tempMeld.addTile(tile);
 						} else if (tempMeld.getMeldSize() < 3
 								&& blueTiles.get(i + 1).getValue() - tile.getValue() != 1) {
@@ -384,7 +447,7 @@ public class AI1 implements PlayerType {
 						} else if (tempMeld.getMeldSize() >= 3
 								&& blueTiles.get(i + 1).getValue() - tile.getValue() != 1) {
 							tempMeld.addTile(tile);
-							//System.out.println("WERE IN THE LOOP");
+							// System.out.println("WERE IN THE LOOP");
 							melds.add(tempMeld);
 							// tempMeld.getTiles().clear();
 							tempMeld = new Meld();
@@ -404,7 +467,7 @@ public class AI1 implements PlayerType {
 								melds.add(tempMeld);
 							}
 						} else {
-							//System.out.println("BLAHBLAHBLAH");
+							// System.out.println("BLAHBLAHBLAH");
 						}
 					} else if (blueTiles.get(i).getValue() != blueTiles.get(i - 2).getValue() && num != 1) {
 						num = 2;
@@ -421,16 +484,16 @@ public class AI1 implements PlayerType {
 
 			}
 		}
-		
+
 		if (orangeTiles.size() > 2) {
 			Meld tempMeld = new Meld();
 			for (int i = 0; i <= orangeTiles.size() - 1; i++) {
 				Tile tile = orangeTiles.get(i);
-				//System.out.println(tile.tileToString());
+				// System.out.println(tile.tileToString());
 				if (i != orangeTiles.size() - 1) {
 					if (orangeTiles.get(i).getValue() != orangeTiles.get(i + 1).getValue()) {
 						if (orangeTiles.get(i + 1).getValue() - tile.getValue() == 1) {
-							//System.out.println("Subtracting green");
+							// System.out.println("Subtracting green");
 							tempMeld.addTile(tile);
 						} else if (tempMeld.getMeldSize() < 3
 								&& orangeTiles.get(i + 1).getValue() - tile.getValue() != 1) {
@@ -438,7 +501,7 @@ public class AI1 implements PlayerType {
 						} else if (tempMeld.getMeldSize() >= 3
 								&& orangeTiles.get(i + 1).getValue() - tile.getValue() != 1) {
 							tempMeld.addTile(tile);
-							//System.out.println("WERE IN THE LOOP");
+							// System.out.println("WERE IN THE LOOP");
 							melds.add(tempMeld);
 							// tempMeld.getTiles().clear();
 							tempMeld = new Meld();
@@ -458,7 +521,7 @@ public class AI1 implements PlayerType {
 								melds.add(tempMeld);
 							}
 						} else {
-							//System.out.println("BLAHBLAHBLAH");
+							// System.out.println("BLAHBLAHBLAH");
 						}
 					} else if (orangeTiles.get(i).getValue() != orangeTiles.get(i - 2).getValue() && num != 1) {
 						num = 2;
@@ -475,8 +538,17 @@ public class AI1 implements PlayerType {
 
 			}
 		}
-		
-		
+	}
+
+	@Override
+	public boolean hasInitialMeldBeenPlayed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setHasInitialMeldBeenPlayed(boolean b) {
+		// TODO Auto-generated method stub
 		
 	}
 	
