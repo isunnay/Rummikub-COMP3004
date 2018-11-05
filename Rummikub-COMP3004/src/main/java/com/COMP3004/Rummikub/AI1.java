@@ -131,8 +131,8 @@ public class AI1 implements PlayerType {
 	
 	
 	public void playMeld(Meld meld, Scanner reader) {
-		int x = ThreadLocalRandom.current().nextInt(0, 14 + 1);
-		int y = ThreadLocalRandom.current().nextInt(0, 14 + 1);
+		int x = ThreadLocalRandom.current().nextInt(0, 12 + 1);
+		int y = ThreadLocalRandom.current().nextInt(0, 12 + 1);
 		System.out.println(x);
 		System.out.println(y);
 		Spot beginningSpot = board.getSpot(x, y);
@@ -154,6 +154,7 @@ public class AI1 implements PlayerType {
 			}
 			else {
 				System.out.println("Meld cannot be placed here. Please try a different Location. ");
+				playMeld(meld, reader);
 			}
 		}
 		
