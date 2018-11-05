@@ -104,7 +104,7 @@ public class Game implements Subject {
 				if (decision == 'P') {
 					while(true) {
 						System.out.println("Would you like to play a (M)eld, an individual (T)ile, or move a current (B)oard Tile? ");
-						System.out.println("Type e to exit at any time");
+						System.out.println("Type 'E' to exit at any time");
 						char nextDecision = reader.next().toUpperCase().charAt(0);
 						
 						if(nextDecision== 'E') {
@@ -112,40 +112,42 @@ public class Game implements Subject {
 						}
 						else if(nextDecision == 'M') {
 							printAll();
-							// Variables
-							int tileChoice = 0;
+							String tileChoice = "";
 							Meld meld = new Meld();
-							// Create meld within hand
+							Hand tempHand = allPlayers.get(0).getHand();
 							allPlayers.get(0).getHand().createMeld();
-							// Ask for tiles for meld on loop
-							while(tileChoice >= 0) {
-								System.out.println("Current Meld: " + meld.meldToString());
-								// Print hand out
-								System.out.println("Human Hand: " + allPlayers.get(0).getHand().handToString());
-								System.out.println("Which tile from your hand (Any negative value will close the sequence | tiles from 0-" + (allPlayers.get(0).getHand().getNumTiles()-1) + "): ");
-								tileChoice = reader.nextInt();
-								if (tileChoice >= 0 && tileChoice<=allPlayers.get(0).getHand().size) {
-									meld.addTile(allPlayers.get(0).getHand().getTile(tileChoice));
-								}
-								else if(tileChoice == -1) {
+							
+							while (!(tileChoice.equals("D"))) {
+								if (tempHand.size == 0) {
 									break;
 								}
-								else {
-									System.out.println("Please enter a valid input");
-								}
 								
-							}
-							// Check if valid meld
-							if (tileChoice == -1 && meld.getMeldSize()>=3 && meld.checkIfValidMeld() == true ) {
-								allPlayers.get(0).playMeld(meld,reader);
-								//notifyObservers();
+								System.out.println("Current Meld: " + meld.meldToString());
+								System.out.println("Human Hand: " + tempHand.handToString());
+								System.out.println("Which tile would you like to add to your meld (Type 'D' when you are done): ");
+								tileChoice = reader.next().toUpperCase();
+								
+								for (int i = 0; i < allPlayers.get(0).getHand().size; i++) {
+									if (allPlayers.get(0).getHand().getTile(i).tileToString().equals(tileChoice)) {
+										meld.addTile(allPlayers.get(0).getHand().getTile(i));
+										tempHand.removeTile(tempHand.getTile(i));
+										break;
+									} else if (i == (allPlayers.get(0).getHand().size - 1) && !(tileChoice.equals("D"))) {
+										System.out.println("It seems that the tile " + tileChoice + " isn't in your posession. Please try again.");
+									}
+								}
+							}	
+							if (meld.getMeldSize() >= 3 && meld.checkIfValidMeld() == true) {
+								allPlayers.get(0).playMeld(meld, reader);
 								turnValue = turnValue + meld.getMeldValue();
 								printAll();
-							} 
-							else {
+							} else {
 								System.out.println("Invalid meld. Please try again.");
 								System.out.println("----------------------------------------");
-								tileChoice = 0;
+								for (int i = 0; i < meld.getMeldSize(); i++) {
+									allPlayers.get(0).getHand().addTile(meld.getTileInMeld(i));
+								}allPlayers.get(0).getHand().sortHand();
+								tileChoice = "";
 							}
 						}
 						else if(nextDecision == 'T') {	
@@ -194,7 +196,7 @@ public class Game implements Subject {
 						}
 						
 						else {
-							System.out.println("You may have entered the wrong character. Try again (M / T).");
+							System.out.println("You may have entered the wrong character. Please try again.");
 							nextDecision = reader.next().toUpperCase().charAt(0);
 						}
 					}
@@ -230,7 +232,7 @@ public class Game implements Subject {
 						System.out.println("You cannot draw a tile if you've already played a tile");
 					}
 				} else {
-					System.out.println("You may have entered the wrong character. Try again (P / S).");
+					System.out.println("You may have entered the wrong character. Please try again.");
 					decision = reader.next().toUpperCase().charAt(0);
 				}
 			}
