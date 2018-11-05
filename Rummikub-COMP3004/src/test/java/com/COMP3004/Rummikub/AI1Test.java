@@ -4,11 +4,22 @@ import junit.framework.TestCase;
 public class AI1Test extends TestCase {
 	
 public void testOneMeldFirstTurn() {
+		Game game = new Game();
 		Deck deck = new Deck();
+		deck.shuffleTiles();
 		AI1 ai1 = new AI1(deck);
-		//System.out.println("AI1Hand " + ai1.h.handToString());
-		//System.out.println("Number of Melds " + ai1.h.numberOfMelds());
+		ai1.findAllMelds();
+		for(int i=0;i<ai1.testMelds.size();i++) {
+			System.out.println("testMelds Size: " +ai1.testMelds.size() );
+			System.out.println(ai1.testMelds.get(i).meldToString());
+			//System.out.println(ai1.testMelds.get(i).checkIfValidMeld());
+		}
+	/*	System.out.println("AI1Hand " + ai1.h.handToString());
+		System.out.println("Number of Melds " + ai1.h.numberOfMelds());
 		System.out.println(ai1.oneMeldFirstTurn());
+		for(int i=0;i<ai1.getHand().size;i++) {
+			
+		}*/
 		//assertTrue("true", ai1.oneMeldFirstTurn());
 	}
 
