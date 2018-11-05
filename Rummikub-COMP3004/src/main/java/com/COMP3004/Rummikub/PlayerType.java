@@ -19,6 +19,7 @@ public interface PlayerType extends Observer{
 	
 	public void update(Board board);
 	
+	public void play(Scanner reader);
 	public void playMeld(Meld meld, Scanner reader);
 	public void addTile(Tile tile, int x, int y);
 	public boolean canWePlaceMeld(Meld meld, int x, int y);

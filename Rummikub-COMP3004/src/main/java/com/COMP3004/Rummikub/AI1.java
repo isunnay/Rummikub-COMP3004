@@ -1,6 +1,7 @@
 package com.COMP3004.Rummikub;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -22,7 +23,7 @@ public class AI1 implements PlayerType {
 	private Board board;
 
 	
-	public AI1(Deck deck) {
+	public AI1(Deck deck, Game game) {
 		h = new Hand();
 		h.createHand(deck);
 		h.sortHand();
@@ -113,14 +114,27 @@ public class AI1 implements PlayerType {
 	public void update(Board board) {
 		// TODO Auto-generated method stub
 		this.spotsTaken = board.filledSpots;
-		this.board = board;
-		
+		this.board = board;		
 	}
-
 	@Override
+	public void play(Scanner reader) {
+		//System.out.println("Play");
+		this.findAllMelds();
+		//System.out.println(melds.size());
+		if(melds.size()>0) {
+			for(int i=0;i<melds.size();i++) {
+				playMeld(melds.get(i),reader);
+				this.hasTileBeenPlaced = true;
+			}
+		}
+	}
+	
+	
 	public void playMeld(Meld meld, Scanner reader) {
-		int x= 5;
-		int y=5;
+		int x = ThreadLocalRandom.current().nextInt(0, 14 + 1);
+		int y = ThreadLocalRandom.current().nextInt(0, 14 + 1);
+		System.out.println(x);
+		System.out.println(y);
 		Spot beginningSpot = board.getSpot(x, y);
 		
 		if(beginningSpot!=null) {

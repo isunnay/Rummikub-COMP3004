@@ -37,7 +37,9 @@ public class Game implements Subject {
 		// Create all 4 players
 		Human human = new Human(deck, this);
 		observers.add(human);
-		AI1 ai1 = new AI1(deck);
+		AI1 ai1 = new AI1(deck, this);
+		observers.add(ai1);
+		
 		AI2 ai2 = new AI2(deck);
 		//AI3 ai3 = new AI3(deck);
 
@@ -244,6 +246,14 @@ public class Game implements Subject {
 				System.out.println("Try #" + (timesTriedPlaying+1) + ": AI1 Playing...");
 				timesTriedPlaying++;
 				TimeUnit.SECONDS.sleep(4);
+				allPlayers.get(1).play(reader);	
+				if(allPlayers.get(1).hasTilesBeenPlayed() == false) {
+						Tile t = allPlayers.get(1).getHand().dealTile(deck);
+						System.out.println("Turn ended: AI1 has decided to draw a tile.");
+						System.out.println("Tile drawn: " + t.tileToString());
+				}
+				notifyObservers();
+				
 				//if (allPlayers.get(1).turnComplete(allPlayers.get(1).getHand()) == true) {
 					allPlayers.get(1).setTilesBeenPlayed(true); allPlayers.get(1).setTurnStatus(false);
 					allPlayers.get(2).setTilesBeenPlayed(false); allPlayers.get(2).setTurnStatus(true);
