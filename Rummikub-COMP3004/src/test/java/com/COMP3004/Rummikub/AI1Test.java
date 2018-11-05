@@ -3,17 +3,48 @@ import junit.framework.TestCase;
 
 public class AI1Test extends TestCase {
 	
-public void testOneMeldFirstTurn() {
-		Game game = new Game();
+public void testMaint() {
+		//Game game = new Game();
 		Deck deck = new Deck();
 		deck.shuffleTiles();
+		Tile tile1 = new Tile(3,1);
+		Tile tile2 = new Tile(3,2);
+		Tile tile3 = new Tile(3,2);
+		Tile tile4 = new Tile(3,3);
+		Tile tile5 = new Tile(3,4);
 		AI1 ai1 = new AI1(deck);
-		ai1.findAllMelds();
-		for(int i=0;i<ai1.testMelds.size();i++) {
-			System.out.println("testMelds Size: " +ai1.testMelds.size() );
-			System.out.println(ai1.testMelds.get(i).meldToString());
-			//System.out.println(ai1.testMelds.get(i).checkIfValidMeld());
+		ai1.h.addTile(tile1);
+		ai1.h.addTile(tile2);
+		ai1.h.addTile(tile3);
+		ai1.h.addTile(tile4);
+		ai1.h.addTile(tile5);
+		
+		Tile tile7 = new Tile(3,6);
+		Tile tile8 = new Tile(3,7);
+		Tile tile9 = new Tile(3,8);
+		Tile tile10 = new Tile(3,9);
+		
+		ai1.h.addTile(tile7);
+		ai1.h.addTile(tile8);
+		ai1.h.addTile(tile9);
+		ai1.h.addTile(tile10);
+
+		Tile tile11 = new Tile(3,12);
+		Tile tile111 = new Tile(2,13);
+		ai1.h.addTile(tile11);
+		ai1.h.addTile(tile111);
+		
+		ai1.h.sortHand();
+		System.out.println(ai1.h.handToString());
+		ai1.findAllRuns();
+		System.out.println("Melds size: "+ai1.melds.size());
+		for(int i=0;i<ai1.melds.size();i++) {
+			System.out.println(ai1.melds.get(i).meldToString());
 		}
+		
+		
+		
+		
 	/*	System.out.println("AI1Hand " + ai1.h.handToString());
 		System.out.println("Number of Melds " + ai1.h.numberOfMelds());
 		System.out.println(ai1.oneMeldFirstTurn());

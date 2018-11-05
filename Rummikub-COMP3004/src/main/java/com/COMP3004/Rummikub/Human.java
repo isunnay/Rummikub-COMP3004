@@ -13,8 +13,7 @@ public class Human implements PlayerType {
 	public ArrayList<Meld> turnMelds;
 	public ArrayList<Tile> turnMoves;
 	private Board board;
-	
-	
+
 	public Human(Deck deck, Game game) {
 		h = new Hand();
 		h.createHand(deck);
@@ -25,16 +24,26 @@ public class Human implements PlayerType {
 		turnMelds = new ArrayList<Meld>();
 		turnMoves = new ArrayList<Tile>();
 	}
-	
-	public Hand getHand() { return this.h; }
-	
-	public boolean myTurnStatus() { return this.myTurn; }
-	
-	public void setTurnStatus(boolean b) { this.myTurn = b; }
-	
-	public boolean hasTilesBeenPlayed() { return this.hasTileBeenPlaced; }
-	
-	public void setTilesBeenPlayed(boolean b) { this.hasTileBeenPlaced = b; }
+
+	public Hand getHand() {
+		return this.h;
+	}
+
+	public boolean myTurnStatus() {
+		return this.myTurn;
+	}
+
+	public void setTurnStatus(boolean b) {
+		this.myTurn = b;
+	}
+
+	public boolean hasTilesBeenPlayed() {
+		return this.hasTileBeenPlaced;
+	}
+
+	public void setTilesBeenPlayed(boolean b) {
+		this.hasTileBeenPlaced = b;
+	}
 
 	public boolean turnComplete(Hand h) {
 		// Do Nothing...
@@ -43,78 +52,70 @@ public class Human implements PlayerType {
 
 	@Override
 	public void update(Board board) {
-	//	turnTiles.clear();
+		// turnTiles.clear();
 		this.spotsTaken = board.filledSpots;
 		this.board = board;
 	}
-	
+
 	// && x+a<board.getX() && x+meld.getMeldSize() <= board.getX()
 	@Override
 	public boolean canWePlaceMeld(Meld meld, int x, int y) {
-		//Spot beginningSpot = board.getSpot(x, y);
-		for(int a=0;a<meld.getMeldSize();a++) {
-			if(x+a>=board.getSpot(0, 0).getSpotX() && x+meld.getMeldSize()<=board.getX()) {
-				if(x==0) {
-					if(board.getSpot(x+meld.getMeldSize(), y).isTaken = true) {
-						Spot spot = board.getSpot(x+a, y);
-						if(this.spotsTaken.contains(spot)) {
+		// Spot beginningSpot = board.getSpot(x, y);
+		for (int a = 0; a < meld.getMeldSize(); a++) {
+			if (x + a >= board.getSpot(0, 0).getSpotX() && x + meld.getMeldSize() <= board.getX()) {
+				if (x == 0) {
+					if (board.getSpot(x + meld.getMeldSize(), y).isTaken = true) {
+						Spot spot = board.getSpot(x + a, y);
+						if (this.spotsTaken.contains(spot)) {
 							return false;
-							}
+						}
+					} else {
+						System.out.println("ERROR: Your meld cannot be touching other melds.");
+						return false;
 					}
-					else {
+				} else if (x == 12) {
+					if (board.getSpot(x + meld.getMeldSize() - 1, y).isTaken = true) {
+						Spot spot = board.getSpot(x + a, y);
+						if (this.spotsTaken.contains(spot)) {
+							return false;
+						}
+					} else {
+						System.out.println("ERROR: Your meld cannot be touching other melds.");
+						return false;
+					}
+				} else {
+					if (board.getSpot(x - 1, y).isTaken != true
+							&& board.getSpot(x + meld.getMeldSize(), y).isTaken != true) {
+						Spot spot = board.getSpot(x + a, y);
+						if (this.spotsTaken.contains(spot)) {
+							return false;
+						}
+					} else {
 						System.out.println("ERROR: Your meld cannot be touching other melds.");
 						return false;
 					}
 				}
-				else if(x==12) {
-					if(board.getSpot(x+meld.getMeldSize()-1, y).isTaken = true) {
-						Spot spot = board.getSpot(x+a, y);
-						if(this.spotsTaken.contains(spot)) {
-							return false;
-							}
-					}
-					else {
-						System.out.println("ERROR: Your meld cannot be touching other melds.");
-						return false;
-					}
-					
-				}
-				
-				else {
-					if(board.getSpot(x-1, y).isTaken != true && board.getSpot(x+meld.getMeldSize(), y).isTaken != true) {
-						Spot spot = board.getSpot(x+a, y);
-						if(this.spotsTaken.contains(spot)) {
-							return false;
-							}
-					}
-					else {
-						System.out.println("ERROR: Your meld cannot be touching other melds.");
-						return false;
-					}
-			}
-			}
-			else {
+			} else {
 				System.out.println("ERROR: Make sure your meld is placed within the board spots.");
 				return false;
 			}
 		}
-		return true;	
+		return true;
 	}
 
 	@Override
 	public void playMeld(Meld meld, Scanner aReader) {
 		System.out.println("Enter an x value for the beginning of the Meld (Between 0-14): ");
-		int x = aReader.nextInt(); 
+		int x = aReader.nextInt();
 		System.out.println("Enter an y value for the beginning of the Meld (Between 0-14): ");
-		int y = aReader.nextInt(); 
+		int y = aReader.nextInt();
 		Spot beginningSpot = board.getSpot(x, y);
-		
-		
-		if(beginningSpot!=null) {
-			if(canWePlaceMeld(meld,x,y)==true) {
-				for(int i=0;i<meld.getNumberOfTiles();i++) {
+
+		if (beginningSpot != null) {
+			if (canWePlaceMeld(meld, x, y) == true) {
+				for (int i = 0; i < meld.getNumberOfTiles(); i++) {
 					Tile tile = meld.getTileInMeld(i);
-					Spot spot = board.getSpot(x+i,y);
+					Spot spot = board.getSpot(x + i, y);
 					spot.playTile(tile);
 					tile.setSpot(spot);
 					board.numberOfTilesOnBoard++;
@@ -122,10 +123,9 @@ public class Human implements PlayerType {
 					h.removeTile(tile);
 				}
 				board.meldsOnBoard.add(meld);
-				board.numberOfMelds++;	
+				board.numberOfMelds++;
 				turnMelds.add(meld);
-			}
-			else {
+			} else {
 				System.out.println("Meld cannot be placed here. Please try a different Location. ");
 			}
 		}
@@ -203,8 +203,7 @@ public class Human implements PlayerType {
 				System.out.println("ERROR: This is an invalid meld.");
 				nextTileMeld.removeTile(tile);
 			}
-		} 
-		else {
+		} else {
 			Spot spot = board.getSpot(x, y);
 			spot.playTile(tile);
 			tile.setSpot(spot);
@@ -214,7 +213,7 @@ public class Human implements PlayerType {
 			h.removeTile(tile);
 		}
 	}
-	
+
 	public void moveTile(Tile tile, Spot newSpot) {
 		Spot oldSpot = tile.getSpot();
 		oldSpot.removeTile();
@@ -224,11 +223,11 @@ public class Human implements PlayerType {
 		tile.setSpot(newSpot);
 		board.filledSpots.add(newSpot);
 		turnMoves.add(tile);
-		//boardChanged();
+		// boardChanged();
 	}
-	
+
 	public void undoPlayMeld(Meld meld) {
-		for(int i=0; i<meld.getMeldSize();i++) {
+		for (int i = 0; i < meld.getMeldSize(); i++) {
 			Tile tile = meld.getTileInMeld(i);
 			Spot spot = tile.getSpot();
 			spot.removeTile();
@@ -238,23 +237,23 @@ public class Human implements PlayerType {
 			h.addTile(tile);
 		}
 		board.meldsOnBoard.remove(meld);
-		board.numberOfMelds--;	
-		meld=null;
+		board.numberOfMelds--;
+		meld = null;
 	}
-	
+
 	public void undoAddTile(Tile tile) {
 		Spot spot = tile.getSpot();
 		spot.removeTile();
 		tile.removeSpot(spot);
 		board.numberOfTilesOnBoard--;
-		if(tile.getMemberOfMeld() != null) {
+		if (tile.getMemberOfMeld() != null) {
 			Meld meld = tile.getMemberOfMeld();
 			meld.removeTile(tile);
 		}
 		board.filledSpots.remove(spot);
 		h.addTile(tile);
 	}
-	
+
 	public void undoMove(Tile tile) {
 		Spot oldSpot = tile.getOldSpot();
 		Spot currentSpot = tile.getSpot();
@@ -262,33 +261,33 @@ public class Human implements PlayerType {
 		board.filledSpots.remove(currentSpot);
 		oldSpot.playTile(tile);
 		tile.setSpot(oldSpot);
-		board.filledSpots.add(oldSpot);		
+		board.filledSpots.add(oldSpot);
 	}
-	
-	public void undoTurn() {	
-		if(turnTiles.size()>0) {	
-			for(int i=0; i<turnTiles.size();i++) {
+
+	public void undoTurn() {
+		if (turnTiles.size() > 0) {
+			for (int i = 0; i < turnTiles.size(); i++) {
 				undoAddTile(turnTiles.get(i));
 			}
 		}
-		if(turnMelds.size()>0) {	
-			for(int x=0; x<turnMelds.size();x++) {
+		if (turnMelds.size() > 0) {
+			for (int x = 0; x < turnMelds.size(); x++) {
 				Meld meld = turnMelds.get(x);
 				undoPlayMeld(meld);
 			}
 		}
-		if(turnMoves.size()>0) {
-			for(int move=0;move<turnMoves.size();move++) {
-				undoMove(turnMoves.get(move));	
+		if (turnMoves.size() > 0) {
+			for (int move = 0; move < turnMoves.size(); move++) {
+				undoMove(turnMoves.get(move));
 			}
 		}
-		
+
 		h.sortHand();
 		turnTiles.clear();
 		turnMelds.clear();
 		turnMoves.clear();
 	}
-	
+
 	public Meld combineMelds(Meld meld1, Meld meld2, Tile tile) {
 		Meld newMeld = new Meld();
 		newMeld.getTiles().addAll(meld1.getTiles());
@@ -296,7 +295,5 @@ public class Human implements PlayerType {
 		newMeld.getTiles().addAll(meld2.getTiles());
 		return newMeld;
 	}
-	
-	
 
 }
