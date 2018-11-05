@@ -45,10 +45,12 @@ public class Hand {
 	}
 	
 	//dealTile() method returns size of hand after a new tile is dealt to it
-	public void dealTile(Deck deck) {
-		playerHand.add(deck.getTileDeck().remove(deck.getDeckCount() - 1));
+	public Tile dealTile(Deck deck) {
+		Tile tile = deck.getTileDeck().remove(deck.getDeckCount() - 1);
+		playerHand.add(tile);
 		this.size++;
 		this.sortHand();
+		return tile;
 	}
 	
 	public int getNumTiles() {
