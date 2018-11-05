@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class Human implements PlayerType {
 	Hand h;
+	private boolean initialMeldPlayed = false;
 	private boolean myTurn = true;
 	private boolean hasTileBeenPlaced = false;
 	public Subject game;
@@ -24,6 +25,13 @@ public class Human implements PlayerType {
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
 		turnMoves = new ArrayList<Tile>();
+	}
+	
+	public boolean hasInitialMeldBeenPlayed() {
+		return this.initialMeldPlayed;
+	}
+	public void setHasInitialMeldBeenPlayed(boolean b) {
+		this.initialMeldPlayed = b;
 	}
 	
 	public Hand getHand() { return this.h; }
