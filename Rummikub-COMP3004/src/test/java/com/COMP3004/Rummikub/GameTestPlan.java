@@ -7,10 +7,95 @@ public class GameTestPlan extends TestCase {
 		Game game = new Game();
 		Board board = game.getBoard();
 		
-		//14 tiles requirement
-		for(int i=0; i<game.getAllPlayers().size(); i++) {
-			assertEquals(14, game.getPlayer(i).getHand().getNumTiles());
+		//System.out.println(game.getAllPlayers().get(0).getHand().getNumTiles());
+		int size = game.getAllPlayers().get(0).getHand().getNumTiles();
+		
+		for(int j=0; j<size; j++) {
+			game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 1);
 		}
+		
+		//System.out.println(game.getAllPlayers().get(0).getHand().getNumTiles());
+		
+		Tile[] humanTiles = {new Tile("R", 1), new Tile("R", 2), new Tile("R", 3), new Tile("R", 4), new Tile("O", 11), new Tile("O", 12),
+				new Tile("O", 13), new Tile("O", 14), new Tile("G", 6), new Tile("G", 7), new Tile("G", 8), new Tile("G", 9),
+				new Tile("G", 10), new Tile("G", 11)};
+		Tile[] ai1Tiles = {new Tile("R", 12), new Tile("R", 13), new Tile("R", 17), new Tile("B", 2), new Tile("B", 4), new Tile("B", 5),
+				new Tile("O", 9), new Tile("O", 12), new Tile("O", 13), new Tile("G", 5), new Tile("G", 6), new Tile("G", 11),
+				new Tile("G", 13), new Tile("G", 14)};
+		Tile[] ai2Tiles = {new Tile("R", 1), new Tile("R", 5), new Tile("B", 1), new Tile("B", 2), new Tile("B", 3), new Tile("B", 6),
+				new Tile("B", 7), new Tile("O", 2), new Tile("O", 4), new Tile("O", 5), new Tile("O", 7), new Tile("O", 8),
+				new Tile("G", 1), new Tile("G", 2)};
+		
+		Tile[] ai3Tiles = {new Tile("R", 9), new Tile("R", 11), new Tile("R", 12), new Tile("B", 10), new Tile("B", 11), new Tile("B", 13),
+				new Tile("B", 14), new Tile("O", 3), new Tile("O", 4), new Tile("O", 5), new Tile("O", 6), new Tile("Green", 4),
+				new Tile("G", 5), new Tile("G", 6)};
+		
+		for(int i=0; i<humanTiles.length; i++) {
+			game.getAllPlayers().get(0).getHand().addTile(humanTiles[i]);
+		}
+		//System.out.println(game.getAllPlayers().get(0).getHand().getNumTiles());
+		for(int i=0; i<ai1Tiles.length; i++) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles[i]);
+		}
+		for(int i=0; i<ai2Tiles.length; i++) {
+			game.getAllPlayers().get(2).getHand().addTile(ai2Tiles[i]);
+		}
+		/*for(int i=0; i<ai3Tiles.length; i++) {
+			game.getAllPlayers().get(3).getHand().addTile(ai3Tiles[i]);
+		}*/
+		Human human = (Human)game.getAllPlayers().get(0);
+		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
+		AI2 ai2 = (AI2)game.getAllPlayers().get(2);
+		//AI3 ai3 = (AI3)game.getAllPlayers().get(3);
+		
+		for(int i=0; i<game.getAllPlayers().size(); i++) {
+			assertNotNull(game.getAllPlayers().get(i).getHand().handToString());
+		}
+		
+		//Tiles are organized by color and value
+		ArrayList<PlayerType> players = game.getAllPlayers();
+		for(int i=0; i<players.size(); i++) {
+			for(int j=0; j<players.get(i).getHand().getPlayerHand().size() - 1; j++) {
+				if(players.get(i).getHand().getTile(j).getColour() == players.get(i).getHand().getTile(j+1).getColour()) {
+					assertTrue(players.get(i).getHand().getTile(j).getValue() <= players.get(i).getHand().getTile(j+1).getValue());
+				}
+			}
+		}
+		
+		human.setTurnStatus(true);
+		assertTrue(human.myTurnStatus());
+		assertFalse(ai1.myTurnStatus());
+		assertFalse(ai2.myTurnStatus());
+		//assertFalse(ai3.myTurnStatus());
+		
+		human.getHand().createMeld();
+		human.getHand().createMeld();
+		human.getHand().createMeld();
+		for(int i=0; i<4; i++) {
+			human.getHand().getMeld(0).addTile(human.getHand().getTile(i));
+		}
+		for(int i=4; i<8; i++) {
+			human.getHand().getMeld(1).addTile(human.getHand().getTile(i));
+		}
+		for(int i=8; i<14; i++) {
+			human.getHand().getMeld(2).addTile(human.getHand().getTile(i));
+		}
+		
+		assertTrue(human.getHand().getMeld(0).checkIfValidMeld());
+		assertTrue(human.getHand().getMeld(1).checkIfValidMeld());
+		assertTrue(human.getHand().getMeld(2).checkIfValidMeld());
+		
+		assertTrue(human.getHand().getMeld(1).getMeldValue() >= 30);
+		
+		assertTrue(human.getHand().getMeld(1).isValidRun() && human.getHand().getMeld(2).isValidRun());
+		
+		int size2 = human.getHand().getPlayerHand().size();
+		for(int i=0; i<size2; i++) {
+			game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 1);
+		}
+		//System.out.println(game.getAllPlayers().get(0).getHand().getNumTiles());
+		
+		assertEquals(1, game.getWinner());
 	}
 	
 	public void testGame2() {
@@ -18,7 +103,7 @@ public class GameTestPlan extends TestCase {
 		Human human = (Human)game.getAllPlayers().get(0);
 		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
 		AI2 ai2 = (AI2)game.getAllPlayers().get(2);
-		AI3 ai3 = (AI3)game.getAllPlayers().get(3);
+		//AI3 ai3 = (AI3)game.getAllPlayers().get(3);
 		
 		//Check who's turn it is
 		//Play in order: Human, AI1, AI2, then AI3
@@ -27,9 +112,12 @@ public class GameTestPlan extends TestCase {
 		assertTrue(human.myTurnStatus());
 		assertFalse(ai1.myTurnStatus());
 		assertFalse(ai2.myTurnStatus());
-		assertFalse(ai3.myTurnStatus());
+		//assertFalse(ai3.myTurnStatus());
 		//human draws tile
-		human.getHand().dealTile(game.getDeck());
+		Tile tile = game.getDeck().getTileDeck().get(game.getDeck().getTileDeck().size() - 1);
+		assertTrue(human.myTurnStatus());
+		assertEquals(tile, human.getHand().dealTile(game.getDeck()));
+		assertTrue(human.getHand().isTileDealt(game.getDeck()));
 		
 		//AI1 goes second
 		human.setTurnStatus(false);
@@ -37,7 +125,7 @@ public class GameTestPlan extends TestCase {
 		assertTrue(ai1.myTurnStatus());
 		assertFalse(human.myTurnStatus());
 		assertFalse(ai2.myTurnStatus());
-		assertFalse(ai3.myTurnStatus());
+		//assertFalse(ai3.myTurnStatus());
 		//ai1 draws a tile
 		ai1.getHand().dealTile(game.getDeck());
 		
@@ -46,41 +134,52 @@ public class GameTestPlan extends TestCase {
 		ai2.setTurnStatus(true);
 		assertTrue(ai2.myTurnStatus());
 		assertFalse(human.myTurnStatus());
-		assertFalse(ai3.myTurnStatus());
+		//assertFalse(ai3.myTurnStatus());
 		assertFalse(ai1.myTurnStatus());
 		//ai2 draws a tile - no tile was placed
 		ai2.getHand().dealTile(game.getDeck());
 		
-		//AI3 goes last
-		ai2.setTurnStatus(false);
+		//AI3 goes last - skipping AI3 for now
+		/*ai2.setTurnStatus(false);
 		ai3.setTurnStatus(true);
 		assertTrue(ai3.myTurnStatus());
 		assertFalse(human.myTurnStatus());
 		assertFalse(ai2.myTurnStatus());
 		assertFalse(ai1.myTurnStatus());
 		//ai3 draws a tile
-		ai3.getHand().dealTile(game.getDeck());
+		ai3.getHand().dealTile(game.getDeck());*/
 	}
 	
 	public void testGame3() {
 		Game game = new Game();
-		Human human = (Human)game.getAllPlayers().get(0);
-		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
-		AI2 ai2 = (AI2)game.getAllPlayers().get(2);
-		AI3 ai3 = (AI3)game.getAllPlayers().get(3);
 		
-		//Tiles are organized by color and value
-		ArrayList<PlayerType> players = game.getAllPlayers();
-		for(int i=0; i<players.size(); i++) {
-			//displaying the hand
-			assertNotNull(players.get(i).getHand().handToString());
-			for(int j=0; j<players.get(i).getHand().getNumTiles() - 1; j++) {
-				if(players.get(i).getHand().getTile(j).getColour() == players.get(i).getHand().getTile(j+1).getColour()) {
-					//System.out.println(players.get(i).getHand().getTile(j).getValue() + ", " + players.get(i).getHand().getTile(j+1).getValue());
-					assertTrue(players.get(i).getHand().getTile(j).getValue() <= players.get(i).getHand().getTile(j+1).getValue());
-				}
-			}
+		Tile[] ai1Tiles = {new Tile("B", 9), new Tile("B", 10), new Tile("B", 11)};
+		
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1);
 		}
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles[i]);
+		}
+		
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		game.getAllPlayers().get(1).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		game.getAllPlayers().get(0).getHand().dealTile(game.getDeck());
+		
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		game.getAllPlayers().get(1).getHand().createMeld();
+		
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[i]);
+		}
+		
+		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
+		assertTrue(ai1.oneMeldFirstTurn());
 	}
 	
 	public void testGame4() {
@@ -88,7 +187,7 @@ public class GameTestPlan extends TestCase {
 		Human human = (Human)game.getAllPlayers().get(0);
 		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
 		AI2 ai2 = (AI2)game.getAllPlayers().get(2);
-		AI3 ai3 = (AI3)game.getAllPlayers().get(3);
+		//AI3 ai3 = (AI3)game.getAllPlayers().get(3);
 		
 		String[] colours = {"Red", "Green", "Blue"};
 		
@@ -107,39 +206,82 @@ public class GameTestPlan extends TestCase {
 		//having two melds to play
 		human.getHand().createMeld();
 		human.getHand().createMeld();
-		human.getHand().getMeld(0).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 3));
-		human.getHand().getMeld(0).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 2));
-		human.getHand().getMeld(0).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 1));
+		human.getHand().getMeld(0).addTile(human.getHand().getTile(human.getHand().getNumTiles() - 3));
+		human.getHand().getMeld(0).addTile(human.getHand().getTile(human.getHand().getNumTiles() - 2));
+		human.getHand().getMeld(0).addTile(human.getHand().getTile(human.getHand().getNumTiles() - 1));
 		/*for(int i=0; i<human.getHand().getMeld(0).getNumberOfTiles(); i++) {
 			System.out.println(human.getHand().getMeld(0).getTileInMeld(i).getTile().tileToString());
 		}*/
+		
+		//The meld to be played is greater than 30
+		
+		human.getHand().getMeld(1).addTile(human.getHand().getTile(human.getHand().getNumTiles() - 4));
+		human.getHand().getMeld(1).addTile(human.getHand().getTile(human.getHand().getNumTiles() - 5));
+		human.getHand().getMeld(1).addTile(human.getHand().getTile(human.getHand().getNumTiles() - 6));
+		/*for(int i=0; i<human.getHand().getMeld(1).getNumberOfTiles(); i++) {
+			System.out.println(human.getHand().getMeld(1).getTileInMeld(i).getTile().tileToString());
+		}*/
+		
+		//The meld to be played is equal to 30
+		assertTrue(human.getHand().getMeld(1).getMeldValue() == 30);
+		//The meld to be played is greater than 30
+		assertTrue(human.getHand().getMeld(0).getMeldValue() > 30);
+		assertEquals(2, human.getHand().getNumberOfMelds());
+		
+		//Can play a mix of a run and a set
 		assertTrue(human.getHand().getMeld(0).checkIfValidMeld());
 		assertTrue(human.getHand().getMeld(0).isValidRun());
+		assertTrue(human.getHand().getMeld(1).checkIfValidMeld());
+		assertTrue(human.getHand().getMeld(1).isValidSet());
 		
-		int sum = 0;
-		for(int i=0; i<human.getHand().getMeld(0).getNumberOfTiles(); i++) {
-			sum += human.getHand().getMeld(0).getTileInMeld(i).getValue();
+		assertTrue(human.canWePlaceMeld(human.getHand().getMeld(0), 1, 1));
+		assertTrue(human.canWePlaceMeld(human.getHand().getMeld(1), 3, 3));
+	}
+	
+	public void testGame5() {
+		Game game = new Game();
+		
+		Tile[] ai1Tiles = {new Tile("B", 9), new Tile("B", 10), new Tile("B", 12)};
+		
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1);
 		}
-		//The meld to be played is greater than 30
-		assertTrue(sum > 30);
-		
-		human.getHand().getMeld(1).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 1));
-		human.getHand().getMeld(1).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 1));
-		human.getHand().getMeld(1).addTile(human.getHand().removeFromHand(human.getHand().getNumTiles() - 1));
-		for(int i=0; i<human.getHand().getMeld(1).getNumberOfTiles(); i++) {
-			System.out.println(human.getHand().getMeld(1).getTileInMeld(i).getTile().tileToString());
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles[i]);
 		}
 		
-		//assertTrue(human.getHand().getMeld(1).checkIfValidMeld());
-		//assertTrue(human.getHand().getMeld(1).isValidSet());
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		game.getAllPlayers().get(1).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		game.getAllPlayers().get(0).getHand().dealTile(game.getDeck());
 		
-		int sum2 = 0;
-		for(int i=0; i<human.getHand().getMeld(1).getNumberOfTiles(); i++) {
-			sum2 += human.getHand().getMeld(1).getTileInMeld(i).getValue();
-		}
-		//The meld to be played is equal to 30
-		assertTrue(sum == 30);
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		game.getAllPlayers().get(1).getHand().addTile(new Tile("B", 11));
+
+		game.getAllPlayers().get(2).setTurnStatus(true);
+		game.getAllPlayers().get(1).setTurnStatus(false);
+		game.getAllPlayers().get(2).getHand().dealTile(game.getDeck());
 		
-		assertEquals(2, human.getHand().getNumberOfMelds());
+		//game.getAllPlayers().get(3).setTurnStatus(true);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).getHand().dealTile(game.getDeck());
+		
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		game.getAllPlayers().get(0).getHand().dealTile(game.getDeck());
+		
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		game.getAllPlayers().get(1).getHand().createMeld();
+		
+		game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[0]);
+		game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[1]);
+		game.getAllPlayers().get(1).getHand().getMeld(0).addTile(new Tile("B", 11));
+		game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[2]);
+		
+		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
+		assertTrue(ai1.oneMeldSubsequentTurn());
 	}
 }
