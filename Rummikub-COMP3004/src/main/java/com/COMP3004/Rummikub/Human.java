@@ -24,7 +24,6 @@ public class Human implements PlayerType {
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
 		turnMoves = new ArrayList<Tile>();
-
 	}
 	
 	public Hand getHand() { return this.h; }
