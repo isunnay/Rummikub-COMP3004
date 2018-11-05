@@ -80,11 +80,11 @@ public class GameTestPlan extends TestCase {
 		for(int i=8; i<14; i++) {
 			human.getHand().getMeld(2).addTile(human.getHand().getTile(i));
 		}
-		
+		assertTrue(human.getHand().getMeld(0).isValidRun());
 		assertTrue(human.getHand().getMeld(0).checkIfValidMeld());
 		assertTrue(human.getHand().getMeld(1).checkIfValidMeld());
 		assertTrue(human.getHand().getMeld(2).checkIfValidMeld());
-		
+		assertEquals(3, human.getHand().getNumberOfMelds());
 		assertTrue(human.getHand().getMeld(1).getMeldValue() >= 30);
 		
 		assertTrue(human.getHand().getMeld(1).isValidRun() && human.getHand().getMeld(2).isValidRun());
@@ -283,5 +283,57 @@ public class GameTestPlan extends TestCase {
 		
 		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
 		assertTrue(ai1.oneMeldSubsequentTurn());
+	}
+	
+	public void testGame6() {
+		Game game = new Game();
+		Tile[] tiles = {new Tile("B", 5), new Tile("G", 5), new Tile("R", 5)};
+		Tile[] tiles2 = {new Tile("B", 4), new Tile("B", 5), new Tile("B", 6)};
+		
+		for(int i=0; i<6; i++) {
+			game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 1);
+		}
+		for(int i=0; i<tiles.length; i++) {
+			game.getAllPlayers().get(0).getHand().addTile(tiles[i]);
+		}
+		for(int i=0; i<tiles.length; i++) {
+			game.getAllPlayers().get(0).getHand().addTile(tiles2[i]);
+		}
+		
+		game.getAllPlayers().get(0).getHand().createMeld();
+		game.getAllPlayers().get(0).getHand().createMeld();
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(0).getHand().getMeld(0).addTile(tiles[i]);
+		}
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(0).getHand().getMeld(0).addTile(tiles2[i]);
+		}
+		
+		int value1 = game.getAllPlayers().get(0).getHand().getMeld(0).getMeldValue();
+		int value2 = game.getAllPlayers().get(0).getHand().getMeld(1).getMeldValue();
+		assertEquals(30, value1 + value2);
+		
+		for(int i=0; i<6; i++) {
+			game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 1);
+		}
+		
+		Tile[] tiles3 = {new Tile("G", 6), new Tile("G", 7), new Tile("G", 8), new Tile("R", 7), new Tile("R", 8), new Tile("R", 9)};
+		for(int i=0; i<tiles3.length; i++) {
+			game.getAllPlayers().get(0).getHand().addTile(tiles3[i]);
+		}
+		
+		game.getAllPlayers().get(0).getHand().createMeld();
+		game.getAllPlayers().get(0).getHand().createMeld();
+		
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(0).getHand().getMeld(2).addTile(tiles3[i]);
+		}
+		for(int i=3; i<5; i++) {
+			game.getAllPlayers().get(0).getHand().getMeld(3).addTile(tiles3[i]);
+		}
+		
+		value1 = game.getAllPlayers().get(0).getHand().getMeld(2).getMeldValue();
+		value2 = game.getAllPlayers().get(0).getHand().getMeld(3).getMeldValue();
+		assertTrue(value1 + value2 > 30);
 	}
 }
