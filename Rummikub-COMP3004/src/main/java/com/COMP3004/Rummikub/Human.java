@@ -309,4 +309,11 @@ public class Human implements PlayerType {
 		return newMeld;
 	}
 
+
+	@Override
+	public void play(Scanner reader) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -91,7 +91,7 @@ public class Meld {
 		int number = tiles.get(0).getValue();
 		if (tiles.size()!=3 || tiles.size()!=4) {
 			for(int i=1;i<tiles.size();i++) {
-				System.out.println(i);
+				//System.out.println(i);
 				tile = tiles.get(i);
 				if(tile.getValue()!=number) {
 					//System.out.println("Wrong Value");

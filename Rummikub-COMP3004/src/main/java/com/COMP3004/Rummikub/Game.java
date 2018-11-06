@@ -37,15 +37,18 @@ public class Game implements Subject {
 		// Create all 4 players
 		Human human = new Human(deck, this);
 		observers.add(human);
-		AI1 ai1 = new AI1(deck);
+		AI1 ai1 = new AI1(deck, this);
+		observers.add(ai1);
+		
 		AI2 ai2 = new AI2(deck);
-		//AI3 ai3 = new AI3(deck);
+		AI3 ai3 = new AI3(deck, this);
+		observers.add(ai3);
 
 		// Put the players into the player ArrayList
 		allPlayers.add(human);
 		allPlayers.add(ai1);
 		allPlayers.add(ai2);
-		//allPlayers.add(ai3);
+		allPlayers.add(ai3);
 
 		// printAll();
 		/*
@@ -244,6 +247,14 @@ public class Game implements Subject {
 				System.out.println("Try #" + (timesTriedPlaying+1) + ": AI1 Playing...");
 				timesTriedPlaying++;
 				TimeUnit.SECONDS.sleep(4);
+				allPlayers.get(1).play(reader);	
+				if(allPlayers.get(1).hasTilesBeenPlayed() == false) {
+						Tile t = allPlayers.get(1).getHand().dealTile(deck);
+						System.out.println("Turn ended: AI1 has decided to draw a tile.");
+						System.out.println("Tile drawn: " + t.tileToString());
+				}
+				notifyObservers();
+				
 				//if (allPlayers.get(1).turnComplete(allPlayers.get(1).getHand()) == true) {
 					allPlayers.get(1).setTilesBeenPlayed(true); allPlayers.get(1).setTurnStatus(false);
 					allPlayers.get(2).setTilesBeenPlayed(false); allPlayers.get(2).setTurnStatus(true);
@@ -260,16 +271,27 @@ public class Game implements Subject {
 					allPlayers.get(2).setTilesBeenPlayed(true); allPlayers.get(2).setTurnStatus(false);
 					//allPlayers.get(3).setTilesBeenPlayed(false); allPlayers.get(3).setTurnStatus(true);
 					// Remove below line and uncomment above line when you put AI3 back in.
-					allPlayers.get(0).setTilesBeenPlayed(false); allPlayers.get(0).setTurnStatus(true);
+					allPlayers.get(3).setTilesBeenPlayed(false); allPlayers.get(3).setTurnStatus(true);
 					timesTriedPlaying = 0;
 					printAll();
 				//}
 				System.out.println("----------------------------------------");
-			}/*else if (whosTurn() == 4 && timesTriedPlaying < maxPlaysForAI) {
-				printAll();
+			}else if (whosTurn() == 4 && timesTriedPlaying < maxPlaysForAI) {
+			/*	printAll();
 				System.out.println("Try #" + (timesTriedPlaying+1) + ": AI3 Playing...");
 				timesTriedPlaying++;
 				TimeUnit.SECONDS.sleep(4);
+				allPlayers.get(3).play(reader);	
+				if(allPlayers.get(3).hasTilesBeenPlayed() == false) {
+						Tile t = allPlayers.get(3).getHand().dealTile(deck);
+						System.out.println("Turn ended: AI3 has decided to draw a tile.");
+						System.out.println("Tile drawn: " + t.tileToString());
+				}
+				notifyObservers();
+				
+				*/
+				
+				
 				//if (allPlayers.get(3).turnComplete(allPlayers.get(3).getHand()) == true) {
 					allPlayers.get(3).setTilesBeenPlayed(true); allPlayers.get(3).setTurnStatus(false);
 					allPlayers.get(0).setTilesBeenPlayed(false); allPlayers.get(0).setTurnStatus(true);
@@ -277,7 +299,7 @@ public class Game implements Subject {
 					printAll();
 				//}
 				System.out.println("----------------------------------------");
-			}*/else if (timesTriedPlaying >= 4) {
+			}else if (timesTriedPlaying >= 4) {
 				System.out.println("There seems to be a problem with our AI!");
 				System.out.println("Either it had trouble playing or it hasn't been implemented yet.");
 				System.out.println("Please try restarting the game.");
@@ -299,9 +321,9 @@ public class Game implements Subject {
 			return 2;
 		} else if (allPlayers.get(2).myTurnStatus() == true) {
 			return 3;
-		}/*else if (allPlayers.get(3).myTurnStatus() == true) {
+		}else if (allPlayers.get(3).myTurnStatus() == true) {
 			return 4;
-		}*/else {
+		}else {
 			return -1;
 		}
 	}
