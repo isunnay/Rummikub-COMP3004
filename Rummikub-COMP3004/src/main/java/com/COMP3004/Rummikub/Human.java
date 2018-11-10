@@ -138,6 +138,7 @@ public class Human implements PlayerType {
 				board.meldsOnBoard.add(meld);
 				board.numberOfMelds++;
 				turnMelds.add(meld);
+				this.setTilesBeenPlayed(true);
 			} else {
 				System.out.println("Meld cannot be placed here. Please try a different Location. ");
 			}
@@ -174,8 +175,10 @@ public class Human implements PlayerType {
 				turnTiles.add(tile);
 				board.deleteMeld(prevTileMeld);
 				board.deleteMeld(nextTileMeld);
+				this.setTilesBeenPlayed(true);
 			} else {
 				System.out.println("ERROR: This is an invalid Meld.");
+				//this.setTilesBeenPlayed(fal);
 			}
 		}
 		// Adding a tile at the end of an existing meld
@@ -192,6 +195,7 @@ public class Human implements PlayerType {
 				board.filledSpots.add(spot);
 				turnTiles.add(tile);
 				h.removeTile(tile);
+				this.setTilesBeenPlayed(true);
 			} else {
 				System.out.println("ERROR: This is an invalid meld.");
 				prevTileMeld.removeTile(tile);
@@ -212,6 +216,7 @@ public class Human implements PlayerType {
 				board.filledSpots.add(spot);
 				turnTiles.add(tile);
 				h.removeTile(tile);
+				this.setTilesBeenPlayed(true);
 			} else {
 				System.out.println("ERROR: This is an invalid meld.");
 				nextTileMeld.removeTile(tile);
@@ -224,6 +229,7 @@ public class Human implements PlayerType {
 			board.filledSpots.add(spot);
 			turnTiles.add(tile);
 			h.removeTile(tile);
+			this.setTilesBeenPlayed(true);
 		}
 	}
 
