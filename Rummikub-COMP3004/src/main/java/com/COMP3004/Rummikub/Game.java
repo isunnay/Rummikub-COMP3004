@@ -107,7 +107,10 @@ public class Game implements Subject {
 					System.out.println("Would you like to (P)lay your turn or (S)kip turn and draw a tile?");
 					System.out.println("If you have placed atleast one tile already, (E)nd your turn");
 					char decision = reader.next().toUpperCase().charAt(0);
+					System.out.println("Current Turn Value: ");
 					System.out.println(turnValue);
+					//REMOVE THIS!!!!AFTER TESTING IS DONE
+				//	allPlayers.get(0).setHasInitialMeldBeenPlayed(true);
 
 					if (decision == 'E') {
 						if (allPlayers.get(0).hasInitialMeldBeenPlayed() == false) {
@@ -127,42 +130,59 @@ public class Game implements Subject {
 								System.out.println(
 										"Your intial Melds have to total 30 or more points. Please try again.");
 								allPlayers.get(0).setHasInitialMeldBeenPlayed(false);
+								allPlayers.get(0).setTilesBeenPlayed(false);
 								allPlayers.get(0).undoTurn();
 								turnValue = 0;
 							}
 						} else if (allPlayers.get(0).hasTilesBeenPlayed() == true) {
 							allPlayers.get(0).setTilesBeenPlayed(true);
 							allPlayers.get(0).setTurnStatus(false);
+							notifyObservers();
 							allPlayers.get(1).setTilesBeenPlayed(false);
-							allPlayers.get(1).setTurnStatus(true);
+							allPlayers.get(1).setTurnStatus(true);	
 							break;
 						} else {
+							allPlayers.get(0).undoTurn();
 							System.out.println(
 									"You will need to either play your turn or Skip your Turn and Draw a Tile.");
 						}
 					} else if (decision == 'P') {
 						while (true) {
+							//System.out.println("Current Turn Value: ");
+							//System.out.println(turnValue);
 							System.out.println(
 									"Would you like to play a (M)eld, an individual (T)ile, or move a current (B)oard Tile? ");
 							System.out.println("Type 'E' to exit at any time");
 							char nextDecision = reader.next().toUpperCase().charAt(0);
 
 							if (nextDecision == 'E') {
-								break;
+								//System.out.println("InHERE");
+								if(board.checkIfValidMelds()==false) {
+									System.out.println("This turn is not valid. Please try again");
+									allPlayers.get(0).undoTurn();
+									//allPlayers.get(0).undoTurn();
+									turnValue = 0;
+									allPlayers.get(0).setTilesBeenPlayed(false);
+									break;
+								}
+								else {
+									//System.out.println("else statement");
+									break;
+								}
 							} else if (nextDecision == 'M') {
 								printAll();
 								String tileChoice = "";
 								Meld meld = new Meld();
-								Hand tempHand = allPlayers.get(0).getHand();
+								//Hand tempHand = allPlayers.get(0).getHand();
 								allPlayers.get(0).getHand().createMeld();
 
 								while (!(tileChoice.equals("D"))) {
-									if (tempHand.size == 0) {
+									if (allPlayers.get(0).getHand().size == 0) {
 										break;
 									}
 
 									System.out.println("Current Meld: " + meld.meldToString());
-									System.out.println("Human Hand: " + tempHand.handToString());
+									System.out.println("Human Hand: " + allPlayers.get(0).getHand().handToString());
 									System.out.println(
 											"Which tile would you like to add to your meld (Type 'D' when you are done): ");
 									tileChoice = reader.next().toUpperCase();
@@ -170,7 +190,8 @@ public class Game implements Subject {
 									for (int i = 0; i < allPlayers.get(0).getHand().size; i++) {
 										if (allPlayers.get(0).getHand().getTile(i).tileToString().equals(tileChoice)) {
 											meld.addTile(allPlayers.get(0).getHand().getTile(i));
-											tempHand.removeTile(tempHand.getTile(i));
+											allPlayers.get(0).getHand().removeFromHand(i);
+											//tempHand.removeTile(tempHand.getTile(i));
 											break;
 										} else if (i == (allPlayers.get(0).getHand().size - 1)
 												&& !(tileChoice.equals("D"))) {
@@ -178,8 +199,10 @@ public class Game implements Subject {
 													+ " isn't in your posession. Please try again.");
 										}
 									}
+									//System.out.println("Human HandOne: " + allPlayers.get(0).getHand().handToString());
 								}
 								if (meld.getMeldSize() >= 3 && meld.checkIfValidMeld() == true) {
+									//if(allPlayers.get(0).canWePlaceMeld(meld, x, y))
 									allPlayers.get(0).playMeld(meld, reader);
 									turnValue = turnValue + meld.getMeldValue();
 									printAll();
@@ -194,52 +217,56 @@ public class Game implements Subject {
 								}
 							} else if (nextDecision == 'T') {
 								if (allPlayers.get(0).hasInitialMeldBeenPlayed() == true) {
-									Hand tempHand = allPlayers.get(0).getHand();
+								//allPlayers.get(0).setHasInitialMeldBeenPlayed(true);
+									//Hand tempHand = allPlayers.get(0).getHand();
 									printAll();
 									String tileChoice = "";
 									int counter = 0;
 
 									while (!(tileChoice.equals("D"))) {
 										if (counter != 0) {
-											System.out.println("Board:");
-											board.boardToString();
-											System.out.println("Human Hand: " + tempHand.handToString());
+											// System.out.println("Board:");
+											// board.boardToString();
+											//System.out.println("Temp Hand: " + tempHand.handToString());
+											System.out.println(
+													"Human Hand: " + allPlayers.get(0).getHand().handToString());
 										}
 										tileChoice = "";
 										System.out.println(
 												"Which tile would you like to add to the board? (Type 'D' when you are done): ");
 										tileChoice = reader.next().toUpperCase();
 										if (tileChoice.equals("D")) {
-											allPlayers.get(0).setHasInitialMeldBeenPlayed(true);
 											break;
-
 										}
-										System.out.println("Please enter an available location to play the tile.");
-										System.out.println("Enter an x value for the spot (Between 0-14): ");
-										int x = reader.nextInt();
-										System.out.println("Enter a y value for the spot (Between 0-14): ");
-										int y = reader.nextInt();
-
-										for (int i = 0; i < allPlayers.get(0).getHand().size; i++) {
-											if (allPlayers.get(0).getHand().getTile(i).tileToString()
-													.equals(tileChoice)) {
-												allPlayers.get(0).addTile(allPlayers.get(0).getHand().getTile(i), x, y);
-												tempHand.removeTile(tempHand.getTile(i));
-												break;
-											} else if (i == (allPlayers.get(0).getHand().size - 1)
-													&& !(tileChoice.equals("D"))) {
-												System.out.println("It seems that the tile " + tileChoice
-														+ " isn't in your posession. Please try again.");
-											}
-										}
-										counter++;
+										Tile tempTile = allPlayers.get(0).getHand().getTile(tileChoice);
+										if (allPlayers.get(0).getHand().getPlayerHand().contains(tempTile)) {
+											System.out.println("Please enter an available location to play the tile.");
+											System.out.println("Enter an x value for the spot (Between 0-14): ");
+											int x = reader.nextInt();
+											System.out.println("Enter a y value for the spot (Between 0-14): ");
+											int y = reader.nextInt();
+												for (int i = 0; i < allPlayers.get(0).getHand().size; i++) {
+													if (allPlayers.get(0).getHand().getTile(i).tileToString().equals(tileChoice)) {
+														System.out.println(allPlayers.get(0).getHand().getTile(i).tileToString());
+														allPlayers.get(0).addTile(allPlayers.get(0).getHand().getTile(i), x, y);
+													}
+	
+												}
+											counter++;
+											System.out.println("Board:");
+											board.boardToString();
+										} else {
+											System.out.println("It seems that the tile " + tileChoice
+													+ " isn't in your posession. Please try again.");
+									}
 									}
 								} else {
 									System.out.println(
-											"You cannot play individual tiles on the board during your initial meld.");
+										"You cannot play individual tiles on the board during your initial meld.");
 								}
 							} else if (nextDecision == 'B') {
 								if (allPlayers.get(0).hasInitialMeldBeenPlayed() == true) {
+								allPlayers.get(0).setHasInitialMeldBeenPlayed(true);
 									printAll();
 									int counter = 0;
 
@@ -272,7 +299,8 @@ public class Game implements Subject {
 								} else {
 									System.out.println("You cannot manipulate the board during your initial meld.");
 								}
-							} else {
+							} 
+								else {
 								System.out.println("You may have entered the wrong character. Please try again.");
 								nextDecision = reader.next().toUpperCase().charAt(0);
 							}

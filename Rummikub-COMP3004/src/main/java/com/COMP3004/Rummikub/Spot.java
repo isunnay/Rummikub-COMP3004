@@ -35,7 +35,7 @@ public class Spot {
 	public void playTile(Tile tile) {
 		if(this.tile==null) {
 			this.tile = tile;
-			tile.setSpot(this);
+			//tile.setSpot(this);
 			isTaken = true;
 
 		}

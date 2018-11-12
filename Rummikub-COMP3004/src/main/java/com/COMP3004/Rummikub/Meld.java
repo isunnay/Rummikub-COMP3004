@@ -89,7 +89,7 @@ public class Meld {
 		ArrayList<String> colours = new ArrayList<String>();
 		colours.add(tiles.get(0).getColour());
 		int number = tiles.get(0).getValue();
-		if (tiles.size()!=3 || tiles.size()!=4) {
+		if (tiles.size()==3 || tiles.size()==4) {
 			for(int i=1;i<tiles.size();i++) {
 				//System.out.println(i);
 				tile = tiles.get(i);
@@ -106,7 +106,7 @@ public class Meld {
 			return true;
 			
 		} else {
-			System.out.println("Melds are made up of 3 or more tiles");
+			//System.out.println("Melds are made up of 3 or more tiles");
 			return false;
 		}
 	}
@@ -134,7 +134,7 @@ public class Meld {
 			
 		}
 		else {
-			System.out.println("Melds are made up of 3 or more tiles");
+			//System.out.println("Melds are made up of 3 or more tiles");
 			return false;
 		}
 	}
@@ -150,9 +150,11 @@ public class Meld {
 	
 	public boolean checkIfValidMeld() {
 		if(this.isValidRun() == true || this.isValidSet() == true) {
+		//	System.out.println("We got a true in Meld");
 			return true;
 		}
 		else {
+		//	System.out.println("We got a False in Meld");
 			return false;
 		}
 	}

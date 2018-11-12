@@ -43,6 +43,7 @@ public class Hand {
 		return false;
 	}
 	
+
 	//dealTile() method returns size of hand after a new tile is dealt to it
 	public Tile dealTile(Deck deck) {
 		Tile tile = deck.getTileDeck().remove(deck.getDeckCount() - 1);
@@ -415,6 +416,16 @@ public class Hand {
 		}
 		return null;
 	}
+	
+	public Tile getTile(String tileName) {
+		for(int i=0; i<playerHand.size();i++) {
+			if(playerHand.get(i).tileToString().equals(tileName)){
+				return playerHand.get(i);
+			}
+		}
+		return null;
+	}
+	
 	
 	public Tile getTile(int i) {
 		return playerHand.get(i);
