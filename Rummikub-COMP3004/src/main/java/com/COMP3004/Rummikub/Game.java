@@ -330,9 +330,12 @@ public class Game implements Subject {
 			} else if (whosTurn() == 2 && timesTriedPlaying < maxPlaysForAI) {
 				printAll();
 				System.out.println("Try #" + (timesTriedPlaying + 1) + ": AI1 Playing...");
+				System.out.println("AI1 Hand: ");
+				System.out.println(allPlayers.get(1).getHand().handToString());
 				timesTriedPlaying++;
 				TimeUnit.SECONDS.sleep(4);
 				allPlayers.get(1).play(reader);
+				
 				if (allPlayers.get(1).hasTilesBeenPlayed() == false) {
 					Tile t = allPlayers.get(1).getHand().dealTile(deck);
 					System.out.println("Turn ended: AI1 has decided to draw a tile.");
@@ -347,7 +350,7 @@ public class Game implements Subject {
 				allPlayers.get(2).setTurnStatus(true);
 				timesTriedPlaying = 0;
 				printAll();
-				// }
+				// 
 				System.out.println("----------------------------------------");
 			} else if (whosTurn() == 3 && timesTriedPlaying < maxPlaysForAI) {
 				printAll();

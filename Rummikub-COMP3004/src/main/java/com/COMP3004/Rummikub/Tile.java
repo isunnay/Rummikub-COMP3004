@@ -8,6 +8,7 @@ public class Tile {
 	private Spot spot;
 	private Spot oldSpot;
 	private Meld memberOfMeld;
+	//public int id;
 	
 	// Constructor for string & int
 	public Tile (String colour, int value) {

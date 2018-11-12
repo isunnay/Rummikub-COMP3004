@@ -4,17 +4,46 @@ import junit.framework.TestCase;
 public class AI1Test extends TestCase {
 	
 public void testMaint() {
-		//Game game = new Game();
+		Game game = new Game();
 		Deck deck = new Deck();
 		deck.shuffleTiles();
-		AI1 ai1 = new AI1(deck);
+		
+		AI1 ai1 = new AI1(deck,game);
+	/*	Tile aTile = new Tile("B",4);
+		Tile tile = new Tile("B", 5);
+		Tile tile1 = new Tile("B", 6);
+		Tile tile2 = new Tile("R", 7);
+		Tile tile3 = new Tile("G", 7);
+		Tile tile4 = new Tile("B", 7);
+		Tile tile5 = new Tile("O", 7);
+		Tile tile6 = new Tile("B", 8);
+		Tile tile7 = new Tile("B", 9);
+		Tile tile8 = new Tile("B", 10);
+		
+		
+		ai1.getHand().addTile(aTile);
+		ai1.getHand().addTile(tile);
+		ai1.getHand().addTile(tile1);
+		ai1.getHand().addTile(tile2);
+		ai1.getHand().addTile(tile3);
+		ai1.getHand().addTile(tile4);
+		ai1.getHand().addTile(tile5);
+		ai1.getHand().addTile(tile6);
+		ai1.getHand().addTile(tile7);
+		ai1.getHand().addTile(tile8);*/
+		
+		
+		ai1.getHand().sortHand();
+		System.out.println(ai1.h.handToString());
+		
 
 		ai1.findAllMelds();
-		System.out.println(ai1.h.handToString());
+		//System.out.println(ai1.h.handToString());
 		System.out.println(ai1.melds.size());
 		for(int i=0;i<ai1.melds.size();i++) {
 			System.out.println(ai1.melds.get(i).meldToString());
 		}
+		//System.out.println(ai1.h.handToString());
 		
 		
 		

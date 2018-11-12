@@ -14,12 +14,14 @@ public class AI1 implements PlayerType {
 	//private boolean isTurn = false;
 	private boolean hasTileBeenPlaced = false;
 	public ArrayList<Meld> melds;
-	public ArrayList<Meld> sets;
+	//public ArrayList<Meld> sets;
 	public Subject game;
 	public ArrayList<Spot> spotsTaken;
 	public ArrayList<Tile> turnTiles;
 	public ArrayList<Meld> turnMelds;
 	public ArrayList<Tile> turnMoves;
+	public ArrayList<Tile> usedInMeld;
+	public int turnPoints;
 	private Board board;
 
 	
@@ -33,7 +35,7 @@ public class AI1 implements PlayerType {
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
 		turnMoves = new ArrayList<Tile>();
-		sets = new ArrayList<Meld>();
+		usedInMeld = new ArrayList<Tile>();
 	}
 	
 	public Hand getHand() { return this.h; }
@@ -114,32 +116,67 @@ public class AI1 implements PlayerType {
 	public void update(Board board) {
 		// TODO Auto-generated method stub
 		this.spotsTaken = board.filledSpots;
-		this.board = board;		
+		this.board = board;	
+		turnTiles.clear();;
+		turnMelds.clear();
+		turnMoves.clear();
+		melds.clear();
+		usedInMeld.clear();
+		turnPoints = 0;
 	}
 	@Override
 	public void play(Scanner reader) {
 		//System.out.println("Play");
 		this.findAllMelds();
 		//System.out.println(melds.size());
-		if(melds.size()>0) {
-			for(int i=0;i<melds.size();i++) {
-				playMeld(melds.get(i),reader);
-				this.hasTileBeenPlaced = true;
+		setTurnPoints();
+		System.out.println(getTurnPoints());
+		if(this.hasInitialMeldBeenPlayed() == false) {
+			if(getTurnPoints()>=30) {
+				if(melds.size()>0) {
+					for(int i=0;i<melds.size();i++) {
+						playMeld(melds.get(i),reader);
+						this.hasTileBeenPlaced = true;
+						this.setHasInitialMeldBeenPlayed(true);
+					}
+				}
 			}
 		}
+		else {
+			if(melds.size()>0) {
+				for(int i=0;i<melds.size();i++) {
+					playMeld(melds.get(i),reader);
+					this.hasTileBeenPlaced = true;
+				}
+			}
+			
+			
+		}
+	}
+	
+	public void setTurnPoints() {
+		for(int i=0; i<melds.size();i++) {
+			turnPoints += melds.get(i).getMeldValue();	
+		}
+	}
+
+	
+	public int getTurnPoints() {
+		return turnPoints;
 	}
 	
 	
 	public void playMeld(Meld meld, Scanner reader) {
 		int x = ThreadLocalRandom.current().nextInt(0, 12 + 1);
 		int y = ThreadLocalRandom.current().nextInt(0, 12 + 1);
-		System.out.println(x);
-		System.out.println(y);
+	//	System.out.println(x);
+	//	System.out.println(y);
 		Spot beginningSpot = board.getSpot(x, y);
 		
 		if(beginningSpot!=null) {
 			if(canWePlaceMeld(meld,x,y)==true) {
 				for(int i=0;i<meld.getNumberOfTiles();i++) {
+					
 					Tile tile = meld.getTileInMeld(i);
 					Spot spot = board.getSpot(x+i,y);
 					spot.playTile(tile);
@@ -167,7 +204,7 @@ public class AI1 implements PlayerType {
 	}
 
 	@Override
-	public boolean canWePlaceMeld(Meld meld, int x, int y) {
+	/*public boolean canWePlaceMeld(Meld meld, int x, int y) {
 		for(int a=0;a<meld.getMeldSize();a++) {
 			if(x+a<board.getX()) {
 				//int nextX = x+meld.getMeldsize;
@@ -188,6 +225,50 @@ public class AI1 implements PlayerType {
 			}
 		}
 		return true;	
+	}*/
+	
+	public boolean canWePlaceMeld(Meld meld, int x, int y) {
+		// Spot beginningSpot = board.getSpot(x, y);
+		for (int a = 0; a < meld.getMeldSize(); a++) {
+			if (x + a >= board.getSpot(0, 0).getSpotX() && x + meld.getMeldSize() <= board.getX()) {
+				if (x == 0) {
+					if (board.getSpot(x + meld.getMeldSize(), y).isTaken = true) {
+						Spot spot = board.getSpot(x + a, y);
+						if (this.spotsTaken.contains(spot)) {
+							return false;
+						}
+					} else {
+						System.out.println("ERROR: Your meld cannot be touching other melds.");
+						return false;
+					}
+				} else if (x == 12) {
+					if (board.getSpot(x + meld.getMeldSize() - 1, y).isTaken = true) {
+						Spot spot = board.getSpot(x + a, y);
+						if (this.spotsTaken.contains(spot)) {
+							return false;
+						}
+					} else {
+						System.out.println("ERROR: Your meld cannot be touching other melds.");
+						return false;
+					}
+				} else {
+					if (board.getSpot(x - 1, y).isTaken != true
+							&& board.getSpot(x + meld.getMeldSize(), y).isTaken != true) {
+						Spot spot = board.getSpot(x + a, y);
+						if (this.spotsTaken.contains(spot)) {
+							return false;
+						}
+					} else {
+						System.out.println("ERROR: Your meld cannot be touching other melds.");
+						return false;
+					}
+				}
+			} else {
+				System.out.println("ERROR: Make sure your meld is placed within the board spots.");
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public class SortByValue implements Comparator<Tile> {
@@ -257,7 +338,7 @@ public class AI1 implements PlayerType {
 		
 	}
 	
-	public void findAllSets() {
+	/*public void findAllSets() {
 		Meld tempMeld = new Meld();
 		ArrayList<Integer> completedValues = new ArrayList<Integer>();
 
@@ -287,37 +368,53 @@ public class AI1 implements PlayerType {
 			
 
 		}
-	}
+	}*/
 	
-	
-	
-	/*public void findAllSets() {
-		for(int i=0; i<this.h.size; i++) {
-			if(i < this.h.size - 3) {
-				int handValue = this.h.getTile(i).getValue();
-				if(handValue == this.h.getTile(i+1).getValue()) {
-					if(handValue == this.h.getTile(i+2).getValue()) {
-						if(handValue == this.h.getTile(i+3).getValue()) {
-							String color = this.h.getTile(i).getColour();
-							String color2 = this.h.getTile(i+1).getColour();
-							String color3 = this.h.getTile(i+2).getColour();
-							String color4 = this.h.getTile(i+3).getColour();
-							if((color != color2) && (color != color3)&& (color != color4) && (color2 != color3) && (color2 != color4) && (color3!=color4)) {
-								Meld newMeld = new Meld();
-								newMeld.addTile(this.h.getTile(i));
-								newMeld.addTile(this.h.getTile(i+1));
-								newMeld.addTile(this.h.getTile(i+2));
-								newMeld.addTile(this.h.getTile(i+3));
-								//System.out.println(newMeld.checkIfValidMeld());
-								this.melds.add(newMeld);
-								//System.out.println(testMelds.size());
-							}
-						}
+	public void findAllSets() {
+		Meld tempMeld = new Meld();
+		ArrayList<Integer> completedValues = new ArrayList<Integer>();
+		ArrayList<Tile> clone = (ArrayList<Tile>) this.h.getPlayerHand().clone();
+
+		for (int i = 0; i < clone.size(); i++) {
+			//if(!(usedInMeld.contains(this.h.getTile(i)))) {
+				Tile aTile = clone.get(i);
+				tempMeld.addTile(aTile);
+				//System.out.println(aTile.tileToString());
+				int currValue = aTile.getValue();
+				for (int x = i; x < clone.size(); x++) {
+					Tile toCompare = clone.get(x);
+					if (toCompare.getValue() == currValue && aTile.getColour() != toCompare.getColour() && !(completedValues.contains(toCompare.getValue())) && !(usedInMeld.contains(toCompare))) {
+							tempMeld.addTile(toCompare);
+							//System.out.println("We in");
+							//usedInMeld.add(toCompare);
+							clone.remove(x);
 					}
 				}
-			}
+			//	System.out.println(tempMeld.meldToString());
+				//completedValues.add(currValue);
+				//System.out.println(tempMeld.meldToString());
+				
+				if (tempMeld.getMeldSize() > 2 && tempMeld.getMeldSize()<5) {
+					if (tempMeld.isValidSet() == true) {
+						melds.add(tempMeld);
+						clone.remove(i);
+						for(int y=0; y<tempMeld.getMeldSize();y++) {
+							usedInMeld.add(tempMeld.getTileInMeld(y));
+						}
+						//System.out.println(clone);
+					}
+					else {
+						tempMeld = new Meld();
+					//	for(int a=0; a<tempMeld.getMeldSize(); a++) {
+					//		usedInMeld.remove(tempMeld.getTileInMeld(a));
+					//	}
+					}
+				}
+				tempMeld = new Meld();
 		}
-	}*/
+	//	}
+	}
+	
 	
 	
 	public void findAllRuns() {
@@ -343,214 +440,261 @@ public class AI1 implements PlayerType {
 		if (redTiles.size() > 2) {
 			Meld tempMeld = new Meld();
 			for (int i = 0; i <= redTiles.size() - 1; i++) {
+				
 				Tile tile = redTiles.get(i);
+				//System.out.println(tile.tileToString());
+				if(!(usedInMeld.contains(tile))) {
 				// System.out.println(tile.tileToString());
-				if (i != redTiles.size() - 1) {
-					if (redTiles.get(i).getValue() != redTiles.get(i + 1).getValue()) {
-						if (redTiles.get(i + 1).getValue() - tile.getValue() == 1) {
-							// System.out.println("Subtracting red");
-							tempMeld.addTile(tile);
-						} else if (tempMeld.getMeldSize() < 3
-								&& redTiles.get(i + 1).getValue() - tile.getValue() != 1) {
-							tempMeld.getTiles().clear();
-						} else if (tempMeld.getMeldSize() >= 3
-								&& redTiles.get(i + 1).getValue() - tile.getValue() != 1) {
-							tempMeld.addTile(tile);
-							// System.out.println("WERE IN THE LOOP");
-							melds.add(tempMeld);
-							// tempMeld.getTiles().clear();
-							tempMeld = new Meld();
-						}
-					}
-
-					else {
-						// System.out.println("Same value");
-					}
-				} else if (i == redTiles.size() - 1) {
-					int num = 0;
-					if (redTiles.get(i).getValue() != redTiles.get(i - 1).getValue()) {
-						num = 1;
-						if (redTiles.get(i).getValue() - redTiles.get(i - 1).getValue() == 1) {
-							if (tempMeld.getMeldSize() > 2) {
-								tempMeld.addTile(redTiles.get(i));
+					if (i != redTiles.size() - 1) {
+						if (redTiles.get(i).getValue() != redTiles.get(i + 1).getValue()) {
+							if (redTiles.get(i + 1).getValue() - tile.getValue() == 1) {
+								// System.out.println("Subtracting red");
+								tempMeld.addTile(tile);
+							} else if (tempMeld.getMeldSize() < 3 && redTiles.get(i + 1).getValue() - tile.getValue() != 1) {
+								tempMeld.getTiles().clear();
+							} else if (tempMeld.getMeldSize() >= 3 && redTiles.get(i + 1).getValue() - tile.getValue() != 1) {
+								tempMeld.addTile(tile);
+								// System.out.println("WERE IN THE LOOP");
 								melds.add(tempMeld);
+								// tempMeld.getTiles().clear();
+								tempMeld = new Meld();
+							}
+						}
+	
+					} else if (i == redTiles.size() - 1) {
+						
+						int num = 0;
+						if (!(usedInMeld.contains(redTiles.get(i-1))) && redTiles.get(i).getValue() != redTiles.get(i - 1).getValue()) {
+							
+							num = 1;
+							if (redTiles.get(i).getValue() - redTiles.get(i - 1).getValue() == 1) {
+								//System.out.println("WE ARE IN THE LAST ONE 1");
+								if (tempMeld.getMeldSize() >= 2) {
+									tempMeld.addTile(redTiles.get(i));
+									melds.add(tempMeld);
+								}
+							} else {
+								// System.out.println("BLAHBLAHBLAH");
+							}
+						} else if ( redTiles.get(i).getValue() != redTiles.get(i - 2).getValue() && num != 1) {
+							//System.out.println("WE ARE IN THE LAST ONE 2");
+							num = 2;
+							if (redTiles.get(i).getValue() - redTiles.get(i - 2).getValue() == 1) {
+								if (tempMeld.getMeldSize() >= 2) {
+									tempMeld.addTile(redTiles.get(i));
+									melds.add(tempMeld);
+								}
 							}
 						} else {
-							// System.out.println("BLAHBLAHBLAH");
+							System.out.println("Impossible. ");
 						}
-					} else if (redTiles.get(i).getValue() != redTiles.get(i - 2).getValue() && num != 1) {
-						num = 2;
-						if (redTiles.get(i).getValue() - redTiles.get(i - 2).getValue() == 1) {
-							if (tempMeld.getMeldSize() > 2) {
-								tempMeld.addTile(redTiles.get(i));
-								melds.add(tempMeld);
-							}
-						}
-					} else {
-						System.out.println("Impossible. ");
 					}
 				}
+				else {
+					//System.out.println("Already used: " + tile.tileToString()) ;
+					if(tempMeld.isValidRun() == true) {
+						melds.add(tempMeld);	
+					}
+					
+					tempMeld = new Meld();
+				}
+				//System.out.println(tempMeld.meldToString());
 			}
 		}
+		
 
 		if (greenTiles.size() > 2) {
 			Meld tempMeld = new Meld();
 			for (int i = 0; i <= greenTiles.size() - 1; i++) {
+				
 				Tile tile = greenTiles.get(i);
+				//System.out.println(tile.tileToString());
+				if(!(usedInMeld.contains(tile))) {
 				// System.out.println(tile.tileToString());
-				if (i != greenTiles.size() - 1) {
-					if (greenTiles.get(i).getValue() != greenTiles.get(i + 1).getValue()) {
-						if (greenTiles.get(i + 1).getValue() - tile.getValue() == 1) {
-							// System.out.println("Subtracting green");
-							tempMeld.addTile(tile);
-						} else if (tempMeld.getMeldSize() < 3
-								&& greenTiles.get(i + 1).getValue() - tile.getValue() != 1) {
-							tempMeld.getTiles().clear();
-						} else if (tempMeld.getMeldSize() >= 3
-								&& greenTiles.get(i + 1).getValue() - tile.getValue() != 1) {
-							tempMeld.addTile(tile);
-							// System.out.println("WERE IN THE LOOP");
-							melds.add(tempMeld);
-							// tempMeld.getTiles().clear();
-							tempMeld = new Meld();
-						}
-					}
-
-					else {
-						System.out.println("Same value");
-					}
-				} else if (i == greenTiles.size() - 1) {
-					int num = 0;
-					if (greenTiles.get(i).getValue() != greenTiles.get(i - 1).getValue()) {
-						num = 1;
-						if (greenTiles.get(i).getValue() - greenTiles.get(i - 1).getValue() == 1) {
-							if (tempMeld.getMeldSize() > 2) {
-								tempMeld.addTile(greenTiles.get(i));
+					if (i != greenTiles.size() - 1) {
+						if (greenTiles.get(i).getValue() != greenTiles.get(i + 1).getValue()) {
+							if (greenTiles.get(i + 1).getValue() - tile.getValue() == 1) {
+								// System.out.println("Subtracting green");
+								tempMeld.addTile(tile);
+							} else if (tempMeld.getMeldSize() < 3 && greenTiles.get(i + 1).getValue() - tile.getValue() != 1) {
+								tempMeld.getTiles().clear();
+							} else if (tempMeld.getMeldSize() >= 3 && greenTiles.get(i + 1).getValue() - tile.getValue() != 1) {
+								tempMeld.addTile(tile);
+								// System.out.println("WERE IN THE LOOP");
 								melds.add(tempMeld);
+								// tempMeld.getTiles().clear();
+								tempMeld = new Meld();
+							}
+						}
+	
+					} else if (i == greenTiles.size() - 1) {
+						
+						int num = 0;
+						if (!(usedInMeld.contains(greenTiles.get(i-1))) && greenTiles.get(i).getValue() != greenTiles.get(i - 1).getValue()) {
+							
+							num = 1;
+							if (greenTiles.get(i).getValue() - greenTiles.get(i - 1).getValue() == 1) {
+								//System.out.println("WE ARE IN THE LAST ONE 1");
+								if (tempMeld.getMeldSize() >= 2) {
+									tempMeld.addTile(greenTiles.get(i));
+									melds.add(tempMeld);
+								}
+							} else {
+								// System.out.println("BLAHBLAHBLAH");
+							}
+						} else if ( greenTiles.get(i).getValue() != greenTiles.get(i - 2).getValue() && num != 1) {
+							//System.out.println("WE ARE IN THE LAST ONE 2");
+							num = 2;
+							if (greenTiles.get(i).getValue() - greenTiles.get(i - 2).getValue() == 1) {
+								if (tempMeld.getMeldSize() >= 2) {
+									tempMeld.addTile(greenTiles.get(i));
+									melds.add(tempMeld);
+								}
 							}
 						} else {
-							// System.out.println("BLAHBLAHBLAH");
+							System.out.println("Impossible. ");
 						}
-					} else if (greenTiles.get(i).getValue() != greenTiles.get(i - 2).getValue() && num != 1) {
-						num = 2;
-						if (greenTiles.get(i).getValue() - greenTiles.get(i - 2).getValue() == 1) {
-							if (tempMeld.getMeldSize() > 2) {
-								tempMeld.addTile(greenTiles.get(i));
-								melds.add(tempMeld);
-							}
-						}
-					} else {
-						System.out.println("Impossible. ");
 					}
 				}
+				else {
+					//System.out.println("Already used: " + tile.tileToString()) ;
+					if(tempMeld.isValidRun() == true) {
+						melds.add(tempMeld);	
+					}
+					
+					tempMeld = new Meld();
+				}
+				//System.out.println(tempMeld.meldToString());
 			}
 		}
 
 		if (blueTiles.size() > 2) {
 			Meld tempMeld = new Meld();
 			for (int i = 0; i <= blueTiles.size() - 1; i++) {
+				
 				Tile tile = blueTiles.get(i);
+				//System.out.println(tile.tileToString());
+				if(!(usedInMeld.contains(tile))) {
 				// System.out.println(tile.tileToString());
-				if (i != blueTiles.size() - 1) {
-					if (blueTiles.get(i).getValue() != blueTiles.get(i + 1).getValue()) {
-						if (blueTiles.get(i + 1).getValue() - tile.getValue() == 1) {
-							// System.out.println("Subtracting green");
-							tempMeld.addTile(tile);
-						} else if (tempMeld.getMeldSize() < 3
-								&& blueTiles.get(i + 1).getValue() - tile.getValue() != 1) {
-							tempMeld.getTiles().clear();
-						} else if (tempMeld.getMeldSize() >= 3
-								&& blueTiles.get(i + 1).getValue() - tile.getValue() != 1) {
-							tempMeld.addTile(tile);
-							// System.out.println("WERE IN THE LOOP");
-							melds.add(tempMeld);
-							// tempMeld.getTiles().clear();
-							tempMeld = new Meld();
-						}
-					}
-
-					else {
-						System.out.println("Same value");
-					}
-				} else if (i == blueTiles.size() - 1) {
-					int num = 0;
-					if (blueTiles.get(i).getValue() != blueTiles.get(i - 1).getValue()) {
-						num = 1;
-						if (blueTiles.get(i).getValue() - blueTiles.get(i - 1).getValue() == 1) {
-							if (tempMeld.getMeldSize() > 2) {
-								tempMeld.addTile(blueTiles.get(i));
+					if (i != blueTiles.size() - 1) {
+						if (blueTiles.get(i).getValue() != blueTiles.get(i + 1).getValue()) {
+							if (blueTiles.get(i + 1).getValue() - tile.getValue() == 1) {
+								// System.out.println("Subtracting blue");
+								tempMeld.addTile(tile);
+							} else if (tempMeld.getMeldSize() < 3 && blueTiles.get(i + 1).getValue() - tile.getValue() != 1) {
+								tempMeld.getTiles().clear();
+							} else if (tempMeld.getMeldSize() >= 3 && blueTiles.get(i + 1).getValue() - tile.getValue() != 1) {
+								tempMeld.addTile(tile);
+								// System.out.println("WERE IN THE LOOP");
 								melds.add(tempMeld);
+								// tempMeld.getTiles().clear();
+								tempMeld = new Meld();
+							}
+						}
+	
+					} else if (i == blueTiles.size() - 1) {
+						
+						int num = 0;
+						if (!(usedInMeld.contains(blueTiles.get(i-1))) && blueTiles.get(i).getValue() != blueTiles.get(i - 1).getValue()) {
+							
+							num = 1;
+							if (blueTiles.get(i).getValue() - blueTiles.get(i - 1).getValue() == 1) {
+								//System.out.println("WE ARE IN THE LAST ONE 1");
+								if (tempMeld.getMeldSize() >= 2) {
+									tempMeld.addTile(blueTiles.get(i));
+									melds.add(tempMeld);
+								}
+							} else {
+								// System.out.println("BLAHBLAHBLAH");
+							}
+						} else if ( blueTiles.get(i).getValue() != blueTiles.get(i - 2).getValue() && num != 1) {
+							//System.out.println("WE ARE IN THE LAST ONE 2");
+							num = 2;
+							if (blueTiles.get(i).getValue() - blueTiles.get(i - 2).getValue() == 1) {
+								if (tempMeld.getMeldSize() >= 2) {
+									tempMeld.addTile(blueTiles.get(i));
+									melds.add(tempMeld);
+								}
 							}
 						} else {
-							// System.out.println("BLAHBLAHBLAH");
+							System.out.println("Impossible. ");
 						}
-					} else if (blueTiles.get(i).getValue() != blueTiles.get(i - 2).getValue() && num != 1) {
-						num = 2;
-						if (blueTiles.get(i).getValue() - blueTiles.get(i - 2).getValue() == 1) {
-							if (tempMeld.getMeldSize() > 2) {
-								tempMeld.addTile(blueTiles.get(i));
-								melds.add(tempMeld);
-							}
-						}
-					} else {
-						System.out.println("Impossible. ");
 					}
 				}
-
+				else {
+					//System.out.println("Already used: " + tile.tileToString()) ;
+					if(tempMeld.isValidRun() == true) {
+						melds.add(tempMeld);	
+					}
+					
+					tempMeld = new Meld();
+				}
+				//System.out.println(tempMeld.meldToString());
 			}
 		}
 
 		if (orangeTiles.size() > 2) {
 			Meld tempMeld = new Meld();
 			for (int i = 0; i <= orangeTiles.size() - 1; i++) {
+				
 				Tile tile = orangeTiles.get(i);
+				//System.out.println(tile.tileToString());
+				if(!(usedInMeld.contains(tile))) {
 				// System.out.println(tile.tileToString());
-				if (i != orangeTiles.size() - 1) {
-					if (orangeTiles.get(i).getValue() != orangeTiles.get(i + 1).getValue()) {
-						if (orangeTiles.get(i + 1).getValue() - tile.getValue() == 1) {
-							// System.out.println("Subtracting green");
-							tempMeld.addTile(tile);
-						} else if (tempMeld.getMeldSize() < 3
-								&& orangeTiles.get(i + 1).getValue() - tile.getValue() != 1) {
-							tempMeld.getTiles().clear();
-						} else if (tempMeld.getMeldSize() >= 3
-								&& orangeTiles.get(i + 1).getValue() - tile.getValue() != 1) {
-							tempMeld.addTile(tile);
-							// System.out.println("WERE IN THE LOOP");
-							melds.add(tempMeld);
-							// tempMeld.getTiles().clear();
-							tempMeld = new Meld();
-						}
-					}
-
-					else {
-						System.out.println("Same value");
-					}
-				} else if (i == orangeTiles.size() - 1) {
-					int num = 0;
-					if (orangeTiles.get(i).getValue() != orangeTiles.get(i - 1).getValue()) {
-						num = 1;
-						if (orangeTiles.get(i).getValue() - orangeTiles.get(i - 1).getValue() == 1) {
-							if (tempMeld.getMeldSize() > 2) {
-								tempMeld.addTile(orangeTiles.get(i));
+					if (i != orangeTiles.size() - 1) {
+						if (orangeTiles.get(i).getValue() != orangeTiles.get(i + 1).getValue()) {
+							if (orangeTiles.get(i + 1).getValue() - tile.getValue() == 1) {
+								// System.out.println("Subtracting orange");
+								tempMeld.addTile(tile);
+							} else if (tempMeld.getMeldSize() < 3 && orangeTiles.get(i + 1).getValue() - tile.getValue() != 1) {
+								tempMeld.getTiles().clear();
+							} else if (tempMeld.getMeldSize() >= 3 && orangeTiles.get(i + 1).getValue() - tile.getValue() != 1) {
+								tempMeld.addTile(tile);
+								// System.out.println("WERE IN THE LOOP");
 								melds.add(tempMeld);
+								// tempMeld.getTiles().clear();
+								tempMeld = new Meld();
+							}
+						}
+	
+					} else if (i == orangeTiles.size() - 1) {
+						
+						int num = 0;
+						if (!(usedInMeld.contains(orangeTiles.get(i-1))) && orangeTiles.get(i).getValue() != orangeTiles.get(i - 1).getValue()) {
+							
+							num = 1;
+							if (orangeTiles.get(i).getValue() - orangeTiles.get(i - 1).getValue() == 1) {
+								//System.out.println("WE ARE IN THE LAST ONE 1");
+								if (tempMeld.getMeldSize() >= 2) {
+									tempMeld.addTile(orangeTiles.get(i));
+									melds.add(tempMeld);
+								}
+							} else {
+								// System.out.println("BLAHBLAHBLAH");
+							}
+						} else if ( orangeTiles.get(i).getValue() != orangeTiles.get(i - 2).getValue() && num != 1) {
+							//System.out.println("WE ARE IN THE LAST ONE 2");
+							num = 2;
+							if (orangeTiles.get(i).getValue() - orangeTiles.get(i - 2).getValue() == 1) {
+								if (tempMeld.getMeldSize() >= 2) {
+									tempMeld.addTile(orangeTiles.get(i));
+									melds.add(tempMeld);
+								}
 							}
 						} else {
-							// System.out.println("BLAHBLAHBLAH");
+							System.out.println("Impossible. ");
 						}
-					} else if (orangeTiles.get(i).getValue() != orangeTiles.get(i - 2).getValue() && num != 1) {
-						num = 2;
-						if (orangeTiles.get(i).getValue() - orangeTiles.get(i - 2).getValue() == 1) {
-							if (tempMeld.getMeldSize() > 2) {
-								tempMeld.addTile(orangeTiles.get(i));
-								melds.add(tempMeld);
-							}
-						}
-					} else {
-						System.out.println("Impossible. ");
 					}
 				}
-
+				else {
+					//System.out.println("Already used: " + tile.tileToString()) ;
+					if(tempMeld.isValidRun() == true) {
+						melds.add(tempMeld);	
+					}
+					
+					tempMeld = new Meld();
+				}
+				//System.out.println(tempMeld.meldToString());
 			}
 		}
 	}
@@ -566,64 +710,12 @@ public class AI1 implements PlayerType {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	/*public void findAllMelds() {
-		int numMelds = 0;
-		Collections.sort(this.h.getPlayerHand(), new SortByValue());
-		
-		for(int i=0; i<this.getHand().size; i++) {
-			if(i < this.getHand().size - 2) {
-				if(this.getHand().getTile(i).getValue() == this.getHand().getTile(i+1).getValue() - 1) {
-					if(this.getHand().getTile(i+1).getValue() == this.getHand().getTile(i+2).getValue() - 1) {
-						if(this.getHand().getTile(i+2).getValue() == this.getHand().getTile(i+3).getValue() - 1) {
-							String color1 = this.getHand().getTile(i).getColour();
-							String color2 = this.getHand().getTile(i+1).getColour();
-							String color3 = this.getHand().getTile(i+2).getColour();
-							if((color1 == color2) && (color2 == color3)) {
-								
-								Meld newMeld = new Meld();
-								newMeld.addTile(this.getHand().getTile(i));
-								newMeld.addTile(this.getHand().getTile(i+1));
-								newMeld.addTile(this.getHand().getTile(i+2));
-								//System.out.println(newMeld.checkIfValidMeld());
-								this.testMelds.add(newMeld);
-								//System.out.println(testMelds.size());
-							}
-						}
-					}
-				}
-			}
-			//System.out.println("i = "+i);
-		}	
 
-		for(int i=0; i<this.getHand().size; i++) {
-			if(i < this.getHand().size - 2) {
-				int handValue = this.getHand().getTile(i).getValue();
-				if(handValue == this.getHand().getTile(i+1).getValue()) {
-					if(handValue == this.getHand().getTile(i+2).getValue()) {
-						String color = this.getHand().getTile(i).getColour();
-						String color2 = this.getHand().getTile(i+1).getColour();
-						String color3 = this.getHand().getTile(i+2).getColour();
-						if((color != color2) && (color != color3) && (color2 != color3)) {
-							Meld newMeld = new Meld();
-							newMeld.addTile(this.getHand().getTile(i));
-							newMeld.addTile(this.getHand().getTile(i+1));
-							newMeld.addTile(this.getHand().getTile(i+2));
-							//System.out.println(newMeld.checkIfValidMeld());
-							this.testMelds.add(newMeld);
-							//System.out.println(testMelds.size());
-						}
-					}
-				}
-			}
-		}
-		
-		
-		
-		//return numMelds;
-	}*/
-	
-	
+	@Override
+	public boolean canWePlaceTile(Tile tile, int x, int y) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 
 	
