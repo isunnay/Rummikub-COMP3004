@@ -339,6 +339,7 @@ public class GameTestPlan extends TestCase {
 	
 	public void testGame7() {
 		Game game = new Game();
+		Deck deck = new Deck();
 		
 		Tile tile1 = new Tile("B", 9);
 		Tile tile2 = new Tile("B", 10);
@@ -363,21 +364,158 @@ public class GameTestPlan extends TestCase {
 		game.getAllPlayers().get(1).setTurnStatus(false);
 		game.getAllPlayers().get(2).setTurnStatus(false);
 		//game.getAllPlayers().get(3).setTurnStatus(false);
+		game.getAllPlayers().get(0).getHand().dealTile(deck);
 		
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		
+		game.getAllPlayers().get(1).getHand().createMeld();
 		game.getAllPlayers().get(1).getHand().createMeld();
 		
 		int j=0;
-		for(int i=0; i<6; i++) {
+		for(int i=0; i<3; i++) {
 			game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[j]);
 			j++;
+		}
+		
+		for(int i=j; i<6; i++) {
+			game.getAllPlayers().get(1).getHand().getMeld(1).addTile(ai1Tiles[i]);
 		}
 		
 		assertEquals(tile1, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(0));
 		assertEquals(tile2, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(1));
 		assertEquals(tile3, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(2));
+		assertEquals(tile4, game.getAllPlayers().get(1).getHand().getMeld(1).getTileInMeld(0));
+		assertEquals(tile5, game.getAllPlayers().get(1).getHand().getMeld(1).getTileInMeld(1));
+		assertEquals(tile6, game.getAllPlayers().get(1).getHand().getMeld(1).getTileInMeld(2));
+	}
+	
+	public void testGame8() {
+		Game game = new Game();
+		Deck deck = new Deck();
 		
-		assertEquals(tile4, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(3));
-		assertEquals(tile5, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(4));
-		assertEquals(tile3, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(5));
+		Tile tile1 = new Tile("G", 9);
+		Tile tile2 = new Tile("0", 9);
+		Tile tile3 = new Tile("B", 9);
+		//These 3 tiles are a set
+		
+		Tile tile4 = new Tile("G", 10);
+		Tile tile5 = new Tile("O", 10);
+		Tile tile6 = new Tile("R", 10);
+		//These 3 tiles are a second set
+		//Will test playing several sets in a turn
+		
+		Tile[] ai1Tiles = {tile1, tile2, tile3, tile4, tile5, tile6};
+		
+		for(int i=0; i<6; i++) {
+			game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1);
+		}
+		for(int i=0; i<6; i++) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles[i]);
+		}
+		
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		game.getAllPlayers().get(1).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		game.getAllPlayers().get(0).getHand().dealTile(deck);
+		
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		
+		game.getAllPlayers().get(1).getHand().createMeld();
+		game.getAllPlayers().get(1).getHand().createMeld();
+		
+		int j=0;
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[j]);
+			j++;
+		}
+		
+		for(int i=j; i<6; i++){
+			game.getAllPlayers().get(1).getHand().getMeld(1).addTile(ai1Tiles[i]);
+		}
+		
+		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(0).isValidSet());
+		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(1).isValidSet());
+	}
+	
+	public void testGame9() {
+		Game game = new Game();
+		Deck deck = new Deck();
+		
+		Tile tile1 = new Tile("B", 9);
+		Tile tile2 = new Tile("B", 10);
+		Tile tile3 = new Tile("B", 11);
+		//These 3 tiles are a run
+		
+		Tile[] ai1Tiles = {tile1, tile2, tile3};
+		
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1);
+		}
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles[i]);
+		}
+		
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		game.getAllPlayers().get(1).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		game.getAllPlayers().get(0).getHand().dealTile(deck);
+		
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		
+		game.getAllPlayers().get(1).getHand().createMeld();
+		for(int i=0; i<3; i++){
+			game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[i]);
+		}
+		
+		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(0).isValidRun());
+		
+	}
+	
+	public void testGame10() {
+		Game game = new Game();
+		Deck deck = new Deck();
+		
+		Tile tile1 = new Tile("B", 9);
+		Tile tile2 = new Tile("O", 9);
+		Tile tile3 = new Tile("R", 9);
+		//These 3 tiles are a set
+		
+		Tile[] ai1Tiles = {tile1, tile2, tile3};
+		
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1);
+		}
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles[i]);
+		}
+		
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		game.getAllPlayers().get(1).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		game.getAllPlayers().get(0).getHand().dealTile(deck);
+		
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		
+		game.getAllPlayers().get(1).getHand().createMeld();
+		for(int i=0; i<3; i++){
+			game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[i]);
+		}
+		
+		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(0).isValidSet());
 	}
 }
