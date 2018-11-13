@@ -336,4 +336,48 @@ public class GameTestPlan extends TestCase {
 		value2 = game.getAllPlayers().get(0).getHand().getMeld(3).getMeldValue();
 		assertTrue(value1 + value2 > 30);
 	}
+	
+	public void testGame7() {
+		Game game = new Game();
+		
+		Tile tile1 = new Tile("B", 9);
+		Tile tile2 = new Tile("B", 10);
+		Tile tile3 = new Tile("B", 11);
+		//These 3 tiles are a run
+		
+		Tile tile4 = new Tile("G", 10);
+		Tile tile5 = new Tile("O", 10);
+		Tile tile6 = new Tile("R", 10);
+		//These 3 tiles are a set
+		
+		Tile[] ai1Tiles = {tile1, tile2, tile3, tile4, tile5, tile6};
+		
+		for(int i=0; i<6; i++) {
+			game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1);
+		}
+		for(int i=0; i<6; i++) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles[i]);
+		}
+		
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		game.getAllPlayers().get(1).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		//game.getAllPlayers().get(3).setTurnStatus(false);
+		
+		game.getAllPlayers().get(1).getHand().createMeld();
+		
+		int j=0;
+		for(int i=0; i<6; i++) {
+			game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[j]);
+			j++;
+		}
+		
+		assertEquals(tile1, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(0));
+		assertEquals(tile2, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(1));
+		assertEquals(tile3, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(2));
+		
+		assertEquals(tile4, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(3));
+		assertEquals(tile5, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(4));
+		assertEquals(tile3, game.getAllPlayers().get(1).getHand().getMeld(0).getTileInMeld(5));
+	}
 }
