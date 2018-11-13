@@ -10,11 +10,10 @@ import com.COMP3004.Rummikub.Hand.SortByValue;
 
 public class AI1 implements PlayerType {
 	Hand h;
+	private boolean initialMeldPlayed = false;
 	private boolean myTurn = false;
-	//private boolean isTurn = false;
 	private boolean hasTileBeenPlaced = false;
 	public ArrayList<Meld> melds;
-	//public ArrayList<Meld> sets;
 	public Subject game;
 	public ArrayList<Spot> spotsTaken;
 	public ArrayList<Tile> turnTiles;
@@ -30,7 +29,7 @@ public class AI1 implements PlayerType {
 		h.createHand(deck);
 		h.sortHand();
 		melds = new ArrayList<Meld>();
-		//game.registerObserver(this);
+		game.registerObserver(this);
 		spotsTaken = new ArrayList<Spot>();
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
@@ -54,63 +53,6 @@ public class AI1 implements PlayerType {
 		//h.meldExists();
 		return false;
 	}
-	
-	public boolean oneMeldFirstTurn() {
-		if (h.numberOfMelds()==1)
-			return true;
-		else
-			return false;
-	}
-
-	public boolean severalMeldsFirstTurn() {
-		if (h.numberOfMelds()>1)
-			return true;
-		else
-			return false;
-	}
-	
-	public Hand drawsOnFirstTurn() {
-		//System.out.println("first in draw " + h.handToString());
-		if (! (h.meldExists()) ) {
-			Deck deck = new Deck();
-			//h.createHand(deck);
-			h.dealTile(deck);
-			//System.out.println("in draw " + h.handToString());
-		}
-		
-		return h;
-		
-	}
-	
-	public boolean oneMeldSubsequentTurn(){
-		Deck deck = new Deck();
-		h.dealTile(deck);
-		return this.oneMeldFirstTurn();
-		
-	}
-	
-	public boolean severaltMeldsSubsequentTurn(){
-		Deck deck = new Deck();
-		h.dealTile(deck);
-		return this.severalMeldsFirstTurn();
-		
-	}
-
-	public Hand drawsOnSubsequentTurn() {
-		//System.out.println("first in draw " + h.handToString());
-				if (! (h.meldExists()) ) {
-					Deck deck1 = new Deck();
-					h.dealTile(deck1);
-					if (! (h.meldExists()) ) {
-						Deck deck2 = new Deck();
-						h.dealTile(deck2);
-					}
-				}
-					//System.out.println("in draw " + h.handToString());
-				
-				return h;
-				
-			}
 
 	@Override
 	public void update(Board board) {
@@ -137,9 +79,10 @@ public class AI1 implements PlayerType {
 					for(int i=0;i<melds.size();i++) {
 						playMeld(melds.get(i),reader);
 						this.hasTileBeenPlaced = true;
-						this.setHasInitialMeldBeenPlayed(true);
 					}
+					this.setHasInitialMeldBeenPlayed(true);
 				}
+				
 			}
 		}
 		else {
@@ -701,12 +644,13 @@ public class AI1 implements PlayerType {
 
 	@Override
 	public boolean hasInitialMeldBeenPlayed() {
+		return this.initialMeldPlayed;
 		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
 	public void setHasInitialMeldBeenPlayed(boolean b) {
+		this.initialMeldPlayed = b;
 		// TODO Auto-generated method stub
 		
 	}
@@ -717,6 +661,74 @@ public class AI1 implements PlayerType {
 		return false;
 	}
 	
+	public boolean oneMeldFirstTurn() {
+		if (h.numberOfMelds()==1)
+			return true;
+		else
+			return false;
+	}
+
+	public boolean severalMeldsFirstTurn() {
+		if (h.numberOfMelds()>1)
+			return true;
+		else
+			return false;
+	}
+	
+	public Hand drawsOnFirstTurn() {
+		//System.out.println("first in draw " + h.handToString());
+		if (! (h.meldExists()) ) {
+			Deck deck = new Deck();
+			//h.createHand(deck);
+			h.dealTile(deck);
+			//System.out.println("in draw " + h.handToString());
+		}
+		
+		return h;
+		
+	}
+	
+	public boolean oneMeldSubsequentTurn(){
+		Deck deck = new Deck();
+		h.dealTile(deck);
+		return this.oneMeldFirstTurn();
+		
+	}
+	
+	public boolean severaltMeldsSubsequentTurn(){
+		Deck deck = new Deck();
+		h.dealTile(deck);
+		return this.severalMeldsFirstTurn();
+		
+	}
+
+	public Hand drawsOnSubsequentTurn() {
+		//System.out.println("first in draw " + h.handToString());
+				if (! (h.meldExists()) ) {
+					Deck deck1 = new Deck();
+					h.dealTile(deck1);
+					if (! (h.meldExists()) ) {
+						Deck deck2 = new Deck();
+						h.dealTile(deck2);
+					}
+				}
+					//System.out.println("in draw " + h.handToString());
+				
+				return h;
+				
+			}
+
+	@Override
+	public Meld combineMelds(Meld meld1, Meld meld2, Tile tile) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void undoMove(Tile tile) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	
 	

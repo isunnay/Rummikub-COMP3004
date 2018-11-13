@@ -41,6 +41,7 @@ public class Game implements Subject {
 		observers.add(ai1);
 
 		AI2 ai2 = new AI2(deck);
+		observers.add(ai2);
 		AI3 ai3 = new AI3(deck, this);
 		observers.add(ai3);
 

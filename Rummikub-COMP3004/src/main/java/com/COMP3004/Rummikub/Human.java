@@ -150,6 +150,7 @@ public class Human implements PlayerType {
 		}
 	}
 	
+	@Override
 	public boolean canWePlaceTile(Tile tile, int x, int y) {
 		// Adding a tile between two melds
 				//System.out.println("Adding between two melds");
@@ -192,8 +193,6 @@ public class Human implements PlayerType {
 						return false;
 					}
 				}
-				
-				
 				return true;	
 	}
 
@@ -272,9 +271,6 @@ public class Human implements PlayerType {
 				System.out.println("ERROR: You cannot play this here.");
 			}
 		}	
-		
-		
-		
 
 		//ADDING TILE BEFORE A MELD
 		else if (x >= 0 && board.getSpot(x + 1, y).isTaken) {
@@ -309,8 +305,7 @@ public class Human implements PlayerType {
 			else {
 				System.out.println("ERROR: You cannot play this here.");
 				//nextTileMeld.removeTile(tile);
-			}
-			
+			}	
 		}
 		//Creating a new meld
 		else {
@@ -330,7 +325,8 @@ public class Human implements PlayerType {
 			this.setTilesBeenPlayed(true);
 		}
 	}
-
+	
+	@Override
 	public void moveTile(Tile tile, Spot newSpot) {
 		// Moving a tile between two melds
 				//System.out.println("Moving between two melds");
@@ -475,24 +471,9 @@ public class Human implements PlayerType {
 				//	h.removeTile(tile);
 					//this.setTilesBeenPlayed(true);
 				}
-		
-		
-		
-		
-		
-		
-		
-				//Spot oldSpot = tile.getSpot();
-				//oldSpot.removeTile();
-				//tile.removeSpot(oldSpot);
-				//board.filledSpots.remove(oldSpot);
-		//newSpot.playTile(tile);
-		//tile.setSpot(newSpot);
-		//board.filledSpots.add(newSpot);
-		//turnMoves.add(tile);
-		// boardChanged();
-	}
-
+		}
+	
+	@Override
 	public void undoPlayMeld(Meld meld) {
 		for (int i = 0; i < meld.getMeldSize(); i++) {
 			Tile tile = meld.getTileInMeld(i);
@@ -512,7 +493,8 @@ public class Human implements PlayerType {
 		board.numberOfMelds--;
 		meld = null;
 	}
-
+	
+	@Override
 	public void undoAddTile(Tile tile) {
 		Spot spot = tile.getSpot();
 		spot.removeTile();
@@ -525,7 +507,7 @@ public class Human implements PlayerType {
 		board.filledSpots.remove(spot);
 		h.addTile(tile);
 	}
-
+	@Override
 	public void undoMove(Tile tile) {
 		Spot currentSpot = tile.getOldSpot();
 		Spot oldSpot = tile.getSpot();
@@ -537,7 +519,8 @@ public class Human implements PlayerType {
 		tile.setSpot(currentSpot);
 		board.filledSpots.add(currentSpot);
 	}
-
+	
+	@Override
 	public void undoTurn() {
 		if (turnTiles.size() > 0) {
 			for (int i = 0; i < turnTiles.size(); i++) {
@@ -561,7 +544,7 @@ public class Human implements PlayerType {
 		turnMelds.clear();
 		turnMoves.clear();
 	}
-
+	@Override
 	public Meld combineMelds(Meld meld1, Meld meld2, Tile tile) {
 		Meld newMeld = new Meld();
 		newMeld.getTiles().addAll(meld1.getTiles());
@@ -577,6 +560,20 @@ public class Human implements PlayerType {
 	public void play(Scanner reader) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public void setTurnPoints() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public int getTurnPoints() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
