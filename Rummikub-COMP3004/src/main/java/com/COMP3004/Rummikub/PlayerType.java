@@ -2,8 +2,8 @@ package com.COMP3004.Rummikub;
 
 import java.util.*;
 
-public interface PlayerType extends Observer{
-//extends Observer{
+public interface PlayerType extends Observer {
+	
 	public Hand getHand();
 	public boolean myTurnStatus();
 
@@ -20,6 +20,7 @@ public interface PlayerType extends Observer{
 	public void update(Board board);
 	
 	public void play(Scanner reader);
+	public boolean makeAPlay(Scanner reader);
 	public void playMeld(Meld meld, Scanner reader);
 	public void addTile(Tile tile, int x, int y);
 	public boolean canWePlaceMeld(Meld meld, int x, int y);
@@ -32,5 +33,6 @@ public interface PlayerType extends Observer{
 	public void undoMove(Tile tile);
 	public void setTurnPoints();
 	public int getTurnPoints();
+	public void play(Scanner reader, Deck deck) throws InterruptedException;
 	
 }
