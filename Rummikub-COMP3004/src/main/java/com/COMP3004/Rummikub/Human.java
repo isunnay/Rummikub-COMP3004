@@ -17,6 +17,7 @@ public class Human implements PlayerType {
 	private Board board;
 	private int turnValue;
 	Scanner reader;
+	private boolean isAI = false;
 
 	public Human(Deck deck, Game game) {
 		h = new Hand();
@@ -585,8 +586,9 @@ public class Human implements PlayerType {
 						System.out.println("It seems that the tile " + tileChoice + " isn't in your posession. Please try again.");
 					}
 				}
-				
-				if (meld.getMeldSize() >= 3 && meld.checkIfValidMeld() == true && !(tileChoice.equals("D"))) {
+			}
+			if (tileChoice.equals("D")) {
+				if (meld.getMeldSize() >= 3 && meld.checkIfValidMeld() == true) {
 					this.playMeld(meld, reader);
 					turnValue = turnValue + meld.getMeldValue();
 					// ? printAll();
@@ -745,5 +747,14 @@ public class Human implements PlayerType {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+
+	@Override
+	public void play(Scanner reader) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public boolean isAI() { return isAI; }
 
 }

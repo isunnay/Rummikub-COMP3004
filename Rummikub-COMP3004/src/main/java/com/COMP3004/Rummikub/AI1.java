@@ -22,6 +22,7 @@ public class AI1 implements PlayerType {
 	public ArrayList<Tile> usedInMeld;
 	public int turnPoints;
 	private Board board;
+	private boolean isAI = true;
 
 	
 	public AI1(Deck deck, Game game) {
@@ -729,6 +730,20 @@ public class AI1 implements PlayerType {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean makeAPlay(Scanner reader) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void play(Scanner reader, Deck deck) throws InterruptedException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean isAI() { return isAI; }
 
 	
 	

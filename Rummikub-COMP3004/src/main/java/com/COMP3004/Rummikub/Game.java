@@ -9,8 +9,8 @@ public class Game implements Subject {
 	private boolean gameInProgress = false;
 	private Deck deck;
 	private Board board;
-	private ArrayList<PlayerType> allPlayers = new ArrayList<PlayerType>();
-	private ArrayList<Observer> observers = new ArrayList<Observer>();
+	private ArrayList<PlayerType> allPlayers;
+	private ArrayList<Observer> observers;
 	Scanner reader;
 
 	// Constructor
@@ -32,39 +32,49 @@ public class Game implements Subject {
 		// Shuffle the deck
 		deck.shuffleTiles();
 		
+		//Re-init arraylists
+		allPlayers = new ArrayList<PlayerType>();
+		observers = new ArrayList<Observer>();
+		
 		// Ask how many players
 		reader = new Scanner(System.in);
-		System.out.println("How many human players will be playing? (1-4)");
-		int amountOfPlayers = reader.nextInt();
-		
-		
-		
-		/*
-		if (amountOfPlayers > 0 || amountOfPlayers <= 4) {
-			for (int i = 0; i < amountOfPlayers; i++) {
-				//allPlayers.add(new Human(deck, this));
-				//observers.add(allPlayers.get(i));
-				System.out.println("Human added to game...");
+		int amountOfPlayers;
+		while (true) {
+			System.out.println("How many human players will be playing? (1-4)");
+			amountOfPlayers = reader.nextInt();
+			
+			if (amountOfPlayers > 4 || amountOfPlayers < 0) {
+				System.out.println("Invalid input. Please try again.");
+			} else {
+				break;
 			}
-		}*/
+		}
 		
+		// Add human's based on input
+		for (int i = 0; i < amountOfPlayers; i++) {
+			allPlayers.add(new Human(deck, this));
+			observers.add(allPlayers.get(i));
+			//System.out.println("Human added to game...");
+		}
+	
 		// Fill in the rest with AI (random chance of each AI strategy)
-		/*
-		for (int i = allPlayers.size()3; i < (4-allPlayers.size()); i++) {
+		for (int i = allPlayers.size(); i < 4; i++) {
 			int foo = (int) (Math.random() * 100);
 			if (foo < 34) {
-				//allPlayers.add(new AI1(deck, this));
-				System.out.println("AI1");
+				allPlayers.add(new AI1(deck, this));
+				//System.out.println("AI1");
 			} else if (foo < 67){
-				//allPlayers.add(new AI2(deck));
-				System.out.println("AI2");
+				//allPlayers.add(new AI2(deck)); /* Uncomment when other strategies are complete */
+				allPlayers.add(new AI1(deck, this));
+				//System.out.println("AI2");
 			} else {
-				//allPlayers.add(new AI3(deck, this));
-				System.out.println("AI3");
+				//allPlayers.add(new AI3(deck, this)); /* Uncomment when other strategies are complete */
+				allPlayers.add(new AI1(deck, this));
+				//System.out.println("AI3");
 			}
-			//observers.add(allPlayers.get(i));
-			System.out.println("added to game...");
-		}*/
+			observers.add(allPlayers.get(i));
+			//System.out.println("added to game...");
+		}
 	}
 
 	private int anyWinners() {
@@ -99,34 +109,64 @@ public class Game implements Subject {
 			System.out.println("Player 4 Won!");
 		}
 	}
+	
+	public void playTurn(int i) {
+		printAll();
+		// Play if human
+		if (allPlayers.get(i).myTurnStatus() == true && allPlayers.get(i).isAI() == false) {
+			//System.out.println("Player " + (i+1) + " is playing...");
+			System.out.println("Player " + (i+1) + "'s Hand: " + allPlayers.get(i).getHand().handToString());
+			try {
+				allPlayers.get(i).play(reader, deck);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// Play if AI
+		if (allPlayers.get(i).myTurnStatus() == true && allPlayers.get(i).isAI() == true) {
+			//System.out.println("Player " + (i+1) + " is playing...");
+			allPlayers.get(i).play(reader);
+			
+			if (allPlayers.get(i).hasTilesBeenPlayed() == false) {
+				Tile t = allPlayers.get(i).getHand().dealTile(deck);
+				System.out.println("Turn ended: Player " + (i+1) + " has decided to draw a tile.");
+				System.out.println("Tile drawn: " + t.tileToString());
+			}
+		}
+		// Sets next players turn
+		if (i <= 2) {
+			allPlayers.get(i+1).setTilesBeenPlayed(false);
+			allPlayers.get(i+1).setTurnStatus(true);
+		} else {
+			allPlayers.get(0).setTilesBeenPlayed(false);
+			allPlayers.get(0).setTurnStatus(true);
+		}
+	}
 
 	public void play() throws InterruptedException {
-		notifyObservers();
 		while (anyWinners() == 0) {
 			if (whosTurn() == 1) {
-				printAll();
-				System.out.println("Player 1 Hand: " + allPlayers.get(0).getHand().handToString());
-				if (allPlayers.get(0).myTurnStatus() == true) {
-					allPlayers.get(0).play(reader, deck);
-				}
-				/*
-				if (allPlayers.get(0).isAI() == true) {
-					// Do something...
-				}
-				*/
+				// Nothing yet...
+				System.out.println("Player 1's turn.");
+				playTurn(0);
+				notifyObservers();
 			} else if (whosTurn() == 2) {
 				// Nothing yet...
+				System.out.println("Player 2's turn.");
+				playTurn(1);
+				notifyObservers();
 			} else if (whosTurn() == 3) {
 				// Nothing yet...
+				System.out.println("Player 3's turn.");
+				playTurn(2);
+				notifyObservers();
 			} else if (whosTurn() == 4) {
 				// Nothing yet...
-			}/* else if (timesTriedPlaying >= 4) {
-				System.out.println("There seems to be a problem with our AI!");
-				System.out.println("Either it had trouble playing or it hasn't been implemented yet.");
-				System.out.println("Please try restarting the game.");
-				System.out.println("----------------------------------------");
-				break;
-			}*/ else {
+				System.out.println("Player 4's turn.");
+				playTurn(3);
+				notifyObservers();
+			} else {
 				System.out.println("There seems to be a problem. Please try restarting the game.");
 				System.out.println("----------------------------------------");
 				break;
