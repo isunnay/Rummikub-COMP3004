@@ -79,9 +79,11 @@ public class AI1 implements PlayerType {
 				if(melds.size()>0) {
 					for(int i=0;i<melds.size();i++) {
 						playMeld(melds.get(i),reader);
-						this.hasTileBeenPlaced = true;
+						//this.hasTileBeenPlaced = true;
+						this.setTilesBeenPlayed(true);
 					}
 					this.setHasInitialMeldBeenPlayed(true);
+					this.setTurnStatus(false);
 				}
 				
 			}
@@ -90,11 +92,11 @@ public class AI1 implements PlayerType {
 			if(melds.size()>0) {
 				for(int i=0;i<melds.size();i++) {
 					playMeld(melds.get(i),reader);
-					this.hasTileBeenPlaced = true;
+					//this.hasTileBeenPlaced = true;
+					this.setTilesBeenPlayed(true);
 				}
+				this.setTurnStatus(false);
 			}
-			
-			
 		}
 	}
 	

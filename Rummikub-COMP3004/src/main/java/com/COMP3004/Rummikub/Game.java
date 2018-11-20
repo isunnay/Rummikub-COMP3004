@@ -54,7 +54,6 @@ public class Game implements Subject {
 		for (int i = 0; i < amountOfPlayers; i++) {
 			allPlayers.add(new Human(deck, this));
 			observers.add(allPlayers.get(i));
-			//System.out.println("Human added to game...");
 		}
 	
 		// Fill in the rest with AI (random chance of each AI strategy)
@@ -62,18 +61,14 @@ public class Game implements Subject {
 			int foo = (int) (Math.random() * 100);
 			if (foo < 34) {
 				allPlayers.add(new AI1(deck, this));
-				//System.out.println("AI1");
 			} else if (foo < 67){
 				//allPlayers.add(new AI2(deck)); /* Uncomment when other strategies are complete */
-				allPlayers.add(new AI1(deck, this));
-				//System.out.println("AI2");
+				allPlayers.add(new AI1(deck, this)); /* Remove when above strategy line is uncommented */
 			} else {
 				//allPlayers.add(new AI3(deck, this)); /* Uncomment when other strategies are complete */
-				allPlayers.add(new AI1(deck, this));
-				//System.out.println("AI3");
+				allPlayers.add(new AI1(deck, this)); /* Remove when above strategy line is uncommented */
 			}
 			observers.add(allPlayers.get(i));
-			//System.out.println("added to game...");
 		}
 	}
 
@@ -110,62 +105,68 @@ public class Game implements Subject {
 		}
 	}
 	
+	public void nextPlayersTurn(int i) {
+		// Sets next players turn
+		if (i <= 2) {
+			if (allPlayers.get(i).isAI() == true) { allPlayers.get(i).setTurnStatus(false); }
+			allPlayers.get(i+1).setTilesBeenPlayed(false);
+			allPlayers.get(i+1).setTurnStatus(true);
+		} else {
+			if (allPlayers.get(i).isAI() == true) { allPlayers.get(i).setTurnStatus(false); }
+			allPlayers.get(0).setTilesBeenPlayed(false);
+			allPlayers.get(0).setTurnStatus(true);
+		}
+	}
+	
 	public void playTurn(int i) {
 		printAll();
 		// Play if human
-		if (allPlayers.get(i).myTurnStatus() == true && allPlayers.get(i).isAI() == false) {
-			//System.out.println("Player " + (i+1) + " is playing...");
+		if (allPlayers.get(i).isAI() == false && allPlayers.get(i).myTurnStatus() == true) {
 			System.out.println("Player " + (i+1) + "'s Hand: " + allPlayers.get(i).getHand().handToString());
 			try {
 				allPlayers.get(i).play(reader, deck);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		// Play if AI
-		if (allPlayers.get(i).myTurnStatus() == true && allPlayers.get(i).isAI() == true) {
-			//System.out.println("Player " + (i+1) + " is playing...");
+		if (allPlayers.get(i).isAI() == true && allPlayers.get(i).myTurnStatus() == true) {
 			allPlayers.get(i).play(reader);
 			
 			if (allPlayers.get(i).hasTilesBeenPlayed() == false) {
 				Tile t = allPlayers.get(i).getHand().dealTile(deck);
 				System.out.println("Turn ended: Player " + (i+1) + " has decided to draw a tile.");
 				System.out.println("Tile drawn: " + t.tileToString());
+				nextPlayersTurn(i);
 			}
 		}
 		// Sets next players turn
-		if (i <= 2) {
-			allPlayers.get(i+1).setTilesBeenPlayed(false);
-			allPlayers.get(i+1).setTurnStatus(true);
-		} else {
-			allPlayers.get(0).setTilesBeenPlayed(false);
-			allPlayers.get(0).setTurnStatus(true);
-		}
+		nextPlayersTurn(i);
 	}
 
 	public void play() throws InterruptedException {
+		notifyObservers();
 		while (anyWinners() == 0) {
 			if (whosTurn() == 1) {
-				// Nothing yet...
 				System.out.println("Player 1's turn.");
 				playTurn(0);
 				notifyObservers();
+				TimeUnit.SECONDS.sleep(2);
 			} else if (whosTurn() == 2) {
-				// Nothing yet...
 				System.out.println("Player 2's turn.");
 				playTurn(1);
 				notifyObservers();
+				TimeUnit.SECONDS.sleep(2);
 			} else if (whosTurn() == 3) {
-				// Nothing yet...
 				System.out.println("Player 3's turn.");
 				playTurn(2);
 				notifyObservers();
+				TimeUnit.SECONDS.sleep(2);
 			} else if (whosTurn() == 4) {
-				// Nothing yet...
 				System.out.println("Player 4's turn.");
 				playTurn(3);
 				notifyObservers();
+				TimeUnit.SECONDS.sleep(2);
 			} else {
 				System.out.println("There seems to be a problem. Please try restarting the game.");
 				System.out.println("----------------------------------------");

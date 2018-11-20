@@ -127,8 +127,11 @@ public class Human implements PlayerType {
 		int x = aReader.nextInt();
 		System.out.println("Enter an y value for the beginning of the Meld (Between 0-14): ");
 		int y = aReader.nextInt();
-		Spot beginningSpot = board.getSpot(x, y);
+		System.out.println(x);
+		System.out.println(y);
 
+		
+		Spot beginningSpot = board.getSpot(x, y);
 		if (beginningSpot != null) {
 			if (canWePlaceMeld(meld, x, y) == true) {
 				for (int i = 0; i < meld.getNumberOfTiles(); i++) {
@@ -567,7 +570,6 @@ public class Human implements PlayerType {
 		if (decision == 'M') {
 			String tileChoice = "";
 			Meld meld = new Meld();
-			// ? Hand tempHand = this.getHand();
 			this.getHand().createMeld();
 			
 			while (!tileChoice.equals("D")) {
@@ -589,12 +591,15 @@ public class Human implements PlayerType {
 			}
 			if (tileChoice.equals("D")) {
 				if (meld.getMeldSize() >= 3 && meld.checkIfValidMeld() == true) {
+					
+					for (int i = 0; i < meld.getMeldSize(); i++) {
+						System.out.println(meld.getTileInMeld(i).tileToString());
+					}
+					
 					this.playMeld(meld, reader);
 					turnValue = turnValue + meld.getMeldValue();
-					// ? printAll();
 				} else {
 					System.out.println("Invalid meld. Please try again.");
-					// ? System.out.println("----------------------------------------");
 					for (int i = 0; i < meld.getMeldSize(); i++) {
 						this.getHand().addTile(meld.getTileInMeld(i));
 					}
@@ -621,7 +626,6 @@ public class Human implements PlayerType {
 					
 					for (int i = 0; i < this.getHand().size; i++) {
 						if (this.getHand().getTile(i).tileToString().equals(tileChoice)) {
-							// ? System.out.println(this.getHand().getTile(i).tileToString());
 							this.addTile(this.getHand().getTile(i), xTile, yTile);
 						}
 					}
@@ -665,10 +669,8 @@ public class Human implements PlayerType {
 				System.out.println("That wasn't a valid move. Please try again.");
 				this.setTilesBeenPlayed(false);
 				this.undoTurn();
-				// ? break;
 				return false;
 			} else {
-				// ? break;
 				return false;
 			}
 		}
@@ -692,23 +694,18 @@ public class Human implements PlayerType {
 					Tile t = this.getHand().dealTile(deck);
 					System.out.println("Turn ended: Player drew " + t.tileToString() + ".");
 					System.out.println("----------------------------------------");
-					TimeUnit.SECONDS.sleep(4);
 					this.setTurnStatus(false);
-					// ? allPlayers.get(1).setTilesBeenPlayed(false);
-					// ? allPlayers.get(1).setTurnStatus(true);
 				} else {
 					System.out.println("You've already made a play. Try typing 'E' to end your turn.");
 				}
 			} else if (decision == 'E') {
 				if (initialMeldPlayed == false) {
-					if (turnValue >= 30) {
+					if (turnValue >= 2) {
 						System.out.println("Initial Meld Completed.");
 						System.out.println("----------------------------------------");
 						this.setHasInitialMeldBeenPlayed(true);
 						this.setTilesBeenPlayed(true);
 						this.setTurnStatus(false);
-						// ? allPlayers.get(1).setTilesBeenPlayed(false);
-						// ? allPlayers.get(1).setTurnStatus(true);
 					} else {
 						System.out.println("Your Initial Meld total must be greater than or equal to 30 points.");
 						System.out.println("You played: " + turnValue + ". Please try again.");	
@@ -720,9 +717,6 @@ public class Human implements PlayerType {
 				} else if (initialMeldPlayed == true) {
 					if (hasTileBeenPlaced == true) {
 						this.setTurnStatus(false);
-						// ? allPlayers.get(1).setTilesBeenPlayed(false);
-						// ? allPlayers.get(1).setTurnStatus(true);
-						// ? break;
 					} else {
 						this.undoTurn();
 						System.out.println("You must either play your turn or draw a tile.");
