@@ -1,4 +1,4 @@
-package com.COMP3004.Rummikub;
+package com.COMP3004.Rummikub.models;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -560,12 +560,14 @@ public class Human implements PlayerType {
 	}
 	
 	public boolean makeAPlay(Scanner reader) {
+		while(true) {
 		System.out.println("Choose one of the following commands:");
 		System.out.println(" - 'M' to play a meld.");
 		System.out.println(" - 'T' to play an individual tile.");
 		System.out.println(" - 'B' to move an existing tile on the board.");
 		System.out.println(" - 'L' to exit this sequence.");
 		char decision = reader.next().toUpperCase().charAt(0);
+		
 		
 		if (decision == 'M') {
 			String tileChoice = "";
@@ -674,7 +676,9 @@ public class Human implements PlayerType {
 				return false;
 			}
 		}
-		return false;
+		
+		}
+		//return false;
 	}
 
 	public void play(Scanner reader, Deck deck) throws InterruptedException {

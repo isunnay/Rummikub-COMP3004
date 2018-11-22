@@ -1,5 +1,10 @@
 package com.COMP3004.Rummikub;
 
+import com.COMP3004.Rummikub.models.Board;
+import com.COMP3004.Rummikub.models.Deck;
+import com.COMP3004.Rummikub.models.Hand;
+import com.COMP3004.Rummikub.models.Spot;
+
 import junit.framework.TestCase;
 
 public class SpotTest extends TestCase{

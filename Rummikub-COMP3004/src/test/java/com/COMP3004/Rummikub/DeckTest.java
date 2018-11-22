@@ -1,5 +1,7 @@
 package com.COMP3004.Rummikub;
 
+import com.COMP3004.Rummikub.models.Deck;
+
 import junit.framework.TestCase;
 
 public class DeckTest extends TestCase {

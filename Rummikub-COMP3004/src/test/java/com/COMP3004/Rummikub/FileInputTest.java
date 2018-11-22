@@ -1,5 +1,9 @@
 package com.COMP3004.Rummikub;
 
+import com.COMP3004.Rummikub.models.Deck;
+import com.COMP3004.Rummikub.models.Game;
+import com.COMP3004.Rummikub.models.Tile;
+
 import junit.framework.TestCase;
 
 public class FileInputTest extends TestCase {
