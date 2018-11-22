@@ -1,4 +1,7 @@
 package com.COMP3004.Rummikub;
+import com.COMP3004.Rummikub.models.AI3;
+import com.COMP3004.Rummikub.models.Deck;
+
 import junit.framework.TestCase;
 
 public class AI3Test extends TestCase {

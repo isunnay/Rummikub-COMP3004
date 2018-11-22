@@ -1,5 +1,7 @@
 package com.COMP3004.Rummikub;
 
+import com.COMP3004.Rummikub.models.Game;
+
 import junit.framework.TestCase;
 
 public class GameTest extends TestCase {

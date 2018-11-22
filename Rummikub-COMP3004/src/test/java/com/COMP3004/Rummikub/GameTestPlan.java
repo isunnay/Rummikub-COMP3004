@@ -2,6 +2,14 @@ package com.COMP3004.Rummikub;
 import junit.framework.TestCase;
 import java.util.ArrayList;
 
+import com.COMP3004.Rummikub.models.AI1;
+import com.COMP3004.Rummikub.models.AI2;
+import com.COMP3004.Rummikub.models.Board;
+import com.COMP3004.Rummikub.models.Game;
+import com.COMP3004.Rummikub.models.Human;
+import com.COMP3004.Rummikub.models.PlayerType;
+import com.COMP3004.Rummikub.models.Tile;
+
 public class GameTestPlan extends TestCase {
 	public void testGame1() {
 		Game game = new Game();

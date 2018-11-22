@@ -1,4 +1,4 @@
-package com.COMP3004.Rummikub;
+package com.COMP3004.Rummikub.models;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
 
-import com.COMP3004.Rummikub.Hand.SortByValue;
+import com.COMP3004.Rummikub.models.Hand.SortByValue;
 
 public class AI1 implements PlayerType {
 	Hand h;

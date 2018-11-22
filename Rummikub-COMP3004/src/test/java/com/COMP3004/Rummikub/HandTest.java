@@ -2,6 +2,11 @@ package com.COMP3004.Rummikub;
 import junit.framework.TestCase;
 import java.util.Random;
 
+import com.COMP3004.Rummikub.models.Deck;
+import com.COMP3004.Rummikub.models.Hand;
+import com.COMP3004.Rummikub.models.Meld;
+import com.COMP3004.Rummikub.models.Tile;
+
 public class HandTest extends TestCase {
 	public void testHandExists() {
 		Hand hand = new Hand();
