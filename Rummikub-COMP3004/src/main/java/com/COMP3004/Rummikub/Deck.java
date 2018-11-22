@@ -5,12 +5,12 @@ import java.util.Collections;
 
 public class Deck {
 	private ArrayList<Tile> tileDeck;
-	private int size;
+	//private int size;
 	
 	public Deck() {
 		tileDeck = new ArrayList<Tile>();
 		generateDeck();
-		generateDeck();
+		generateDeck();	
 	}
 	
 	private void generateDeck() {
@@ -20,18 +20,17 @@ public class Deck {
 				tileDeck.add(tile); 
 			}
 		}
+		tileDeck.add(new Tile("JKR", 0));
 	} 
 	
-	public ArrayList<Tile> getTileDeck() {
-		return tileDeck;
-	}
-
-	public int getDeckCount() {
-		size = tileDeck.size();
-		return size;
-		
-	}
-
+	// Getters
+	public ArrayList<Tile> getTileDeck() { return tileDeck; }
+	public int getDeckCount() { return tileDeck.size(); }
+	
+	// Setters
+	public void shuffleTiles() { Collections.shuffle(tileDeck); }
+	
+	// Checkers
 	public boolean doesEveryTileExist(int count) {
 		int counter = count;
 		for(int i=0;i<4;i++) {
@@ -47,12 +46,7 @@ public class Deck {
 			}
 		doesEveryTileExist(53);
 		return true;
-		}
-	
-	public void shuffleTiles() {
-		Collections.shuffle(tileDeck);
 	}
-
 	public boolean isDeckShuffled(int count) {
 		int counter = count;
 		for(int i=0;i<4;i++) {

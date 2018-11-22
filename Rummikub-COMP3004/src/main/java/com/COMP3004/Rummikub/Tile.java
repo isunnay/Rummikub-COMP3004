@@ -2,13 +2,11 @@ package com.COMP3004.Rummikub;
 
 public class Tile {
 	// Variables
-	private int colour;
-	private int value;
-	private static final String[] colours = { "Red", "Green", "Blue", "Orange" };
-	private Spot spot;
-	private Spot oldSpot;
+	private int colour, value;
+	private Spot spot, oldSpot;
 	private Meld memberOfMeld;
-	//public int id;
+	private boolean isJoker = false;
+	private static final String[] colours = { "Red", "Green", "Blue", "Orange", "Joker" };
 	
 	// Constructor for string & int
 	public Tile (String colour, int value) {
@@ -20,9 +18,11 @@ public class Tile {
 		else if (colour.equals("G")) { this.colour = 1; }
 		else if (colour.equals("B")) { this.colour = 2; }
 		else if (colour.equals("O")) { this.colour = 3; }
+		else if (colour.equals("JKR")) { this.colour = 4; isJoker = true; }
 		
 		// Set the value of the tile
 		this.value = value;
+		if (isJoker) { this.value = 0; }
 		this.spot = null;
 		this.oldSpot = null;
 		this.memberOfMeld = null;
@@ -34,57 +34,29 @@ public class Tile {
 		this.value = value;
 	}
 	
-	public String getColour() { return colours[this.colour]; } // Getter for tile colour
-	public int getValue() { return this.value; }	// Getter for tile value
-	
+	// Getters
+	public String getColour() { return colours[this.colour]; }
+	public int getValue() { return this.value; }
+	public Tile getTile() { return this; }
+	public Spot getSpot() { return this.spot; }
+	public Spot getOldSpot() { return this.oldSpot; }
+	public Meld getMemberOfMeld() { return this.memberOfMeld; }
 	public String getTileName() {
 		String colourForName = String.valueOf(colour);
 		String valueForName = String.valueOf(value);
 		return colourForName + valueForName;
 	}
 	
-	
-	public String tileToString() {
-		return colours[colour].charAt(0) + String.valueOf(value);
-	}
-	
-	public String toString(int colour, int value) {
-		return colours[colour] + String.valueOf(value);
-	}
-	
-	public Tile getTile() {
-		return this;
-	}
-	
-	public void setSpot(Spot spot) {
-		//oldSpot = this.spot;
-		this.spot = spot;
-	}
-	
+	// Setters
+	public void setSpot(Spot spot) { this.spot = spot; }
+	public void setMeld(Meld meld) { this.memberOfMeld = meld; }
+	public void removeMeld() { this.memberOfMeld = null; }
 	public void removeSpot(Spot spot) {
 		oldSpot = this.spot;
 		this.spot = null;
 	}
 	
-	public Spot getSpot() {
-		return this.spot;
-	}
-	
-	public Spot getOldSpot() {
-		return this.oldSpot;
-	}
-	
-	public void setMeld(Meld meld) {
-		this.memberOfMeld = meld;
-	}
-	
-	public Meld getMemberOfMeld() {
-		return this.memberOfMeld;
-	}
-	
-	public void removeMeld() {
-		this.memberOfMeld = null;
-	}
-	
-	
+	// Print
+	public String toString(int colour, int value) { return colours[colour] + String.valueOf(value); }
+	public String tileToString() { return colours[colour].charAt(0) + String.valueOf(value); }
 }
