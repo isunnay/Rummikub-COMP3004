@@ -1,6 +1,7 @@
 package com.COMP3004.Rummikub;
+import junit.framework.TestCase;
 
-public class TestTimer {
+public class TestTimer extends TestCase {
 	public void testTimerExists() {
 		GameTimer timer = new GameTimer();
 		
