@@ -41,6 +41,7 @@ public class Tile {
 	public Spot getSpot() { return this.spot; }
 	public Spot getOldSpot() { return this.oldSpot; }
 	public Meld getMemberOfMeld() { return this.memberOfMeld; }
+	public boolean getJoker() { return this.isJoker; }
 	public String getTileName() {
 		String colourForName = String.valueOf(colour);
 		String valueForName = String.valueOf(value);
@@ -51,6 +52,7 @@ public class Tile {
 	public void setSpot(Spot spot) { this.spot = spot; }
 	public void setMeld(Meld meld) { this.memberOfMeld = meld; }
 	public void removeMeld() { this.memberOfMeld = null; }
+	public void setJoker(boolean b) { this.isJoker = b; }
 	public void removeSpot(Spot spot) {
 		oldSpot = this.spot;
 		this.spot = null;
@@ -58,5 +60,11 @@ public class Tile {
 	
 	// Print
 	public String toString(int colour, int value) { return colours[colour] + String.valueOf(value); }
-	public String tileToString() { return colours[colour].charAt(0) + String.valueOf(value); }
+	public String tileToString() {
+		if (this.isJoker == true) {
+			return "JKR";
+		} else {
+			return colours[colour].charAt(0) + String.valueOf(value);
+		}
+	}
 }

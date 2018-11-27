@@ -17,10 +17,13 @@ public class Deck {
 		for(int colour=0;colour<4;colour++) {
 			for(int value=1;value<14;value++) {
 				Tile tile = new Tile(colour,value);
-				tileDeck.add(tile); 
+				tile.setJoker(false);
+				tileDeck.add(tile);
 			}
 		}
-		tileDeck.add(new Tile("JKR", 0));
+		Tile tileJoker = new Tile("JKR", 0);
+		tileJoker.setJoker(true);
+		tileDeck.add(tileJoker);
 	} 
 	
 	// Getters
@@ -30,7 +33,7 @@ public class Deck {
 	// Setters
 	public void shuffleTiles() { Collections.shuffle(tileDeck); }
 	
-	// Checkers
+	// Checkers (these should be in the tests)
 	public boolean doesEveryTileExist(int count) {
 		int counter = count;
 		for(int i=0;i<4;i++) {
@@ -44,7 +47,7 @@ public class Deck {
 				counter++;
 				}
 			}
-		doesEveryTileExist(53);
+		doesEveryTileExist(54);
 		return true;
 	}
 	public boolean isDeckShuffled(int count) {

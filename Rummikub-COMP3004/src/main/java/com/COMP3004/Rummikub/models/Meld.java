@@ -19,30 +19,14 @@ public class Meld {
 		meldValue = 0;
 	}
 	
-	public Meld getMeld() {
-		return this;
-	}
-	
-	public ArrayList<Tile> getTiles(){
-		return tiles;
-	}
-	
-	public int getMeldSize() {
-		return tiles.size();
-	}
-	
-	public int getNumberOfTiles() {
-		return numberOfTiles;
-	}
-	
-	public boolean getIsValidMeld() {
-		return isValidMeld;
-	}
-	
-	
-	public Tile getTileInMeld(int i) {
-		return tiles.get(i);
-	}
+	// Getters
+	public Meld getMeld() { return this; }
+	public ArrayList<Tile> getTiles(){ return tiles; }
+	public int getMeldSize() { return tiles.size(); }
+	public int getNumberOfTiles() { return numberOfTiles; }
+	public boolean getIsValidMeld() { return isValidMeld; }
+	public Tile getTileInMeld(int i) { return tiles.get(i); }
+	public int getMeldValue() { return this.meldValue; }
 
 	public void addTile(Tile tile) {
 		tiles.add(tile);
@@ -57,8 +41,7 @@ public class Meld {
 		meldValue = meldValue+tile.getValue();
 		numberOfTiles++;
 	}
-	
-	
+
 	public int findTileIndex(Tile tile) {
 		for(int i=0;i<tiles.size();i++) {
 			if(tiles.get(i).getTile() == tile) {
@@ -91,50 +74,68 @@ public class Meld {
 		int number = tiles.get(0).getValue();
 		if (tiles.size()==3 || tiles.size()==4) {
 			for(int i=1;i<tiles.size();i++) {
-				//System.out.println(i);
 				tile = tiles.get(i);
-				if(tile.getValue()!=number) {
-					//System.out.println("Wrong Value");
+				if(tile.getValue()!=number && !(tile.getJoker())) {
 					return false;
 				}
-				if((colours.contains(tile.getColour()))) {
-					//System.out.println("Wrong Colour");
+				if((colours.contains(tile.getColour()) && !(tile.getJoker()))) {
 					return false;
 				}
 				colours.add(tile.getColour());
 			}
 			return true;
-			
 		} else {
-			//System.out.println("Melds are made up of 3 or more tiles");
 			return false;
 		}
 	}
 	
 	public boolean isValidRun() {
 		Tile tile;
+		String colour;
+		int previousNum;
+		int i;
 		if(tiles.size()>2) {
-			String colour = tiles.get(0).getColour(); 
-			int previousNum = tiles.get(0).getValue(); 
-			for(int i = 1; i < tiles.size(); i++) {
+			if (tiles.get(0).getJoker() == false) {
+				colour = tiles.get(0).getColour(); 
+				previousNum = tiles.get(0).getValue();
+				i = 1;
+			} else {
+				colour = tiles.get(1).getColour(); 
+				previousNum = tiles.get(1).getValue();
+				i = 2;
+			}
+			while(i<tiles.size()) {
 				tile = tiles.get(i); 
-				
-				if(!(colour.equals(tile.getColour()))) {
+				if(!(colour.equals(tile.getColour())) && !(tile.getJoker())) {
+					System.out.println("Invalid Colour: " + tile.tileToString());
 					return false;
 				}
-				
-				if(tile.getValue() == previousNum + 1) {
-					previousNum++; 
-				}
-				else {
+				if(tile.getValue() == previousNum + 1 || tile.getJoker()) {
+					System.out.println("Num: " + previousNum + "| Tile: " + tile.tileToString());
+					previousNum++;
+				} else {
+					System.out.println("Invalid Number: " + tile.tileToString());
 					return false; 
 				}
+				i++;
 			}
-			return true;
-			
-		}
-		else {
-			//System.out.println("Melds are made up of 3 or more tiles");
+			/*
+			for(i; i < tiles.size(); i++) {
+				tile = tiles.get(i); 
+				if(!(colour.equals(tile.getColour()))) {
+					System.out.println("Invalid Colour: " + tile.tileToString());
+					return false;
+				}
+				if(tile.getValue() == previousNum + 1) {
+					System.out.println("Num: " + previousNum + "| Tile: " + tile.tileToString());
+					previousNum++;
+				} else {
+					System.out.println("Invalid Number: " + tile.tileToString());
+					return false; 
+				}
+			}*/
+			return true;	
+		} else {
 			return false;
 		}
 	}
@@ -150,11 +151,8 @@ public class Meld {
 	
 	public boolean checkIfValidMeld() {
 		if(this.isValidRun() == true || this.isValidSet() == true) {
-		//	System.out.println("We got a true in Meld");
 			return true;
-		}
-		else {
-		//	System.out.println("We got a False in Meld");
+		} else {
 			return false;
 		}
 	}
@@ -169,9 +167,4 @@ public class Meld {
 		
 		return h;
 	}
-	
-	public int getMeldValue() {
-		return this.meldValue;
-	}
-
 }

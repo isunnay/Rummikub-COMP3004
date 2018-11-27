@@ -10,6 +10,7 @@ public class Hand {
 	private ArrayList<Tile> blueHand;
 	private ArrayList<Tile> redHand;
 	private ArrayList<Tile> orangeHand;
+	private ArrayList<Tile> jokerHand;
 	private ArrayList<Tile> sortedHand;
 	private ArrayList<Meld> melds;
 	
@@ -18,10 +19,13 @@ public class Hand {
 	
 	public Hand() {
 		playerHand = new ArrayList<Tile>();
+		
 		greenHand = new ArrayList<Tile>();
 		blueHand = new ArrayList<Tile>();
 		redHand = new ArrayList<Tile>();
 		orangeHand = new ArrayList<Tile>();
+		jokerHand = new ArrayList<Tile>();
+		
 		sortedHand = new ArrayList<Tile>();
 		melds = new ArrayList<Meld>();
 		numberOfMelds = 0;
@@ -38,9 +42,9 @@ public class Hand {
 	public boolean isTileDealt(Deck deck) {
 		if(this.getNumTiles() > 14) {
 			return true;
+		} else {
+			return false;
 		}
-		
-		return false;
 	}
 	
 
@@ -53,8 +57,27 @@ public class Hand {
 		return tile;
 	}
 	
-	public int getNumTiles() {
-		return this.size;
+	// Getters
+	public int getNumTiles() { return this.size; }
+	public ArrayList<Tile> getPlayerHand() { return this.playerHand; }
+	public Tile getTile(int i) { return playerHand.get(i); }
+	public Meld getMeld(int i) { return melds.get(i); }
+	public int getNumberOfMelds() { return numberOfMelds; }
+	public Tile getTile(String colour, int value) {
+		for(int i=0; i<playerHand.size();i++) {
+			if((playerHand.get(i).getColour() == colour)&& (playerHand.get(i).getValue() == value)) {
+				return playerHand.get(i);
+			}
+		}
+		return null;
+	}
+	public Tile getTile(String tileName) {
+		for(int i=0; i<playerHand.size();i++) {
+			if(playerHand.get(i).tileToString().equals(tileName)){
+				return playerHand.get(i);
+			}
+		}
+		return null;
 	}
 	
 	public class SortByValue implements Comparator<Tile> {
@@ -69,67 +92,41 @@ public class Hand {
 	
 	public void sortByColor() {
 		for(int i=0; i<playerHand.size(); i++) {
-			if(playerHand.get(i).getColour()=="Green")
+			if(playerHand.get(i).getColour()=="Green") {
 				greenHand.add(playerHand.get(i));
-			
-			else if (playerHand.get(i).getColour()=="Blue")
+			} else if (playerHand.get(i).getColour()=="Blue") {
 				blueHand.add(playerHand.get(i));
-			
-			else if (playerHand.get(i).getColour()=="Red")
+			} else if (playerHand.get(i).getColour()=="Red") {
 				redHand.add(playerHand.get(i));
-			
-			else if (playerHand.get(i).getColour()=="Orange")
+			} else if (playerHand.get(i).getColour()=="Orange") {
 				orangeHand.add(playerHand.get(i));
+			} else {
+				jokerHand.add(playerHand.get(i));
+			}
 		}
-	}
-	
-	
-	public ArrayList<Tile> getPlayerHand() {
-		return this.playerHand;
 	}
 	
 	public void sortHand() {
+		if(greenHand.size()>0) { greenHand.clear(); }
+		if(redHand.size()>0) { redHand.clear(); }
+		if(blueHand.size()>0) { blueHand.clear(); }
+		if(orangeHand.size()>0) { orangeHand.clear(); }
+		if(jokerHand.size()>0) { jokerHand.clear(); }
 
-		if(greenHand.size()>0) {
-			greenHand.clear();
-		}
-		if(redHand.size()>0) {
-			redHand.clear();
-		}
-		if(blueHand.size()>0) {
-			blueHand.clear();
-		}
-		if(orangeHand.size()>0) {
-			orangeHand.clear();
-		}
-
-		//System.out.println(playerHand.size());
 		this.sortByColor();
 		this.sortByValue(greenHand);
 		this.sortByValue(redHand);
 		this.sortByValue(blueHand);
 		this.sortByValue(orangeHand);
+		this.sortByValue(jokerHand);
 		
 		sortedHand.clear();
-		for(int i=0; i<redHand.size(); i++) {
-			sortedHand.add(redHand.get(i));
-		}
-		
-		for(int i=0; i<greenHand.size(); i++) {
-			sortedHand.add(greenHand.get(i));
-		}
-		
-		for(int i=0; i<blueHand.size(); i++) {
-			sortedHand.add(blueHand.get(i));
-		}
-		
-		for(int i=0; i<orangeHand.size(); i++) {
-			sortedHand.add(orangeHand.get(i));
-		}	
-		//System.out.println(sortedHand.size());
-		//playerHand.clear();
-		//myObject = (ArrayList<Object>)myTempObject.clone();
-		//playerHand = (ArrayList<Tile>)sortedHand.clone();
+		for(int i=0; i<redHand.size(); i++) { sortedHand.add(redHand.get(i)); }
+		for(int i=0; i<greenHand.size(); i++) { sortedHand.add(greenHand.get(i)); }
+		for(int i=0; i<blueHand.size(); i++) { sortedHand.add(blueHand.get(i)); }
+		for(int i=0; i<orangeHand.size(); i++) { sortedHand.add(orangeHand.get(i)); }
+		for(int i=0; i<jokerHand.size(); i++) { sortedHand.add(jokerHand.get(i)); }
+
 		playerHand = sortedHand;	
 	}
 	
@@ -146,24 +143,19 @@ public class Hand {
 							String color3 = playerHand.get(i+2).getColour();
 							if((color1 == color2) && (color2 == color3)) {
 								return true;
-							}
-							else {
+							} else {
 								continue;
 							}
-						}
-						else {
+						} else {
 							continue;
 						}
-					}
-					else {
+					} else {
 						continue;
 					}
-				}
-				else {
+				} else {
 					continue;
 				}
-			}
-			else {
+			} else {
 				break;
 			}
 		}
@@ -178,30 +170,24 @@ public class Hand {
 						String color3 = playerHand.get(i+2).getColour();
 						if((color != color2) && (color != color3) && (color2 != color3)) {
 							return true;
-						}
-						else {
+						} else {
 							continue;
 						}
-					}
-					else {
+					} else {
 						continue;
 					}
-				}
-				else {
+				} else {
 					continue;
 				}
-			}
-			else {
+			} else {
 				break;
 			}
 		}
-		
 		return false;
 	}
 	
    //new method to test #of melds
 	public int numberOfMelds() {
-		
 		int numMelds = 0;
 		Collections.sort(playerHand, new SortByValue());
 		
@@ -221,10 +207,7 @@ public class Hand {
 					}
 				}
 			}
-			//System.out.println("i = "+i);
 		}	
-
-
 
 		for(int i=0; i<playerHand.size(); i++) {
 			if(i < playerHand.size() - 2) {
@@ -242,8 +225,6 @@ public class Hand {
 				}
 			}
 		}
-		
-		
 		
 		return numMelds;
 	}
@@ -263,28 +244,22 @@ public class Hand {
 							if((color1 == color2) && (color2 == color3)) {							
 								if(playerHand.get(i).getValue() + playerHand.get(i+1).getValue() +  playerHand.get(i+2).getValue() >= 30) {
 									return true;
-								}
-								else {
+								} else {
 									continue;
 								}
-							}
-							else {
+							} else {
 								continue;
 							}
-						}
-						else {
+						} else {
 							continue;
 						}
-					}
-					else {
+					} else {
 						continue;
 					}
-				}
-				else {
+				} else {
 					continue;
 				}
-			}
-			else {
+			} else {
 				break;
 			}
 		}
@@ -301,31 +276,24 @@ public class Hand {
 							if(playerHand.get(i).getValue() + playerHand.get(i+1).getValue() +  playerHand.get(i+2).getValue() >= 30) {
 								
 								return true;
-						}
-							else {
+						} else {
 								continue;
 							}
-						}
-						else {
+						} else {
 							continue;
 						}
-					}
-					else {
+					} else {
 						continue;
 					}
-				}
-				else {
+				} else {
 					continue;
 				}
-			}
-			else {
+			} else {
 				break;
 			}
 		}
-		
 		return false;
 	}
-
 
 	public boolean isSortedByValue() {
 		for(int i=0;i<this.size-1;i++) {
@@ -401,34 +369,8 @@ public class Hand {
 					return false;
 				}
 			}
-			
 		}
-
 		return true;
-
-	}
-	
-	public Tile getTile(String colour, int value) {
-		for(int i=0; i<playerHand.size();i++) {
-			if((playerHand.get(i).getColour() == colour)&& (playerHand.get(i).getValue() == value)) {
-				return playerHand.get(i);
-			}
-		}
-		return null;
-	}
-	
-	public Tile getTile(String tileName) {
-		for(int i=0; i<playerHand.size();i++) {
-			if(playerHand.get(i).tileToString().equals(tileName)){
-				return playerHand.get(i);
-			}
-		}
-		return null;
-	}
-	
-	
-	public Tile getTile(int i) {
-		return playerHand.get(i);
 	}
 	
 	public Tile playTile(String colour, int value) {
@@ -472,14 +414,6 @@ public class Hand {
 		Meld meld = new Meld();
 		melds.add(meld);
 		numberOfMelds++;
-	}
-
-	public Meld getMeld(int i) {
-		return melds.get(i);
-	}
-	
-	public int getNumberOfMelds() {
-		return numberOfMelds;
 	}
 	
 	public void addTile(Tile tile) {
