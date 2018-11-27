@@ -75,6 +75,7 @@ public class Meld {
 		if (tiles.size()==3 || tiles.size()==4) {
 			for(int i=1;i<tiles.size();i++) {
 				tile = tiles.get(i);
+				if (tile.getJoker() == true) { meldValue += number; }
 				if(tile.getValue()!=number && !(tile.getJoker())) {
 					return false;
 				}
@@ -105,16 +106,14 @@ public class Meld {
 				i = 2;
 			}
 			while(i<tiles.size()) {
-				tile = tiles.get(i); 
+				tile = tiles.get(i);
+				if (tile.getJoker() == true) { meldValue += previousNum-1; }
 				if(!(colour.equals(tile.getColour())) && !(tile.getJoker())) {
-					System.out.println("Invalid Colour: " + tile.tileToString());
 					return false;
 				}
 				if(tile.getValue() == previousNum + 1 || tile.getJoker()) {
-					System.out.println("Num: " + previousNum + "| Tile: " + tile.tileToString());
 					previousNum++;
 				} else {
-					System.out.println("Invalid Number: " + tile.tileToString());
 					return false; 
 				}
 				i++;
