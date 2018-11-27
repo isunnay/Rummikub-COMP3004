@@ -1543,12 +1543,77 @@ public class GameTestPlan extends TestCase {
 		meld.addTile(game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 2));
 		meld.addTile(game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 1));
 		
-		//Req. 9c.) Several tiles to add to a run
+		//Req. 9c.) Several tiles to add to a run on the table
 		assertTrue(meld.checkIfValidMeld());
 		board.getSpot(11, 6).playTile(meld.getTileInMeld(meld.getNumberOfTiles() - 2));
 		board.getSpot(12, 6).playTile(meld.getTileInMeld(meld.getNumberOfTiles() - 1));
 		for(int i=7; i<13; i++) {
 			assertNotNull(board.getTileAtSpot(i, 6));
+		}
+	}
+	
+	public void testGame25() {
+		Game game = new Game();
+		Deck deck = game.getDeck();
+		Board board = game.getBoard();
+		
+		String[] colours = {"R", "G", "B", "O"};
+		
+		int j=0;
+		for(int i=3; i<6; i++) {
+			board.getSpot(i, 3).playTile(new Tile("B", i));
+			j++;
+		} //Board has a set played already
+		
+		for(int i=7; i<11; i++) {
+			board.getSpot(i, 6).playTile(new Tile("R", i));
+		} //Board has a run played already
+		
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		game.getAllPlayers().get(0).getHand().removeFromHand(13);
+		game.getAllPlayers().get(0).getHand().removeFromHand(12);
+		game.getAllPlayers().get(0).getHand().removeFromHand(11);
+		game.getAllPlayers().get(0).getHand().removeFromHand(10);
+		game.getAllPlayers().get(0).getHand().addTile(new Tile("B", 6));
+		game.getAllPlayers().get(0).getHand().addTile(new Tile("B", 7));
+		game.getAllPlayers().get(0).getHand().addTile(new Tile("R", 11));
+		game.getAllPlayers().get(0).getHand().addTile(new Tile("R", 12));
+		
+		Meld meld = new Meld();
+		for(int i=7; i<11; i++) {
+			meld.addTile(board.getSpot(i, 6).getTile());
+		}
+		
+		/*class SortByValue implements Comparator<Tile> {
+			public int compare(Tile x, Tile y) {
+				return x.getValue() - y.getValue();
+			}
+		}*/
+		
+		Meld meld2 = new Meld();
+		for(int i=3; i<6; i++) {
+			meld2.addTile(board.getSpot(i, 3).getTile());
+		}
+		
+		//Req. 9f.) Play several tiles to several melds on the board
+		meld.addTile(game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 2));
+		meld.addTile(game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 1));
+		assertTrue(meld.checkIfValidMeld());
+		
+		meld2.addTile(game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 2));
+		meld2.addTile(game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 1));
+		assertTrue(meld2.checkIfValidMeld());
+		
+		board.getSpot(11, 6).playTile(meld.getTileInMeld(0));
+		board.getSpot(12, 6).playTile(meld.getTileInMeld(1));
+		board.getSpot(6, 3).playTile(meld2.getTileInMeld(0));
+		board.getSpot(7, 3).playTile(meld2.getTileInMeld(1));
+		
+		for(int i=7; i<13; i++) {
+			assertNotNull(board.getSpot(i, 6));
+		}
+		for(int i=3; i<8; i++) {
+			assertNotNull(board.getSpot(i, 3));
 		}
 	}
 }
