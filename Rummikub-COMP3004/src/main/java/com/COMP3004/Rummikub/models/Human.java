@@ -22,7 +22,7 @@ public class Human implements PlayerType {
 	public Human(Deck deck, Game game) {
 		h = new Hand();
 		h.createHand(deck);
-		h.sortHand();
+		//h.sortHand();
 		game.registerObserver(this);
 		spotsTaken = new ArrayList<Spot>();
 		turnTiles = new ArrayList<Tile>();

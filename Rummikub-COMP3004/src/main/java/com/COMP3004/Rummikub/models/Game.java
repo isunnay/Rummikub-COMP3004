@@ -70,6 +70,9 @@ public class Game implements Subject {
 			}
 			observers.add(allPlayers.get(i));
 		}
+		
+		// Determine who starts
+		determineStarter();
 	}
 
 	private int anyWinners() {
@@ -116,6 +119,88 @@ public class Game implements Subject {
 			allPlayers.get(0).setTilesBeenPlayed(false);
 			allPlayers.get(0).setTurnStatus(true);
 		}
+	}
+	
+	public void determineStarter() {
+		// TD = Tiles Drawn
+		// MV = Max Value
+		int p1TD = 0, p2TD = 0, p3TD = 0, p4TD = 0,
+			p1MV = 0, p2MV = 0, p3MV = 0, p4MV = 0;
+		
+		while (true) {
+			p1MV = allPlayers.get(0).getHand().getTile(p1TD).getValue();
+			p2MV = allPlayers.get(1).getHand().getTile(p2TD).getValue();
+			p3MV = allPlayers.get(2).getHand().getTile(p3TD).getValue();
+			p4MV = allPlayers.get(3).getHand().getTile(p4TD).getValue();
+			
+			// 0 = Joker. While no one has a Joker
+			if (p1MV == 0) { allPlayers.get(0).getHand().getTile(p1TD).getValue(); p1TD++; }
+			if (p2MV == 0) { allPlayers.get(1).getHand().getTile(p2TD).getValue(); p2TD++; }
+			if (p3MV == 0) { allPlayers.get(2).getHand().getTile(p3TD).getValue(); p3TD++; }
+			if (p4MV == 0) { allPlayers.get(3).getHand().getTile(p4TD).getValue(); p4TD++; }
+			
+			// if anyone equals someone else
+			if (p1MV == p2MV) { 
+				p1MV = allPlayers.get(0).getHand().getTile(p1TD).getValue(); p1TD++;
+				p2MV = allPlayers.get(1).getHand().getTile(p2TD).getValue(); p2TD++;
+			} else if (p1MV == p3MV) {
+				p1MV = allPlayers.get(0).getHand().getTile(p1TD).getValue(); p1TD++;
+				p3MV = allPlayers.get(2).getHand().getTile(p3TD).getValue(); p3TD++;
+			} else if (p1MV == p4MV) {
+				p1MV = allPlayers.get(0).getHand().getTile(p1TD).getValue(); p1TD++;
+				p4MV = allPlayers.get(3).getHand().getTile(p4TD).getValue(); p4TD++;
+			} else if (p2MV == p3MV) {
+				p2MV = allPlayers.get(1).getHand().getTile(p2TD).getValue(); p2TD++;
+				p3MV = allPlayers.get(2).getHand().getTile(p3TD).getValue(); p3TD++;
+			} else if (p2MV == p4MV) {
+				p2MV = allPlayers.get(1).getHand().getTile(p2TD).getValue(); p2TD++;
+				p4MV = allPlayers.get(3).getHand().getTile(p4TD).getValue(); p4TD++;
+			} else if (p3MV == p4MV) {
+				p3MV = allPlayers.get(2).getHand().getTile(p3TD).getValue(); p3TD++;
+				p4MV = allPlayers.get(3).getHand().getTile(p4TD).getValue(); p4TD++;
+			} else if (p1MV >= 10 || p2MV >= 10 || p3MV >= 10 || p4MV >= 10) {
+				break;
+			} else {
+				/*System.out.println(allPlayers.get(0).getHand().getTile(p1TD).tileToString() + " - " + p1TD);
+				System.out.println(allPlayers.get(1).getHand().getTile(p2TD).tileToString() + " - " + p2TD);
+				System.out.println(allPlayers.get(2).getHand().getTile(p3TD).tileToString() + " - " + p3TD);
+				System.out.println(allPlayers.get(3).getHand().getTile(p4TD).tileToString() + " - " + p4TD);*/
+				p1TD++; p2TD++; p3TD++; p4TD++;
+				break;
+			}
+		}
+		
+		System.out.println("P" + checkHighestValue(p1MV, p2MV, p3MV, p4MV) + " has the highest value and therefore will start the game.");
+		
+		if (checkHighestValue(p1MV, p2MV, p3MV, p4MV) == "1") {
+			allPlayers.get(0).setTurnStatus(true); allPlayers.get(1).setTurnStatus(false);
+			allPlayers.get(2).setTurnStatus(false); allPlayers.get(3).setTurnStatus(false);
+		} else if (checkHighestValue(p1MV, p2MV, p3MV, p4MV) == "2") {
+			allPlayers.get(0).setTurnStatus(false); allPlayers.get(1).setTurnStatus(true);
+			allPlayers.get(2).setTurnStatus(false); allPlayers.get(3).setTurnStatus(false);
+		} else if (checkHighestValue(p1MV, p2MV, p3MV, p4MV) == "3") {
+			allPlayers.get(0).setTurnStatus(false); allPlayers.get(1).setTurnStatus(false);
+			allPlayers.get(2).setTurnStatus(true); allPlayers.get(3).setTurnStatus(false);
+		} else if (checkHighestValue(p1MV, p2MV, p3MV, p4MV) == "4") {
+			allPlayers.get(0).setTurnStatus(false); allPlayers.get(1).setTurnStatus(false);
+			allPlayers.get(2).setTurnStatus(false); allPlayers.get(3).setTurnStatus(true);
+		}
+		
+		for (int i = 0; i < 4; i++) {
+			//System.out.println(allPlayers.get(i).getHand().handToString());
+			allPlayers.get(i).getHand().sortHand();
+		}
+	}
+	
+	private String checkHighestValue(int p1, int p2, int p3, int p4) {		
+	    int max = p1;
+	    String player = "1";
+	    
+	    if (p2 > max) { max = p2; player = "2"; }
+	    if (p3 > max) { max = p3; player = "3"; }
+	    if (p4 > max) { max = p4; player = "4"; }
+		
+	    return player;
 	}
 	
 	public void playTurn(int i) {
