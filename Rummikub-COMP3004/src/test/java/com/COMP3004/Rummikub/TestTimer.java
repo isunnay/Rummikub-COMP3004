@@ -12,8 +12,7 @@ public class TestTimer extends TestCase {
 		GameTimer timer = new GameTimer();
 		
 		timer.start();
-		assertEquals(0, timer.getSeconds());
-		assertEquals("true", timer.isStarted());
+		assertTrue(timer.isStarted());
 	}
 	
 	public void testTimerStopped() {
@@ -24,14 +23,11 @@ public class TestTimer extends TestCase {
 		assertTrue("true", timer.isStopped());
 	}
 	
-	publci void testTimerRestarts() {
+	public void testStopsAtRightTime() {
 		GameTimer timer = new GameTimer();
 		
 		timer.start();
-		timer.stop();
 		
-		timer.restart();
-		
-		assertTrue("true", timer.isRestarted());
+		assertTrue(timer.stopsAtRightTime());
 	}
 }
