@@ -1,10 +1,9 @@
-package com.COMP3004.Rummikub;
+package com.COMP3004.Rummikub.models;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameTimer {
-	private final int perSecond = 1000000000; //amount of nano-seconds in one second
 	private int seconds;
 	private boolean started;
 	private boolean stopped;

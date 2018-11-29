@@ -18,6 +18,7 @@ public class Human implements PlayerType {
 	private int turnValue;
 	Scanner reader;
 	private boolean isAI = false;
+	public GameTimer timer;
 
 	public Human(Deck deck, Game game) {
 		h = new Hand();
@@ -28,6 +29,7 @@ public class Human implements PlayerType {
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
 		turnMoves = new ArrayList<Tile>();
+		timer = new GameTimer();
 	}
 
 
@@ -40,6 +42,12 @@ public class Human implements PlayerType {
 	}
 
 	public void setTurnStatus(boolean b) {
+		if(b==true){
+			timer.start();
+		}
+		else if(b==false){
+			timer.stop();
+		}
 		turnTiles.clear();
 		turnMelds.clear();
 		turnMoves.clear();

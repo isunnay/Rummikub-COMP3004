@@ -1,5 +1,6 @@
 package com.COMP3004.Rummikub;
 import junit.framework.TestCase;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Collections;
@@ -7,9 +8,12 @@ import java.util.Comparator;
 
 import com.COMP3004.Rummikub.models.AI1;
 import com.COMP3004.Rummikub.models.AI2;
+import com.COMP3004.Rummikub.models.AI3;
 import com.COMP3004.Rummikub.models.Board;
+import com.COMP3004.Rummikub.models.Deck;
 import com.COMP3004.Rummikub.models.Game;
 import com.COMP3004.Rummikub.models.Human;
+import com.COMP3004.Rummikub.models.Meld;
 import com.COMP3004.Rummikub.models.PlayerType;
 import com.COMP3004.Rummikub.models.Tile;
 
