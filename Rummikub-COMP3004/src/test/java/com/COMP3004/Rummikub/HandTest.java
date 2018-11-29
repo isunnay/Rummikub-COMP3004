@@ -40,9 +40,6 @@ public class HandTest extends TestCase {
 		hand.addTile(tile2);
 		
 		assertTrue("true", hand.meldExists());
-		//System.out.println(hand.numberOfMelds());
-		//hand.numberOfMelds();
-		
 	}
 	
 	
@@ -58,7 +55,6 @@ public class HandTest extends TestCase {
 		hand.addTile(tile);
 		hand.addTile(tile1);
 		hand.addTile(tile2);
-		
 		
 		System.out.println("AI1 hand: " + hand.handToString());
 		System.out.println("Number of Melds : " + hand.numberOfMelds());
@@ -78,7 +74,6 @@ public class HandTest extends TestCase {
 		hand.addTile(tile1);
 		hand.addTile(tile2);
 		
-		
 		System.out.println("AI1 hand: " + hand.handToString());
 		System.out.println("Meld Points : " + hand.meldPoints());
 		
@@ -90,7 +85,6 @@ public class HandTest extends TestCase {
 		
 		hand.createHand(deck);
 		hand.dealTile(deck);
-		
 		
 		assertTrue("true", hand.isTileDealt(deck));
 	}
@@ -104,9 +98,6 @@ public class HandTest extends TestCase {
 		hand.sortByValue(hand.getPlayerHand());
 		
 		assertTrue("true", hand.isSortedByValue());
-		
-		
-		
 	}
 	
 	public void testSortByColor() {

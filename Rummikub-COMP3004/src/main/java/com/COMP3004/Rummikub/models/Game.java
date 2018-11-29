@@ -122,7 +122,7 @@ public class Game implements Subject {
 		printAll();
 		// Play if human
 		if (allPlayers.get(i).isAI() == false && allPlayers.get(i).myTurnStatus() == true) {
-			System.out.println("Player " + (i+1) + "'s Hand: " + allPlayers.get(i).getHand().handToString());
+			System.out.println("Player " + (i+1) + "'s Hand[" + allPlayers.get(i).getHand().size + "]: " + allPlayers.get(i).getHand().handToString());
 			try {
 				allPlayers.get(i).play(reader, deck);
 			} catch (InterruptedException e) {
@@ -148,22 +148,18 @@ public class Game implements Subject {
 		notifyObservers();
 		while (anyWinners() == 0) {
 			if (whosTurn() == 1) {
-				System.out.println("Player 1's turn.");
 				playTurn(0);
 				notifyObservers();
 				TimeUnit.SECONDS.sleep(2);
 			} else if (whosTurn() == 2) {
-				System.out.println("Player 2's turn.");
 				playTurn(1);
 				notifyObservers();
 				TimeUnit.SECONDS.sleep(2);
 			} else if (whosTurn() == 3) {
-				System.out.println("Player 3's turn.");
 				playTurn(2);
 				notifyObservers();
 				TimeUnit.SECONDS.sleep(2);
 			} else if (whosTurn() == 4) {
-				System.out.println("Player 4's turn.");
 				playTurn(3);
 				notifyObservers();
 				TimeUnit.SECONDS.sleep(2);
