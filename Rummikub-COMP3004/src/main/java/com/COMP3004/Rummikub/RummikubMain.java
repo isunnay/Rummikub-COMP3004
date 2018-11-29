@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-import com.COMP3004.Rummikub.controller.GameEngine;
+//import com.COMP3004.Rummikub.controller.GameEngine;
 import com.COMP3004.Rummikub.models.Game;
 
 import javafx.application.Application;
