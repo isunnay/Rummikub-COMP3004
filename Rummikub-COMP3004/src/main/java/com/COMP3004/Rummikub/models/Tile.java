@@ -67,4 +67,8 @@ public class Tile {
 			return colours[colour].charAt(0) + String.valueOf(value);
 		}
 	}
+
+	public int getIntColor() {
+		return this.colour;
+	}
 }

@@ -28,7 +28,7 @@ public class AI1 implements PlayerType {
 	public AI1(Deck deck, Game game) {
 		h = new Hand();
 		h.createHand(deck);
-		h.sortHand();
+		//h.sortHand();
 		melds = new ArrayList<Meld>();
 		game.registerObserver(this);
 		spotsTaken = new ArrayList<Spot>();

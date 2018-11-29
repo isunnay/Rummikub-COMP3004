@@ -23,7 +23,7 @@ public class Human implements PlayerType {
 	public Human(Deck deck, Game game) {
 		h = new Hand();
 		h.createHand(deck);
-		h.sortHand();
+		//h.sortHand();
 		game.registerObserver(this);
 		spotsTaken = new ArrayList<Spot>();
 		turnTiles = new ArrayList<Tile>();
@@ -712,7 +712,7 @@ public class Human implements PlayerType {
 				}
 			} else if (decision == 'E') {
 				if (initialMeldPlayed == false) {
-					if (turnValue >= 30) {
+					if (turnValue >= 1) {
 						System.out.println("Initial Meld Completed.");
 						System.out.println("----------------------------------------");
 						this.setHasInitialMeldBeenPlayed(true);
