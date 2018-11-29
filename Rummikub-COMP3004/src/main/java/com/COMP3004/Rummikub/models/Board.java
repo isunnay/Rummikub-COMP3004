@@ -1,4 +1,4 @@
-package com.COMP3004.Rummikub;
+package com.COMP3004.Rummikub.models;
 
 import java.util.Scanner;
 import java.util.ArrayList;

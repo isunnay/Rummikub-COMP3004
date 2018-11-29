@@ -1,37 +1,39 @@
-package com.COMP3004.Rummikub;
+package com.COMP3004.Rummikub.models;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
 	private ArrayList<Tile> tileDeck;
-	private int size;
+	//private int size;
 	
 	public Deck() {
 		tileDeck = new ArrayList<Tile>();
 		generateDeck();
-		generateDeck();
+		generateDeck();	
 	}
 	
 	private void generateDeck() {
 		for(int colour=0;colour<4;colour++) {
 			for(int value=1;value<14;value++) {
 				Tile tile = new Tile(colour,value);
-				tileDeck.add(tile); 
+				tile.setJoker(false);
+				tileDeck.add(tile);
 			}
 		}
+		Tile tileJoker = new Tile("JKR", 0);
+		tileJoker.setJoker(true);
+		tileDeck.add(tileJoker);
 	} 
 	
-	public ArrayList<Tile> getTileDeck() {
-		return tileDeck;
-	}
-
-	public int getDeckCount() {
-		size = tileDeck.size();
-		return size;
-		
-	}
-
+	// Getters
+	public ArrayList<Tile> getTileDeck() { return tileDeck; }
+	public int getDeckCount() { return tileDeck.size(); }
+	
+	// Setters
+	public void shuffleTiles() { Collections.shuffle(tileDeck); }
+	
+	// Checkers (these should be in the tests)
 	public boolean doesEveryTileExist(int count) {
 		int counter = count;
 		for(int i=0;i<4;i++) {
@@ -45,14 +47,9 @@ public class Deck {
 				counter++;
 				}
 			}
-		doesEveryTileExist(53);
+		doesEveryTileExist(54);
 		return true;
-		}
-	
-	public void shuffleTiles() {
-		Collections.shuffle(tileDeck);
 	}
-
 	public boolean isDeckShuffled(int count) {
 		int counter = count;
 		for(int i=0;i<4;i++) {

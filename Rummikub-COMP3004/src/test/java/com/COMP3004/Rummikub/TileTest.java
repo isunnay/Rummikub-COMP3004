@@ -1,5 +1,7 @@
 package com.COMP3004.Rummikub;
 
+import com.COMP3004.Rummikub.models.Tile;
+
 import junit.framework.TestCase;
 
 public class TileTest extends TestCase {

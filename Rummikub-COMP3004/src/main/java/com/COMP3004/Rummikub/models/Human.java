@@ -1,7 +1,8 @@
-package com.COMP3004.Rummikub;
+package com.COMP3004.Rummikub.models;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Human implements PlayerType {
 	Hand h;
@@ -14,6 +15,9 @@ public class Human implements PlayerType {
 	public ArrayList<Meld> turnMelds;
 	public ArrayList<Tile> turnMoves;
 	private Board board;
+	private int turnValue;
+	Scanner reader;
+	private boolean isAI = false;
 
 	public Human(Deck deck, Game game) {
 		h = new Hand();
@@ -57,9 +61,6 @@ public class Human implements PlayerType {
 	public void setHasInitialMeldBeenPlayed(boolean b) {
 		this.initialMeldPlayed = b;
 	}
-	
-
-
 
 	public boolean turnComplete(Hand h) {
 		// Do Nothing...
@@ -126,8 +127,11 @@ public class Human implements PlayerType {
 		int x = aReader.nextInt();
 		System.out.println("Enter an y value for the beginning of the Meld (Between 0-14): ");
 		int y = aReader.nextInt();
-		Spot beginningSpot = board.getSpot(x, y);
+		System.out.println(x);
+		System.out.println(y);
 
+		
+		Spot beginningSpot = board.getSpot(x, y);
 		if (beginningSpot != null) {
 			if (canWePlaceMeld(meld, x, y) == true) {
 				for (int i = 0; i < meld.getNumberOfTiles(); i++) {
@@ -554,12 +558,178 @@ public class Human implements PlayerType {
 		board.deleteMeld(meld2);
 		return newMeld;
 	}
-
-
-	@Override
-	public void play(Scanner reader) {
-		// TODO Auto-generated method stub
+	
+	public boolean makeAPlay(Scanner reader) {
+		while(true) {
+		System.out.println("Choose one of the following commands:");
+		System.out.println(" - 'M' to play a meld.");
+		System.out.println(" - 'T' to play an individual tile.");
+		System.out.println(" - 'B' to move an existing tile on the board.");
+		System.out.println(" - 'L' to exit this sequence.");
+		char decision = reader.next().toUpperCase().charAt(0);
 		
+		
+		if (decision == 'M') {
+			String tileChoice = "";
+			Meld meld = new Meld();
+			this.getHand().createMeld();
+			
+			while (!tileChoice.equals("D")) {
+				if (this.getHand().size == 0) { break; }
+				System.out.println("Current Meld: " + meld.meldToString());
+				System.out.println("Hand: " + this.getHand().handToString());
+				System.out.println("Select a tile you'd like to add to your meld, type 'D' to exit.");
+				tileChoice = reader.next().toUpperCase();
+				if (tileChoice.equals("D")) { break; }
+				for (int i = 0; i < this.getHand().size; i++) {
+					if (this.getHand().getTile(i).tileToString().equals(tileChoice)) {
+						meld.addTile(this.getHand().getTile(i));
+						this.getHand().removeFromHand(i);
+						break;
+					} else if (i == (this.getHand().size - 1) && !(tileChoice.equals("D"))) {
+						System.out.println("It seems that the tile " + tileChoice + " isn't in your posession. Please try again.");
+					}
+				}
+			}
+			if (tileChoice.equals("D")) {
+				if (meld.getMeldSize() >= 3 && meld.checkIfValidMeld() == true) {
+					
+					for (int i = 0; i < meld.getMeldSize(); i++) {
+						System.out.println(meld.getTileInMeld(i).tileToString());
+					}
+					
+					this.playMeld(meld, reader);
+					turnValue = turnValue + meld.getMeldValue();
+				} else {
+					System.out.println("Invalid meld. Please try again.");
+					for (int i = 0; i < meld.getMeldSize(); i++) {
+						this.getHand().addTile(meld.getTileInMeld(i));
+					}
+					this.getHand().sortHand();
+					tileChoice = "";
+				}
+			}
+		}
+		
+		if (decision == 'T') {
+			if (initialMeldPlayed == true) {
+				String tileChoice = "";
+				System.out.println("Hand: " + this.getHand().handToString());
+				System.out.println("Which tile would you like to add to the board?");
+				tileChoice = reader.next().toUpperCase();
+				Tile tempTile = this.getHand().getTile(tileChoice);
+				
+				if (this.getHand().getPlayerHand().contains(tempTile)) {
+					System.out.println("Where would you like to put " + tempTile.tileToString() + " ?");
+					System.out.println("X-Coordinate: ");
+					int xTile = reader.nextInt();
+					System.out.println("Y-Coordinate: ");
+					int yTile = reader.nextInt();
+					
+					for (int i = 0; i < this.getHand().size; i++) {
+						if (this.getHand().getTile(i).tileToString().equals(tileChoice)) {
+							this.addTile(this.getHand().getTile(i), xTile, yTile);
+						}
+					}
+					
+					System.out.println("Board:");
+					board.boardToString();
+				} else {
+					System.out.println("It seems that you don't have " + tileChoice + " isn't in your hand. Please try again.");
+				}
+			} else {
+				System.out.println("You cannot play individual tiles on the board during your initial meld.");
+			}
+		}
+		
+		if (decision == 'B') {
+			if (initialMeldPlayed == true) {
+				while(true) {
+					board.boardToString();
+					System.out.println("Which tile would you like to move on the board?");
+					System.out.println("Current X-Coordinate ('-1' to exit): ");
+					int xTile = reader.nextInt(); if (xTile == -1) { break; }
+					System.out.println("Current Y-Coordinate ('-1' to exit): ");
+					int yTile = reader.nextInt(); if (yTile == -1) { break; }
+					Spot oldSpot = board.getSpot(xTile, yTile);
+					Tile tile = oldSpot.getTile();
+					System.out.println("Where would you like to move tile " + tile.tileToString() + " to?");
+					System.out.println("New X-Coordinate: ");
+					int xTileNew = reader.nextInt();
+					System.out.println("New Y-Coordinate: ");
+					int yTileNew = reader.nextInt();
+					Spot newSpot = board.getSpot(xTileNew, yTileNew);
+					this.moveTile(tile, newSpot);
+				}
+			} else {
+				System.out.println("You cannot manipulate the board during your initial meld.");
+			}
+		}
+		
+		if (decision == 'L') {
+			if (board.checkIfValidMelds() == false) {
+				System.out.println("That wasn't a valid move. Please try again.");
+				this.setTilesBeenPlayed(false);
+				this.undoTurn();
+				return false;
+			} else {
+				return false;
+			}
+		}
+		
+		}
+		//return false;
+	}
+
+	public void play(Scanner reader, Deck deck) throws InterruptedException {
+		turnValue = 0;
+		while(myTurn == true) {
+			//reader = new Scanner(System.in);
+			System.out.println("Choose one of the following commands:");
+			System.out.println(" - 'P' to play your turn.");
+			System.out.println(" - 'S' to skip your turn & draw a tile.");
+			System.out.println(" - 'E' to end your turn if you've already played atleast one tile.");
+			char decision = reader.next().toUpperCase().charAt(0);		
+			
+			if (decision == 'P') {
+				makeAPlay(reader);
+			} else if (decision == 'S') {
+				if (hasTileBeenPlaced == false) {
+					Tile t = this.getHand().dealTile(deck);
+					System.out.println("Turn ended: Player drew " + t.tileToString() + ".");
+					System.out.println("----------------------------------------");
+					this.setTurnStatus(false);
+				} else {
+					System.out.println("You've already made a play. Try typing 'E' to end your turn.");
+				}
+			} else if (decision == 'E') {
+				if (initialMeldPlayed == false) {
+					if (turnValue >= 30) {
+						System.out.println("Initial Meld Completed.");
+						System.out.println("----------------------------------------");
+						this.setHasInitialMeldBeenPlayed(true);
+						this.setTilesBeenPlayed(true);
+						this.setTurnStatus(false);
+					} else {
+						System.out.println("Your Initial Meld total must be greater than or equal to 30 points.");
+						System.out.println("You played: " + turnValue + ". Please try again.");	
+						this.setHasInitialMeldBeenPlayed(false);
+						this.setTilesBeenPlayed(false);
+						this.undoTurn();
+						turnValue = 0;
+					}
+				} else if (initialMeldPlayed == true) {
+					if (hasTileBeenPlaced == true) {
+						this.setTurnStatus(false);
+					} else {
+						this.undoTurn();
+						System.out.println("You must either play your turn or draw a tile.");
+					}
+				}
+			} else {
+				System.out.println("You may have entered the wrong character. Please try again.");
+			}
+		}
 	}
 
 
@@ -575,5 +745,14 @@ public class Human implements PlayerType {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+
+	@Override
+	public void play(Scanner reader) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public boolean isAI() { return isAI; }
 
 }

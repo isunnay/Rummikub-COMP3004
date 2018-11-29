@@ -1,5 +1,10 @@
 package com.COMP3004.Rummikub;
 
+import com.COMP3004.Rummikub.models.Deck;
+import com.COMP3004.Rummikub.models.Hand;
+import com.COMP3004.Rummikub.models.Meld;
+import com.COMP3004.Rummikub.models.Tile;
+
 import junit.framework.TestCase;
 
 public class MeldTest extends TestCase{

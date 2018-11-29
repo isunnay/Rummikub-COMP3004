@@ -1,9 +1,14 @@
 package com.COMP3004.Rummikub;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+
+import com.COMP3004.Rummikub.controller.GameEngine;
+import com.COMP3004.Rummikub.models.Game;
 
 import javafx.application.Application;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -32,6 +37,7 @@ public class RummikubMain extends Application{
 	
 	StringBuilder sb;
 	Stage window;
+	//private GameEngine engine;
 	Game game;
 
 	public static void main(String[] args) {
@@ -41,7 +47,7 @@ public class RummikubMain extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		window = primaryStage;
-		window.setTitle("Rummikub");
+		window.setTitle("Rummikub-Team22");
 		
 		Pane root = new Pane();
 		BorderPane menuBarLayout = new BorderPane();
@@ -50,8 +56,8 @@ public class RummikubMain extends Application{
 		HBox buttonLayout = new HBox(20);
 		Region background = new Region();
 		Rectangle board = new Rectangle(750, 490);
-		Button btnHit = new Button("Hit");
-        Button btnStand = new Button("Stand");
+//		Button btnHit = new Button("Hit");
+//        Button btnStand = new Button("Stand");
         
 		root.setPrefSize(800, 600);
         background.setPrefSize(800, 600);
@@ -59,24 +65,32 @@ public class RummikubMain extends Application{
         board.setArcWidth(50);
         board.setArcHeight(50);
         board.setFill(Color.GREEN);
-        btnHit.setDisable(true);
-	    btnStand.setDisable(true);
+  //      btnHit.setDisable(true);
+//	    btnStand.setDisable(true);
+	    
 		
 		// Input file menu
 		Menu fileMenu = new Menu ("_File");
-		
+
 		// New Game Menu Item
 		MenuItem newGame = new MenuItem("_New Game...");
 		newGame.setOnAction(e -> {
 			System.out.println("-------------------------");
 			System.out.println("Creating new game...");
-			game = new Game();
+			//game = new Game();
+			RummikubApplication rummikubApp = new RummikubApplication();
 			try {
+				rummikubApp.run();
+			} catch (Exception e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			/*try {
 				game.play();
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			}*/
 		});
 		fileMenu.getItems().add(newGame);
 		fileMenu.getItems().add(new SeparatorMenuItem());

@@ -1,4 +1,8 @@
 package com.COMP3004.Rummikub;
+import com.COMP3004.Rummikub.models.AI1;
+import com.COMP3004.Rummikub.models.Deck;
+import com.COMP3004.Rummikub.models.Game;
+
 import junit.framework.TestCase;
 
 public class AI1Test extends TestCase {

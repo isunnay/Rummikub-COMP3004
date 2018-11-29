@@ -1,5 +1,7 @@
 package com.COMP3004.Rummikub;
 
+import com.COMP3004.Rummikub.models.Deck;
+
 import junit.framework.TestCase;
 
 public class DeckTest extends TestCase {
@@ -10,10 +12,9 @@ public class DeckTest extends TestCase {
 	
 	public void testNumberOfTiles() {
 		Deck deck = new Deck();
-		assertEquals(104, deck.getDeckCount());	
+		assertEquals(106, deck.getDeckCount());	
 	}
 	
-
 	public void testEveryTileExists(){
 		Deck deck = new Deck();
 		assertTrue("true",deck.doesEveryTileExist(0));		
