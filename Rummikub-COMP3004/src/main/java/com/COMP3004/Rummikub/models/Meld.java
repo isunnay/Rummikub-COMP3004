@@ -69,11 +69,21 @@ public class Meld {
 	
 	public boolean isValidSet() {
 		Tile tile;
+		int number;
+		int i;
 		ArrayList<String> colours = new ArrayList<String>();
-		colours.add(tiles.get(0).getColour());
-		int number = tiles.get(0).getValue();
 		if (tiles.size()==3 || tiles.size()==4) {
-			for(int i=1;i<tiles.size();i++) {
+			if (tiles.get(0).getJoker() == false) {
+				colours.add(tiles.get(0).getColour());
+				number = tiles.get(0).getValue();
+				i = 1;
+			} else {
+				meldValue += tiles.get(1).getValue();
+				colours.add(tiles.get(1).getColour());
+				number = tiles.get(1).getValue();
+				i = 2;
+			}
+			while(i<tiles.size()) {
 				tile = tiles.get(i);
 				if (tile.getJoker() == true) { meldValue += number; }
 				if(tile.getValue()!=number && !(tile.getJoker())) {
@@ -83,6 +93,7 @@ public class Meld {
 					return false;
 				}
 				colours.add(tile.getColour());
+				i++;
 			}
 			return true;
 		} else {
@@ -118,21 +129,6 @@ public class Meld {
 				}
 				i++;
 			}
-			/*
-			for(i; i < tiles.size(); i++) {
-				tile = tiles.get(i); 
-				if(!(colour.equals(tile.getColour()))) {
-					System.out.println("Invalid Colour: " + tile.tileToString());
-					return false;
-				}
-				if(tile.getValue() == previousNum + 1) {
-					System.out.println("Num: " + previousNum + "| Tile: " + tile.tileToString());
-					previousNum++;
-				} else {
-					System.out.println("Invalid Number: " + tile.tileToString());
-					return false; 
-				}
-			}*/
 			return true;	
 		} else {
 			return false;
