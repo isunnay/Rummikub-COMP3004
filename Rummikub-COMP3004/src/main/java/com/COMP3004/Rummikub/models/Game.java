@@ -60,13 +60,13 @@ public class Game implements Subject {
 		for (int i = allPlayers.size(); i < 4; i++) {
 			int foo = (int) (Math.random() * 100);
 			if (foo < 34) {
-				allPlayers.add(new AI1(deck, this));
+				allPlayers.add(new AI2(deck, this));
 			} else if (foo < 67){
 				//allPlayers.add(new AI2(deck)); /* Uncomment when other strategies are complete */
-				allPlayers.add(new AI1(deck, this)); /* Remove when above strategy line is uncommented */
+				allPlayers.add(new AI2(deck, this)); /* Remove when above strategy line is uncommented */
 			} else {
 				//allPlayers.add(new AI3(deck, this)); /* Uncomment when other strategies are complete */
-				allPlayers.add(new AI1(deck, this)); /* Remove when above strategy line is uncommented */
+				allPlayers.add(new AI2(deck, this)); /* Remove when above strategy line is uncommented */
 			}
 			observers.add(allPlayers.get(i));
 		}
