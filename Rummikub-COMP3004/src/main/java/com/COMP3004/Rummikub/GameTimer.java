@@ -41,4 +41,23 @@ public class GameTimer {
 	public boolean isStopped() { return stopped; }
 	
 	public int getSeconds() { return seconds; }
+	
+	public boolean stopsAtRightTime() {
+		this.start();
+		
+		int secondsPassed = 0;
+		
+		do {
+			secondsPassed = this.getSeconds();
+		}
+		while(this.getSeconds() < 60);
+		
+		this.stop();
+		
+		if(secondsPassed == 60) {
+			return true;
+		}
+		
+		return false;
+	}
 }
