@@ -27,7 +27,6 @@ public class TestTimer extends TestCase {
 		GameTimer timer = new GameTimer();
 		
 		timer.start();
-		
 		assertTrue(timer.stopsAtRightTime());
 	}
 }

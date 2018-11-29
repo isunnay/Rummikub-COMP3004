@@ -43,14 +43,13 @@ public class GameTimer {
 	public int getSeconds() { return seconds; }
 	
 	public boolean stopsAtRightTime() {
-		this.start();
-		
 		int secondsPassed = 0;
 		
 		do {
-			secondsPassed = this.getSeconds();
+			secondsPassed = seconds;
+			System.out.println(seconds);
 		}
-		while(this.getSeconds() < 60);
+		while(seconds <= 60);
 		
 		this.stop();
 		
