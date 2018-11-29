@@ -1,5 +1,7 @@
 package com.COMP3004.Rummikub;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -35,7 +37,7 @@ public class RummikubMain extends Application{
 	
 	StringBuilder sb;
 	Stage window;
-	private GameEngine engine;
+	//private GameEngine engine;
 	Game game;
 
 	public static void main(String[] args) {
@@ -69,21 +71,26 @@ public class RummikubMain extends Application{
 		
 		// Input file menu
 		Menu fileMenu = new Menu ("_File");
-		
+
 		// New Game Menu Item
 		MenuItem newGame = new MenuItem("_New Game...");
 		newGame.setOnAction(e -> {
 			System.out.println("-------------------------");
 			System.out.println("Creating new game...");
-			game = new Game();
-			engine = new GameEngine();
-
+			//game = new Game();
+			RummikubApplication rummikubApp = new RummikubApplication();
 			try {
+				rummikubApp.run();
+			} catch (Exception e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			/*try {
 				game.play();
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			}*/
 		});
 		fileMenu.getItems().add(newGame);
 		fileMenu.getItems().add(new SeparatorMenuItem());
