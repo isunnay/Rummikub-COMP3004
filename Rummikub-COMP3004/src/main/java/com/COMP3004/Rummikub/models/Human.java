@@ -704,7 +704,7 @@ public class Human implements PlayerType {
 				}
 			} else if (decision == 'E') {
 				if (initialMeldPlayed == false) {
-					if (turnValue >= 30) {
+					if (turnValue >= 1) {
 						System.out.println("Initial Meld Completed.");
 						System.out.println("----------------------------------------");
 						this.setHasInitialMeldBeenPlayed(true);
