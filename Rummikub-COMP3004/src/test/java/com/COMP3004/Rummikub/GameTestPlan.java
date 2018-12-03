@@ -1508,7 +1508,7 @@ public class GameTestPlan extends TestCase {
 		for(int i=0; i<2; i++) {
 			game.getAllPlayers().get(0).getHand().getMeld(1).addTile(game.getAllPlayers().get(0).getHand().removeFromHand(0));
 		}
-		board.removeTile(3, 10);
+		//board.removeTile(3, 10);
 		System.out.println(board.getTileAtSpot(3, 10).tileToString());
 		
 		for(int i=0; i<3; i++) {
@@ -1755,5 +1755,85 @@ public class GameTestPlan extends TestCase {
 		assertEquals(2, game.getAllPlayers().get(1).getHand().getNumberOfMelds());
 		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(0).checkIfValidMeld());
 		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(1).checkIfValidMeld());
+	}
+	
+	public void testGame29() {
+		Game game = new Game();
+		Deck deck = new Deck();
+		
+		Board board = game.getBoard();
+		
+		for(int i=0; i<3; i++) {
+			board.getSpot(i, 0).playTile(new Tile("G", i + 7));
+		}
+		
+		Tile[] ai3Tiles = {new Tile("R", 12), new Tile("R", 13), new Tile("R", 14), new Tile("B", 2), new Tile("B", 3), new Tile("B", 4),
+				new Tile("O", 9), new Tile("O", 10), new Tile("O", 11), new Tile("G", 4), new Tile("G", 5), new Tile("G", 6), new Tile("G", 7),
+				new Tile("G", 10)};
+		
+		game.getAllPlayers().get(3).getHand().getPlayerHand().clear();
+		for(int i=0; i<14; i++) {
+			game.getAllPlayers().get(3).getHand().addTile(ai3Tiles[i]);
+		}
+		
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		for(int i=1; i<4; i++) {
+			game.getAllPlayers().get(i).setTurnStatus(false);
+		}
+		game.getAllPlayers().get(0).getHand().dealTile(deck);
+		
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		for(int i=2; i<4; i++) {
+			game.getAllPlayers().get(i).setTurnStatus(false);
+		}
+		game.getAllPlayers().get(1).getHand().dealTile(deck);
+		
+		game.getAllPlayers().get(2).setTurnStatus(true);
+		game.getAllPlayers().get(3).setTurnStatus(false);
+		for(int i=0; i<2; i++) {
+			game.getAllPlayers().get(i).setTurnStatus(false);
+		}
+		game.getAllPlayers().get(2).getHand().dealTile(deck);
+		
+		game.getAllPlayers().get(3).setTurnStatus(true);
+		game.getAllPlayers().get(3).getHand().createMeld();
+		game.getAllPlayers().get(3).getHand().createMeld();
+		game.getAllPlayers().get(3).getHand().createMeld();
+		game.getAllPlayers().get(3).getHand().createMeld();
+		
+		for(int i=0; i<14; i++) {
+			if(i < 3) {
+				game.getAllPlayers().get(3).getHand().getMeld(0).addTile(ai3Tiles[i]);
+			}
+			if(i >= 3 && i < 6) {
+				game.getAllPlayers().get(3).getHand().getMeld(1).addTile(ai3Tiles[i]);
+			}
+			if(i >= 6 && i < 9) {
+				game.getAllPlayers().get(3).getHand().getMeld(2).addTile(ai3Tiles[i]);
+			}
+			if(i >= 9 && i < 13) {
+				game.getAllPlayers().get(3).getHand().getMeld(3).addTile(ai3Tiles[i]);
+			}
+		}
+		
+		int points1 = game.getAllPlayers().get(3).getHand().getMeld(0).getMeldValue();
+		int points2 = game.getAllPlayers().get(3).getHand().getMeld(1).getMeldValue();
+		int points3 = game.getAllPlayers().get(3).getHand().getMeld(2).getMeldValue();
+		int points4 = game.getAllPlayers().get(3).getHand().getMeld(3).getMeldValue();
+		System.out.println(game.getAllPlayers().get(3).getHand().getNumTiles());
+		
+		for(int i=0; i<14; i++) {
+			game.getAllPlayers().get(3).getHand().removeFromHand(i);
+		}
+		
+		assertTrue(points1 + points2 + points3 + points4 >= 30);
+		for(int i=0; i<game.getAllPlayers().get(3).getHand().getNumberOfMelds(); i++) {
+			assertTrue(game.getAllPlayers().get(3).getHand().getMeld(i).checkIfValidMeld());
+		}
+		
+		//Req. 12a.) p3 wins not using the tiles of the table
+		assertEquals(0, game.getAllPlayers().get(3).getHand().getPlayerHand().size());
+		assertEquals(4, game.getWinner());
 	}
 }
