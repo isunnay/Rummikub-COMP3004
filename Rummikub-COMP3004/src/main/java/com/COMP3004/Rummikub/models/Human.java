@@ -42,12 +42,12 @@ public class Human implements PlayerType {
 	}
 
 	public void setTurnStatus(boolean b) {
-		if(b==true){
+		/*if(b==true){
 			timer.start();
 		}
 		else if(b==false){
 			timer.stop();
-		}
+		}*/
 		turnTiles.clear();
 		turnMelds.clear();
 		turnMoves.clear();
@@ -689,15 +689,19 @@ public class Human implements PlayerType {
 		//return false;
 	}
 
-	public void play(Scanner reader, Deck deck) throws InterruptedException {
+	public void play(Scanner reader, Deck deck) /*throws InterruptedException*/ {
 		turnValue = 0;
+		GameTimer timer = new GameTimer();
 		while(myTurn == true) {
 			//reader = new Scanner(System.in);
 			System.out.println("Choose one of the following commands:");
 			System.out.println(" - 'P' to play your turn.");
 			System.out.println(" - 'S' to skip your turn & draw a tile.");
 			System.out.println(" - 'E' to end your turn if you've already played atleast one tile.");
-			char decision = reader.next().toUpperCase().charAt(0);		
+			if(timer.getSeconds() == 0) {
+				timer.start();
+			}
+			char decision = reader.next().toUpperCase().charAt(0);
 			
 			if (decision == 'P') {
 				makeAPlay(reader);
@@ -707,6 +711,7 @@ public class Human implements PlayerType {
 					System.out.println("Turn ended: Player drew " + t.tileToString() + ".");
 					System.out.println("----------------------------------------");
 					this.setTurnStatus(false);
+					timer.stop();
 				} else {
 					System.out.println("You've already made a play. Try typing 'E' to end your turn.");
 				}
@@ -718,6 +723,7 @@ public class Human implements PlayerType {
 						this.setHasInitialMeldBeenPlayed(true);
 						this.setTilesBeenPlayed(true);
 						this.setTurnStatus(false);
+						timer.stop();
 					} else {
 						System.out.println("Your Initial Meld total must be greater than or equal to 30 points.");
 						System.out.println("You played: " + turnValue + ". Please try again.");	
