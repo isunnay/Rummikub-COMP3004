@@ -57,8 +57,8 @@ public class GameTestPlan extends TestCase {
 			game.getAllPlayers().get(3).getHand().addTile(ai3Tiles[i]);
 		}*/
 		Human human = (Human)game.getAllPlayers().get(0);
-		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
-		AI2 ai2 = (AI2)game.getAllPlayers().get(2);
+		//AI1 ai1 = (AI1) game.getAllPlayers().get(1);
+		//AI2 ai2 = (AI2)game.getAllPlayers().get(2);
 		//AI3 ai3 = (AI3)game.getAllPlayers().get(3);
 		
 		for(int i=0; i<game.getAllPlayers().size(); i++) {
@@ -80,8 +80,8 @@ public class GameTestPlan extends TestCase {
 		//Req. 2.) human player plays first
 		human.setTurnStatus(true);
 		assertTrue(human.myTurnStatus());
-		assertFalse(ai1.myTurnStatus());
-		assertFalse(ai2.myTurnStatus());
+		//assertFalse(game.getAllPlayers().get(1).myTurnStatus());
+		//assertFalse(game.getAllPlayers().get(2).myTurnStatus());
 		//assertFalse(ai3.myTurnStatus());
 		
 		human.getHand().createMeld();
@@ -121,8 +121,8 @@ public class GameTestPlan extends TestCase {
 	public void testGame2() {
 		Game game = new Game();
 		Human human = (Human)game.getAllPlayers().get(0);
-		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
-		AI2 ai2 = (AI2)game.getAllPlayers().get(2);
+		//AI1 ai1 = (AI1)game.getAllPlayers().get(1);
+		//AI2 ai2 = (AI2)game.getAllPlayers().get(2);
 		//AI3 ai3 = (AI3)game.getAllPlayers().get(3);
 		
 		//Check who's turn it is
@@ -130,8 +130,8 @@ public class GameTestPlan extends TestCase {
 		//Req. 2.)Human goes first
 		human.setTurnStatus(true);
 		assertTrue(human.myTurnStatus());
-		assertFalse(ai1.myTurnStatus());
-		assertFalse(ai2.myTurnStatus());
+		/*assertFalse(game.getAllPlayers().get(1).myTurnStatus());
+		assertFalse(game.getAllPlayers().get(1).myTurnStatus());*/
 		//assertFalse(ai3.myTurnStatus());
 		//human draws tile
 		Tile tile = game.getDeck().getTileDeck().get(game.getDeck().getTileDeck().size() - 1);
@@ -140,54 +140,54 @@ public class GameTestPlan extends TestCase {
 		
 		//Re1. 2.)AI1 goes second
 		human.setTurnStatus(false);
-		ai1.setTurnStatus(true);
-		assertTrue(ai1.myTurnStatus());
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		assertTrue(game.getAllPlayers().get(1).myTurnStatus());
 		assertFalse(human.myTurnStatus());
-		assertFalse(ai2.myTurnStatus());
+		assertFalse(game.getAllPlayers().get(2).myTurnStatus());
 		//assertFalse(ai3.myTurnStatus());
 		//ai1 draws a tile
-		ai1.getHand().dealTile(game.getDeck());
+		game.getAllPlayers().get(1).getHand().dealTile(game.getDeck());
 		//Req. 10e.) p1 drawas on first turn
-		assertEquals(15, ai1.getHand().getNumTiles());
+		assertEquals(15, game.getAllPlayers().get(1).getHand().getNumTiles());
 		
 		//Req. 2.) AI2 goes third
-		ai1.setTurnStatus(false);
-		ai2.setTurnStatus(true);
-		assertTrue(ai2.myTurnStatus());
+		game.getAllPlayers().get(1).setTurnStatus(false);
+		game.getAllPlayers().get(2).setTurnStatus(true);
+		assertTrue(game.getAllPlayers().get(2).myTurnStatus());
 		assertFalse(human.myTurnStatus());
 		//assertFalse(ai3.myTurnStatus());
-		assertFalse(ai1.myTurnStatus());
+		assertFalse(game.getAllPlayers().get(1).myTurnStatus());
 		//ai2 draws a tile - no tile was placed
-		ai2.getHand().dealTile(game.getDeck());
+		game.getAllPlayers().get(2).getHand().dealTile(game.getDeck());
 		
 		//Req. 2.) AI3 goes last - skipping AI3 for now
-		/*ai2.setTurnStatus(false);
-		ai3.setTurnStatus(true);
-		assertTrue(ai3.myTurnStatus());
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		game.getAllPlayers().get(3).setTurnStatus(true);
+		assertTrue(game.getAllPlayers().get(3).myTurnStatus());
 		assertFalse(human.myTurnStatus());
-		assertFalse(ai2.myTurnStatus());
-		assertFalse(ai1.myTurnStatus());
+		assertFalse(game.getAllPlayers().get(2).myTurnStatus());
+		assertFalse(game.getAllPlayers().get(1).myTurnStatus());
 		//ai3 draws a tile
-		ai3.getHand().dealTile(game.getDeck());*/
+		game.getAllPlayers().get(3).getHand().dealTile(game.getDeck());
 		
-		ai2.setTurnStatus(false);
+		game.getAllPlayers().get(3).setTurnStatus(false);
 		human.setTurnStatus(true);
 		assertTrue(human.myTurnStatus());
-		assertFalse(ai1.myTurnStatus());
-		assertFalse(ai2.myTurnStatus());
+		assertFalse(game.getAllPlayers().get(1).myTurnStatus());
+		assertFalse(game.getAllPlayers().get(2).myTurnStatus());
 		
 		human.getHand().dealTile(game.getDeck());
 		
 		human.setTurnStatus(false);
-		ai1.setTurnStatus(true);
-		assertTrue(ai1.myTurnStatus());
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		assertTrue(game.getAllPlayers().get(1).myTurnStatus());
 		assertFalse(human.myTurnStatus());
-		assertFalse(ai2.myTurnStatus());
+		assertFalse(game.getAllPlayers().get(2).myTurnStatus());
 		//assertFalse(ai3.myTurnStatus());
-		//ai1 draws a tile
-		ai1.getHand().dealTile(game.getDeck());
+		//game.getAllPlayers().get(1) draws a tile
+		game.getAllPlayers().get(1).getHand().dealTile(game.getDeck());
 		//Req. 10f.) p1 draws on subsequent turn
-		assertEquals(16, ai1.getHand().getNumTiles());
+		assertEquals(16, game.getAllPlayers().get(1).getHand().getNumTiles());
 	}
 	
 	public void testGame3() {
@@ -202,33 +202,33 @@ public class GameTestPlan extends TestCase {
 			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles[i]);
 		}
 		
-		AI1 ai1 = (AI1) game.getAllPlayers().get(1);
+		//AI1 ai1 = (AI1) game.getAllPlayers().get(1);
 		
 		game.getAllPlayers().get(0).setTurnStatus(true);
-		ai1.setTurnStatus(false);
+		game.getAllPlayers().get(1).setTurnStatus(false);
 		game.getAllPlayers().get(2).setTurnStatus(false);
 		//game.getAllPlayers().get(3).setTurnStatus(false);
 		game.getAllPlayers().get(0).getHand().dealTile(game.getDeck());
 		
-		ai1.setTurnStatus(true);
+		game.getAllPlayers().get(1).setTurnStatus(true);
 		game.getAllPlayers().get(0).setTurnStatus(false);
 		game.getAllPlayers().get(2).setTurnStatus(false);
 		//game.getAllPlayers().get(3).setTurnStatus(false);
-		ai1.getHand().createMeld();
+		game.getAllPlayers().get(1).getHand().createMeld();
 		
 		for(int i=0; i<3; i++) {
-			ai1.getHand().getMeld(0).addTile(ai1Tiles[i]);
+			game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[i]);
 		}
 		
 		//10a.) AI 1 can play a meld on the first turn
-		assertTrue(ai1.oneMeldFirstTurn());
+		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(0).checkIfValidMeld());
 	}
 	
 	public void testGame4() {
 		Game game = new Game();
 		Human human = (Human)game.getAllPlayers().get(0);
-		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
-		AI2 ai2 = (AI2)game.getAllPlayers().get(2);
+		//AI1 ai1 = (AI1)game.getAllPlayers().get(1);
+		//AI2 ai2 = (AI2)game.getAllPlayers().get(2);
 		//AI3 ai3 = (AI3)game.getAllPlayers().get(3);
 		
 		String[] colours = {"Red", "Green", "Blue"};
@@ -323,9 +323,9 @@ public class GameTestPlan extends TestCase {
 		game.getAllPlayers().get(1).getHand().getMeld(0).addTile(new Tile("B", 11));
 		game.getAllPlayers().get(1).getHand().getMeld(0).addTile(ai1Tiles[2]);
 		
-		AI1 ai1 = (AI1)game.getAllPlayers().get(1);
+		//AI1 ai1 = (AI1)game.getAllPlayers().get(1);
 		//Req. 10c.) can play one meld subsequent turn
-		assertTrue(ai1.oneMeldSubsequentTurn());
+		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(0).checkIfValidMeld());
 	}
 	
 	public void testGame6() {
@@ -865,8 +865,11 @@ public class GameTestPlan extends TestCase {
 		int points2 = game.getAllPlayers().get(3).getHand().getMeld(1).getMeldValue();
 		int points3 = game.getAllPlayers().get(3).getHand().getMeld(2).getMeldValue();
 		int points4 = game.getAllPlayers().get(3).getHand().getMeld(3).getMeldValue();
+		System.out.println(game.getAllPlayers().get(3).getHand().getNumTiles());
 		
-		game.getAllPlayers().get(3).getHand().getPlayerHand().clear();
+		for(int i=0; i<14; i++) {
+			game.getAllPlayers().get(3).getHand().removeFromHand(i);
+		}
 		
 		assertTrue(points1 + points2 + points3 + points4 >= 30);
 		for(int i=0; i<game.getAllPlayers().get(3).getHand().getNumberOfMelds(); i++) {
@@ -1627,5 +1630,130 @@ public class GameTestPlan extends TestCase {
 		for(int i=3; i<8; i++) {
 			assertNotNull(board.getSpot(i, 3));
 		}
+	}
+	
+	public void testGame26() {
+		Game game = new Game();
+		
+		Tile[] tiles = {new Tile("R", 10), new Tile("G", 10), new Tile("B", 10)};
+		//meld which is a set consisting of 30 points
+		
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(0).getHand().removeFromHand(game.getAllPlayers().get(0).getHand().getNumTiles() - 1);
+		}
+		
+		for(int i=0; i<3; i++) {
+			game.getAllPlayers().get(0).getHand().addTile(tiles[i]);
+		}
+		
+		game.getAllPlayers().get(0).getHand().createMeld();
+		
+		for(int i=11; i<14; i++) {
+			game.getAllPlayers().get(0).getHand().getMeld(0).addTile(game.getAllPlayers().get(0).getHand().getTile(i));
+		}
+		
+		//Req. 4a.) Player can play a meld of 30 points
+		assertTrue(game.getAllPlayers().get(0).getHand().getMeld(0).checkIfValidMeld());
+		assertEquals(30, game.getAllPlayers().get(0).getHand().getMeld(0).getMeldValue());
+	}
+	
+	public void testGame27() {
+		Game game = new Game();
+		
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		game.getAllPlayers().get(0).getHand().dealTile(game.getDeck());
+		
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		game.getAllPlayers().get(1).getHand().dealTile(game.getDeck());
+		
+		game.getAllPlayers().get(2).setTurnStatus(true);
+		game.getAllPlayers().get(1).setTurnStatus(false);
+		game.getAllPlayers().get(2).getHand().dealTile(game.getDeck());
+		
+		game.getAllPlayers().get(3).setTurnStatus(true);
+		game.getAllPlayers().get(2).setTurnStatus(false);
+		game.getAllPlayers().get(3).getHand().dealTile(game.getDeck());
+		
+		game.getAllPlayers().get(2).setTurnStatus(true);
+		game.getAllPlayers().get(3).setTurnStatus(false);
+		game.getAllPlayers().get(0).getHand().dealTile(game.getDeck());
+		
+		Tile[] ai1Tiles = new Tile[3];
+		Tile[] ai1Tiles2 = new Tile[3];
+		
+		for(int i=0; i<ai1Tiles.length; i++) {
+			ai1Tiles[i] = new Tile("R", i+10);
+			ai1Tiles2[i] = new Tile("G", i + 3);
+		}
+		
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		
+		for(int i=0; i<6; i++) {
+			game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1);
+		}
+		
+		for(int i=ai1Tiles2.length - 1; i>=0; i--) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles2[i]);
+		}
+		for(int i=ai1Tiles.length - 1; i>=0; i--) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles[i]);
+		}
+		game.getAllPlayers().get(1).getHand().createMeld();
+		game.getAllPlayers().get(1).getHand().createMeld();
+		for(int i=0; i<ai1Tiles.length; i++) {
+			game.getAllPlayers().get(1).getHand().getMeld(0).addTile(game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1));
+		}
+		for(int i=0; i<ai1Tiles2.length; i++) {
+			game.getAllPlayers().get(1).getHand().getMeld(1).addTile(game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1));
+		}
+		
+		//Req. 10 d.) p1 can play several melds on subsequent turn
+		assertEquals(2, game.getAllPlayers().get(1).getHand().getNumberOfMelds());
+		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(0).checkIfValidMeld());
+		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(1).checkIfValidMeld());
+	}
+	
+	public void testGame28() {
+		Game game = new Game();
+		
+		game.getAllPlayers().get(0).setTurnStatus(true);
+		game.getAllPlayers().get(0).getHand().dealTile(game.getDeck());
+		
+		game.getAllPlayers().get(1).setTurnStatus(true);
+		game.getAllPlayers().get(0).setTurnStatus(false);
+		
+		Tile[] ai1Tiles = new Tile[3];
+		Tile[] ai1Tiles2 = new Tile[3];
+		
+		for(int i=0; i<ai1Tiles.length; i++) {
+			ai1Tiles[i] = new Tile("R", i+10);
+			ai1Tiles2[i] = new Tile("G", i + 3);
+		}
+		
+		for(int i=0; i<6; i++) {
+			game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1);
+		}
+		
+		for(int i=ai1Tiles2.length - 1; i>=0; i--) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles2[i]);
+		}
+		for(int i=ai1Tiles.length - 1; i>=0; i--) {
+			game.getAllPlayers().get(1).getHand().addTile(ai1Tiles[i]);
+		}
+		game.getAllPlayers().get(1).getHand().createMeld();
+		game.getAllPlayers().get(1).getHand().createMeld();
+		for(int i=0; i<ai1Tiles.length; i++) {
+			game.getAllPlayers().get(1).getHand().getMeld(0).addTile(game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1));
+		}
+		for(int i=0; i<ai1Tiles2.length; i++) {
+			game.getAllPlayers().get(1).getHand().getMeld(1).addTile(game.getAllPlayers().get(1).getHand().removeFromHand(game.getAllPlayers().get(1).getHand().getNumTiles() - 1));
+		}
+		
+		//Req. 10 b.) p1 can play several melds on first turn
+		assertEquals(2, game.getAllPlayers().get(1).getHand().getNumberOfMelds());
+		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(0).checkIfValidMeld());
+		assertTrue(game.getAllPlayers().get(1).getHand().getMeld(1).checkIfValidMeld());
 	}
 }
