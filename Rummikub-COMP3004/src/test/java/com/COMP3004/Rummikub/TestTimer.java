@@ -28,7 +28,6 @@ public class TestTimer extends TestCase {
 	public void testStopsAtRightTime() {
 		GameTimer timer = new GameTimer();
 		
-		timer.start();
 		assertTrue(timer.stopsAtRightTime());
 	}
 }
