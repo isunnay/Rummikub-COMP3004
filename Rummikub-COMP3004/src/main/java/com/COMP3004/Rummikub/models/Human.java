@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import com.COMP3004.Rummikub.controller.RummikubController;
+
 public class Human implements PlayerType {
 	Hand h;
 	private boolean initialMeldPlayed = false;
@@ -24,6 +26,18 @@ public class Human implements PlayerType {
 		h.createHand(deck);
 		//h.sortHand();
 		game.registerObserver(this);
+		spotsTaken = new ArrayList<Spot>();
+		turnTiles = new ArrayList<Tile>();
+		turnMelds = new ArrayList<Meld>();
+		turnMoves = new ArrayList<Tile>();
+	}
+
+
+	public Human(Deck deck, RummikubController rummikubController) {
+		h = new Hand();
+		h.createHand(deck);
+		//h.sortHand();
+		rummikubController.registerObserver(this);
 		spotsTaken = new ArrayList<Spot>();
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();

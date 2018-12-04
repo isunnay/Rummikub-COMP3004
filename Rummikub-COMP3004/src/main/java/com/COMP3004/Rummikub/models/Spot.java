@@ -1,6 +1,12 @@
 package com.COMP3004.Rummikub.models;
 
-public class Spot {
+import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+//import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
+
+public class Spot extends Rectangle{
 	int x;
 	int y;
 	Tile tile;
@@ -11,7 +17,12 @@ public class Spot {
 		this.y = j;
 		tile = null;
 		isTaken = false;
+		setWidth(0);
+		setHeight(0);
+		setX(x);
+		setY(y);
 	}
+	
 	
 	public Spot getSpot() {
 		return this; 
