@@ -97,8 +97,7 @@ public class RummikubController implements Subject{
 		
 		// Determine who starts
 		determineStarter();
-		
-		setUpPlayerHand(1);
+		setUpPlayerHand(whosTurn()-1);
 	}
 	
 	@FXML
@@ -134,7 +133,7 @@ public class RummikubController implements Subject{
 	
 	@FXML
 	public void setUpPlayerHand(int player) {
-		//MouseGestures mg = new MouseGestures();
+		System.out.println("Showing players hand: " + (player+1));
    
         tilePane.setVgap(50);
         tilePane.setHgap(50);
@@ -142,10 +141,7 @@ public class RummikubController implements Subject{
 
 		for(int i=0;i<allPlayers.get(player).getHand().size;i++) {
 			Tile tile = allPlayers.get(player).getHand().getTile(i);
-			//mg.makeDraggable(tile);
-			
-			
-        	       
+
 			tilePane.getChildren().addAll(tile);
 			
 		}
@@ -155,8 +151,18 @@ public class RummikubController implements Subject{
 
 	
 	@FXML
-	public void drawTile(int player) {
-		Tile t = allPlayers.get(player).getHand().dealTile(deck);
+	public void drawTile() {
+		int who = whosTurn()-1;
+		
+		if (allPlayers.get(who).hasTilesBeenPlayed() == false) {
+			Tile t = allPlayers.get(who).getHand().dealTile(deck);
+			tilePane.getChildren().addAll(t);
+			tilePane.getChildren().clear();
+			nextPlayersTurn(who);
+		} else {
+			tilePane.getChildren().clear();
+			nextPlayersTurn(who);
+		}
 	}
 
 
@@ -177,7 +183,6 @@ public class RummikubController implements Subject{
 	   // }
 	}
 	
-	/*
 	private int anyWinners() {
 		if (getPlayer(0).getHand().getNumTiles() == 0) {
 			return 1;
@@ -191,8 +196,6 @@ public class RummikubController implements Subject{
 			return 0;
 		}
 	}
-	*/
-	/*
 	private void endGame() {
 		// Variables
 		int winner = getWinner();
@@ -210,21 +213,22 @@ public class RummikubController implements Subject{
 		} else if (winner == 4) {
 			System.out.println("Player 4 Won!");
 		}
-	}*/
-	/*
+	}
+	
 	public void nextPlayersTurn(int i) {
 		// Sets next players turn
+		allPlayers.get(i).setTurnStatus(false);
+		
 		if (i <= 2) {
-			if (allPlayers.get(i).isAI() == true) { allPlayers.get(i).setTurnStatus(false); }
 			allPlayers.get(i+1).setTilesBeenPlayed(false);
 			allPlayers.get(i+1).setTurnStatus(true);
+			setUpPlayerHand(i+1);
 		} else {
-			if (allPlayers.get(i).isAI() == true) { allPlayers.get(i).setTurnStatus(false); }
 			allPlayers.get(0).setTilesBeenPlayed(false);
 			allPlayers.get(0).setTurnStatus(true);
+			setUpPlayerHand(0);
 		}
 	}
-	*/
 	
 	public void determineStarter() {
 		// TD = Tiles Drawn
@@ -336,36 +340,12 @@ public class RummikubController implements Subject{
 		nextPlayersTurn(i);
 	}
 */
-	/*
 	public void play() throws InterruptedException {
 		notifyObservers();
-		while (anyWinners() == 0) {
-			if (whosTurn() == 1) {
-				playTurn(0);
-				notifyObservers();
-				TimeUnit.SECONDS.sleep(2);
-			} else if (whosTurn() == 2) {
-				playTurn(1);
-				notifyObservers();
-				TimeUnit.SECONDS.sleep(2);
-			} else if (whosTurn() == 3) {
-				playTurn(2);
-				notifyObservers();
-				TimeUnit.SECONDS.sleep(2);
-			} else if (whosTurn() == 4) {
-				playTurn(3);
-				notifyObservers();
-				TimeUnit.SECONDS.sleep(2);
-			} else {
-				System.out.println("There seems to be a problem. Please try restarting the game.");
-				System.out.println("----------------------------------------");
-				break;
-			}
+		if (anyWinners() > 0) {
+			endGame();
 		}
-		endGame();
 	}
-	*/
-	/*
 
 	public int whosTurn() {
 		if (allPlayers.get(0).myTurnStatus() == true) {
@@ -380,15 +360,7 @@ public class RummikubController implements Subject{
 			return -1;
 		}
 	}
-*/
-	/*
-	public void printAll() {
-		System.out.println("Board:");
-		board.boardToString();
-		System.out.println("Current turn: Player " + Integer.toString(whosTurn()));
-		System.out.println("----------------------------------------");
-	}
-*/
+	
 	public boolean inProgress() {
 		return this.gameInProgress;
 	}
@@ -412,11 +384,10 @@ public class RummikubController implements Subject{
 	public int getPlayerCount() {
 		return this.getAllPlayers().size();
 	}
-/*
+	
 	public int getWinner() {
 		return anyWinners();
 	}
-*/
 	
 	public void registerObserver(Observer o) {
 		observers.add(o);
