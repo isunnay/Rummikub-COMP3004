@@ -104,7 +104,7 @@
             </TilePane>
             <Pane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="drawTile" layoutX="72.0" layoutY="34.0" mnemonicParsing="false" text="Draw Tile" />
+                  <Button fx:id="drawTile" layoutX="72.0" layoutY="34.0" mnemonicParsing="false" onAction="#drawTile" text="End Turn" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

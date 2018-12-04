@@ -30,7 +30,7 @@ public class MouseGestures {
 
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
-        //node.setOnMouseReleased(onMouseReleasedEventHandler);
+        node.setOnMouseReleased(onMouseReleasedEventHandler);
 
     }
 

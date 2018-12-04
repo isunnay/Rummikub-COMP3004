@@ -93,8 +93,11 @@ public class RummikubMain extends Application{
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+<<<<<<< HEAD
 			}*/
 			
+
+
 		});
 		fileMenu.getItems().add(newGame);
 		fileMenu.getItems().add(new SeparatorMenuItem());
