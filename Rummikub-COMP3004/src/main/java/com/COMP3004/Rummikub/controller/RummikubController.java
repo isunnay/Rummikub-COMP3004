@@ -129,6 +129,8 @@ public class RummikubController implements Subject{
 	   board.getSpot(0, 0).playTile(tile);
 	   GridPane.setConstraints(tile, 0, 0);
 	   gridPane.getChildren().addAll(tile);
+	  //gridPane.getChildren().remove(tile);
+	   System.out.println(tile.getParent());
 	   
 	}
 	
@@ -142,14 +144,25 @@ public class RummikubController implements Subject{
 
 		for(int i=0;i<allPlayers.get(player).getHand().size;i++) {
 			Tile tile = allPlayers.get(player).getHand().getTile(i);
-			//mg.makeDraggable(tile);
+			
+        	tilePane.getChildren().forEach(item -> {
+        		item.setOnMousePressed(e->{
+        			//handleDrop();
+	        	});
+        	});
+	        
+
 			
 			
         	       
 			tilePane.getChildren().addAll(tile);
 			
 		}
-		
+	}
+	
+
+	private boolean isValidPlay() {
+		return false;
 	}
 	
 

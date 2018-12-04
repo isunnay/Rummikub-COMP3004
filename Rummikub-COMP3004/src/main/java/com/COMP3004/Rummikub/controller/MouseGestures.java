@@ -1,3 +1,5 @@
+//This code was inspired by StackOVerFlow
+
 package com.COMP3004.Rummikub.controller;
 
 import java.util.Collection;
@@ -13,12 +15,14 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.util.Duration;
 import com.COMP3004.Rummikub.models.Tile;
+import com.COMP3004.Rummikub.controller.RummikubController;
 import javafx.scene.shape.Rectangle;
 
 public class MouseGestures {
 	
 	private double mouseX;
 	private double mouseY;
+	
 
     final DragContext dragContext = new DragContext();
 
@@ -26,7 +30,7 @@ public class MouseGestures {
 
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
-        node.setOnMouseReleased(onMouseReleasedEventHandler);
+        //node.setOnMouseReleased(onMouseReleasedEventHandler);
 
     }
 
@@ -34,6 +38,8 @@ public class MouseGestures {
 
         @Override
         public void handle(MouseEvent event) {
+        	Node node = (Node) event.getSource();
+        	System.out.println(node);
 
             dragContext.x = event.getSceneX();
             dragContext.y = event.getSceneY();
@@ -66,13 +72,19 @@ public class MouseGestures {
 
         @Override
         public void handle(MouseEvent event) {
+        	boolean test = false;
 
             Node node = (Node) event.getSource();
 
-           // moveToSource(node);
+            if(test) {
+            	moveToSource(node);
+            }
 
             // if you find out that the cards are on a valid position, you need to fix it, ie invoke relocate and set the translation to 0
-             fixPosition( node);
+            else{
+            	System.out.println(node.getParent());
+            	fixPosition( node);
+            }
 
         }
     };

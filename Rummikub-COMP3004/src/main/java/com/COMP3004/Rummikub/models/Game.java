@@ -56,21 +56,7 @@ public class Game implements Subject {
 			observers.add(allPlayers.get(i));
 		}
 		
-		Tile tile = new Tile(0,1);
-		Tile tile1 = new Tile(0,2);
-		Tile tile2 = new Tile(0,3);
-		Tile tile3 = new Tile(0,5);
-		Tile tile4 = new Tile(0,6);
-		Tile tile5 = new Tile(0,7);
-		Tile tile6 = new Tile("JKR",0);
-		allPlayers.get(0).getHand().addTile(tile);
-		allPlayers.get(0).getHand().addTile(tile1);
-		allPlayers.get(0).getHand().addTile(tile2);
-		allPlayers.get(0).getHand().addTile(tile3);
-		allPlayers.get(0).getHand().addTile(tile4);
-		allPlayers.get(0).getHand().addTile(tile5);
-		allPlayers.get(0).getHand().addTile(tile6);
-		
+
 		
 	
 		// Fill in the rest with AI (random chance of each AI strategy)
