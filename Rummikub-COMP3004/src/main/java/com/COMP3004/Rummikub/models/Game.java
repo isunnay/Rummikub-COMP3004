@@ -2,6 +2,8 @@ package com.COMP3004.Rummikub.models;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class Game implements Subject {
@@ -12,6 +14,7 @@ public class Game implements Subject {
 	private ArrayList<PlayerType> allPlayers;
 	private ArrayList<Observer> observers;
 	Scanner reader;
+	private Board boardState;
 
 	// Constructor
 	public Game() {
@@ -25,6 +28,9 @@ public class Game implements Subject {
 
 		// Initialize the game board
 		board = new Board();
+		
+		// Initialize the baord state
+		boardState = board;
 
 		// Initialize the deck
 		deck = new Deck();
@@ -73,6 +79,10 @@ public class Game implements Subject {
 		
 		// Determine who starts
 		determineStarter();
+	}
+	
+	public Board getBoardState() {
+		return boardState;
 	}
 
 	private int anyWinners() {
