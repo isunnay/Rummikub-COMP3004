@@ -1,5 +1,6 @@
 package com.COMP3004.Rummikub;
 
+import com.COMP3004.Rummikub.models.Board;
 import com.COMP3004.Rummikub.models.Game;
 
 import junit.framework.TestCase;
@@ -60,5 +61,12 @@ public class GameTest extends TestCase {
 		// Check if first player won (returns 1)
 		assertEquals(1, g.getWinner());
 	}
-
+	
+	public void testInitialBoardStateExists() {
+		Game g = new Game();
+		
+		Board board = g.getBoard();
+		
+		assertEquals(board, g.getBoardState());
+	}
 }
