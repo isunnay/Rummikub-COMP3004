@@ -9,13 +9,14 @@ public class GameTimer {
 	private boolean stopped;
 	private Timer timer;
 	private TimerTask task = new TimerTask() {
+		
 		public void run() {
 			seconds++;
-			System.out.print(seconds);
+			System.out.print(seconds + ", ");
 			if(seconds % 30 == 0) {
 				System.out.println();
 			}
-			if(seconds == 120) {
+			if(seconds == 10) {
 				stop();
 			}
 		}
@@ -31,7 +32,8 @@ public class GameTimer {
 	public void start() {
 		started = true;
 		stopped = false;
-		timer.schedule(task, 0, 1000);
+		//timer.schedule(task, 0, 1000);
+		new Timer(true).schedule(task, 0, 1000);
 		//System.out.println("Timer Started");
 		
 		/*if(seconds == 10) {

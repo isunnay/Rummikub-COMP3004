@@ -2,7 +2,14 @@ package com.COMP3004.Rummikub.models;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.awt.event.ActionEvent;
 
 public class Human implements PlayerType {
 	Hand h;
@@ -18,7 +25,10 @@ public class Human implements PlayerType {
 	private int turnValue;
 	Scanner reader;
 	private boolean isAI = false;
-	public GameTimer timer;
+	private GameTimer timer;
+	private char decision;
+	private char decision2;
+	private boolean returned;
 
 	public Human(Deck deck, Game game) {
 		h = new Hand();
@@ -29,7 +39,6 @@ public class Human implements PlayerType {
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
 		turnMoves = new ArrayList<Tile>();
-		timer = new GameTimer();
 	}
 
 
@@ -568,16 +577,36 @@ public class Human implements PlayerType {
 	}
 	
 	public boolean makeAPlay(Scanner reader) {
+		returned = false;
 		while(true) {
 		System.out.println("Choose one of the following commands:");
 		System.out.println(" - 'M' to play a meld.");
 		System.out.println(" - 'T' to play an individual tile.");
 		System.out.println(" - 'B' to move an existing tile on the board.");
 		System.out.println(" - 'L' to exit this sequence.");
-		char decision = reader.next().toUpperCase().charAt(0);
 		
+		decision2 = reader.next().toUpperCase().charAt(0);
 		
-		if (decision == 'M') {
+		/*TimerTask timerTask = new TimerTask() {
+			public void run() {
+				if(decision2 == 'K') {
+					decision2 = 'L';
+					return;
+				}
+			}
+		};
+		
+		try {
+			Timer timer = new Timer();
+			timer.schedule(timerTask, 10000 - getTimer().getSeconds()*1000);
+			decision2 = (decision2 == 'L')? 'L': reader.next().toUpperCase().charAt(0);
+			timer.cancel();
+		}
+		catch(Exception e) {
+			
+		}*/
+		
+		if (decision2 == 'M') {
 			String tileChoice = "";
 			Meld meld = new Meld();
 			this.getHand().createMeld();
@@ -684,24 +713,78 @@ public class Human implements PlayerType {
 				return false;
 			}
 		}
-		
+		return returned;
 		}
 		//return false;
 	}
+	
+	public GameTimer getTimer() { return timer; }
 
 	public void play(Scanner reader, Deck deck) /*throws InterruptedException*/ {
 		turnValue = 0;
-		GameTimer timer = new GameTimer();
-		while(myTurn == true) {
+		timer = new GameTimer();
+		long startTime = System.currentTimeMillis();
+		while( /*(System.currentTimeMillis()-startTime)<10000 ||*/ myTurn == true /*||timer.getSeconds()!=10*/) {
 			//reader = new Scanner(System.in);
 			System.out.println("Choose one of the following commands:");
 			System.out.println(" - 'P' to play your turn.");
 			System.out.println(" - 'S' to skip your turn & draw a tile.");
 			System.out.println(" - 'E' to end your turn if you've already played atleast one tile.");
-			if(timer.getSeconds() == 0) {
+			
+			
+			/*if(timer.getSeconds() == 0) {
 				timer.start();
+			}*/
+			
+			//while(timer.getSeconds() != 10) {
+				
+			//System.out.print(timer.isStopped());
+
+			/*else if(timer.getSeconds() == 10) {
+				//this.setHasInitialMeldBeenPlayed(false);
+				this.setTilesBeenPlayed(false);
+				this.undoTurn();
+				Tile t = this.getHand().dealTile(deck);
+				System.out.println("Out of time");
+				System.out.println("Turn ended: Player drew " + t.tileToString() + ".");
+				System.out.println("----------------------------------------");
+				this.setTurnStatus(false);
+				timer.stop();
+				
+			}*/
+			/*decision = 'N'; //'N' for no input
+			
+			TimerTask task = new TimerTask() {
+				public void run() {
+					decision = 'N';
+					if(decision == 'N') {
+						Tile t = getHand().dealTile(deck);
+						System.out.println("Timeout");
+						System.out.println("Turn ended: Player drew " + t.tileToString() + ".");
+						System.out.println("----------------------------------------");
+						setTilesBeenPlayed(false);
+						undoTurn();
+						setTurnStatus(false);
+						//return;
+					}
+					if(timer.getSeconds() == 10) {
+						
+					}
+				}
+			};
+			
+			try {
+			
+				Timer timer = new Timer();
+				timer.schedule(task, 10000);
+				timer.cancel();
+				while(!getTimer().isStopped())
+				decision = (getTimer().getSeconds() == 10)? 'S':  reader.next().toUpperCase().charAt(0);
 			}
-			char decision = reader.next().toUpperCase().charAt(0);
+			catch (Exception e) {
+				
+			}*/
+			decision = reader.next().toUpperCase().charAt(0);
 			
 			if (decision == 'P') {
 				makeAPlay(reader);
@@ -735,14 +818,17 @@ public class Human implements PlayerType {
 				} else if (initialMeldPlayed == true) {
 					if (hasTileBeenPlaced == true) {
 						this.setTurnStatus(false);
+						timer.stop();
 					} else {
 						this.undoTurn();
 						System.out.println("You must either play your turn or draw a tile.");
 					}
 				}
-			} else {
+			}
+			else {
 				System.out.println("You may have entered the wrong character. Please try again.");
 			}
+			//}
 		}
 	}
 
