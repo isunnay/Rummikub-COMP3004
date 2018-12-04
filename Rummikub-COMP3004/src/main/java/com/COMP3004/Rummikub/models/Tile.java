@@ -21,6 +21,7 @@ public class Tile extends StackPane{
 	
 	// Constructor for string & int
 	public Tile (String colour, int value) {
+	//	this.setManaged(false);
 		mg = new MouseGestures();
 		// Make the string uppercase
 		colour = colour.toUpperCase();
@@ -90,6 +91,7 @@ public class Tile extends StackPane{
 	
 	//Constructor to pass in two ints
 	public Tile (int colour, int value) {
+		//this.setManaged(false);
 		mg = new MouseGestures();
 		this.colour = colour;
 		this.value = value;

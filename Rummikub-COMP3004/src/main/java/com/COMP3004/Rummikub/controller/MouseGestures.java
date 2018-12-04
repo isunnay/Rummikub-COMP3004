@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javafx.animation.PathTransition;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.LineTo;
@@ -25,7 +26,7 @@ public class MouseGestures {
 
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
-     //   node.setOnMouseReleased(onMouseReleasedEventHandler);
+        node.setOnMouseReleased(onMouseReleasedEventHandler);
 
     }
 
@@ -33,18 +34,14 @@ public class MouseGestures {
 
         @Override
         public void handle(MouseEvent event) {
-        	System.out.println("Mouse pressed");
-         //   dragContext.x = event.getSceneX();
-         //   dragContext.y = event.getSceneY();
-        	
-        	mouseX = event.getSceneX();
-        	mouseY = event.getSceneY();
-            
-            //System.out.println(dragContext.x);
-            //System.out.println(dragContext.y);
+
+            dragContext.x = event.getSceneX();
+            dragContext.y = event.getSceneY();
 
         }
     };
+
+
 
     EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
 
@@ -52,34 +49,13 @@ public class MouseGestures {
         public void handle(MouseEvent event) {
 
             Node node = (Node) event.getSource();
-          
-          
+            node.setManaged(false);
 
-           //double offsetX = event.getSceneX() - dragContext.x;
-           //double offsetY = event.getSceneY() - dragContext.y;
-            double offsetX = event.getSceneX() - mouseX;
-            double offsetY = event.getSceneY() - mouseY;
-        //   System.out.println(node.getLayoutX());
-        //   System.out.println(node.getLayoutY());
-            
+            double offsetX = event.getSceneX() - dragContext.x;
+            double offsetY = event.getSceneY() - dragContext.y;
+
             node.setTranslateX(offsetX);
             node.setTranslateY(offsetY);
-            node.relocate(node.getLayoutX()+offsetX, node.getLayoutY()+offsetY);
-            mouseX = event.getSceneX();
-        	mouseY = event.getSceneY();
-           // node.setTranslateX(offsetX);
-            //node.setTranslateY(offsetY);
-            
-            
-            //node.setLayoutX(node.getLayoutX() - 10);
-            //node.setLayoutY(node.getLayoutY() - 25);
-            //((Tile)node).setX(node.getLayoutX() - 10);
-            //((Tile)node).setY(node.getLayoutY() - 25);
-           // node.relocate(node.getLayoutX() + offsetX, node.getLayoutY() + offsetY);
-           // dragContext.x = offsetX ;
-          //  dragContext.y = offsetY;
-         //   node.setTranslateX(0);
-          //  node.setTranslateY(0);
 
 
         }
@@ -88,27 +64,17 @@ public class MouseGestures {
     
     EventHandler<MouseEvent> onMouseReleasedEventHandler = new EventHandler<MouseEvent>() {
 
-    	 @Override
-         public void handle(MouseEvent event) {
+        @Override
+        public void handle(MouseEvent event) {
 
-             Node node = (Node) event.getSource();
-             
-             System.out.println(node.getLayoutX());
-             
-        //      System.out.println(node.getLayoutX());
-             // System.out.println(node.getTranslateX());
-       //       System.out.println(node.getLayoutY());
-           //   System.out.println(node.getTranslateY());
-              //node.setTranslateY(0);
+            Node node = (Node) event.getSource();
 
-            // moveToSource(node);
+           // moveToSource(node);
 
-             
+            // if you find out that the cards are on a valid position, you need to fix it, ie invoke relocate and set the translation to 0
+             fixPosition( node);
 
-             // if you find out that the cards are on a valid position, you need to fix it, ie invoke relocate and set the translation to 0
-              fixPosition( node);
-
-         }
+        }
     };
 
     private void moveToSource( Node node) {
@@ -140,19 +106,14 @@ public class MouseGestures {
 
         double x = node.getTranslateX();
         double y = node.getTranslateY();
-       
 
-        node.relocate(node.getLayoutX(), node.getLayoutY());
-        //node.relocate(5, 5);
-    /*    System.out.println(node.getLayoutX());
-        ((Tile)node).setX(node.getLayoutX());
-        System.out.println(node.getLayoutY());
-         ((Tile)node).setY(node.getLayoutY());
-*/
+        node.relocate(node.getLayoutX() + x, node.getLayoutY() + y);
+
         node.setTranslateX(0);
         node.setTranslateY(0);
 
     }
+
 
     class DragContext {
 
