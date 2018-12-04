@@ -55,6 +55,23 @@ public class Game implements Subject {
 			allPlayers.add(new Human(deck, this));
 			observers.add(allPlayers.get(i));
 		}
+		
+		Tile tile = new Tile(0,1);
+		Tile tile1 = new Tile(0,2);
+		Tile tile2 = new Tile(0,3);
+		Tile tile3 = new Tile(0,5);
+		Tile tile4 = new Tile(0,6);
+		Tile tile5 = new Tile(0,7);
+		Tile tile6 = new Tile("JKR",0);
+		allPlayers.get(0).getHand().addTile(tile);
+		allPlayers.get(0).getHand().addTile(tile1);
+		allPlayers.get(0).getHand().addTile(tile2);
+		allPlayers.get(0).getHand().addTile(tile3);
+		allPlayers.get(0).getHand().addTile(tile4);
+		allPlayers.get(0).getHand().addTile(tile5);
+		allPlayers.get(0).getHand().addTile(tile6);
+		
+		
 	
 		// Fill in the rest with AI (random chance of each AI strategy)
 		for (int i = allPlayers.size(); i < 4; i++) {
@@ -161,10 +178,6 @@ public class Game implements Subject {
 			} else if (p1MV >= 10 || p2MV >= 10 || p3MV >= 10 || p4MV >= 10) {
 				break;
 			} else {
-				/*System.out.println(allPlayers.get(0).getHand().getTile(p1TD).tileToString() + " - " + p1TD);
-				System.out.println(allPlayers.get(1).getHand().getTile(p2TD).tileToString() + " - " + p2TD);
-				System.out.println(allPlayers.get(2).getHand().getTile(p3TD).tileToString() + " - " + p3TD);
-				System.out.println(allPlayers.get(3).getHand().getTile(p4TD).tileToString() + " - " + p4TD);*/
 				p1TD++; p2TD++; p3TD++; p4TD++;
 				break;
 			}
@@ -187,7 +200,6 @@ public class Game implements Subject {
 		}
 		
 		for (int i = 0; i < 4; i++) {
-			//System.out.println(allPlayers.get(i).getHand().handToString());
 			allPlayers.get(i).getHand().sortHand();
 		}
 	}
@@ -216,6 +228,7 @@ public class Game implements Subject {
 		}
 		// Play if AI
 		if (allPlayers.get(i).isAI() == true && allPlayers.get(i).myTurnStatus() == true) {
+			System.out.println("Player " + (i+1) + "'s Hand[" + allPlayers.get(i).getHand().size + "]: " + allPlayers.get(i).getHand().handToString());
 			allPlayers.get(i).play(reader);
 			
 			if (allPlayers.get(i).hasTilesBeenPlayed() == false) {
