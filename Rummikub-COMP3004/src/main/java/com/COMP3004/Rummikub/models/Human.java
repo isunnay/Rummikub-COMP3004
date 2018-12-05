@@ -216,8 +216,166 @@ public class Human implements PlayerType {
 
 	@Override
 	public void addTile(Tile tile, int x, int y) {
+		if (x == 0) {
+			//adding before a meld
+			//new meld
+			//finishing meld
+		}
+		
+		if (x == 1) {
+			//adding before a meld
+			//new meld
+			//finishing meld
+		}
+		
+		if (x >= 2 && x <= 12) {
+			//adding before a meld
+			//adding after a meld
+			//new meld
+			//finishing meld
+			//adding between melds
+		}
+		
+		if (x == 13) {
+			//adding after a meld
+			//finishing meld
+		}
+		
+		if (x == 14) {
+			//adding after a meld
+			//finishing meld
+		}
+		
 		// Adding a tile between two melds
-		if (x > 0 && x < 14 && board.getSpot(x - 1, y).isTaken && board.getSpot(x + 1, y).isTaken && board.getSpot(x, y).isTaken == false) {
+				//System.out.println("Adding between two melds");
+				if (x > 0 && x < 14 && board.getSpot(x - 1, y).isTaken && board.getSpot(x + 1, y).isTaken && board.getSpot(x, y).isTaken == false) {
+					Spot prevSpot = board.getSpot(x - 1, y);
+					Tile prevTile = prevSpot.getTile();
+					Meld prevTileMeld = prevTile.getMemberOfMeld();
+					Spot beginningOfMeld = prevTileMeld.getTiles().get(0).getSpot();
+					Spot nextSpot = board.getSpot(x + 1, y);
+					int newX = beginningOfMeld.getSpotX();
+					Tile nextTile = nextSpot.getTile();
+					Meld nextTileMeld = nextTile.getMemberOfMeld();
+					Meld newMeld = combineMelds(prevTileMeld, nextTileMeld, tile);
+					if (newMeld.checkIfValidMeld() == true) {
+						board.deleteMeld(prevTileMeld);
+						//board.deleteMeld(nextTileMeld);
+						for (int i = 0; i < newMeld.getNumberOfTiles(); i++) {
+							Tile newTile = newMeld.getTileInMeld(i);
+							Spot spot = board.getSpot(newX + i, y);
+							spot.playTile(newTile);
+							newTile.setSpot(spot);
+							board.numberOfTilesOnBoard++;
+							board.filledSpots.add(spot);
+						}
+						board.meldsOnBoard.add(newMeld);
+						board.numberOfMelds++;
+						turnTiles.add(tile);
+						h.removeTile(tile);
+						//board.deleteMeld(prevTileMeld);
+						//board.deleteMeld(nextTileMeld);
+						this.setTilesBeenPlayed(true);
+					} else {
+						System.out.println("ERROR: You can't play this here. ");
+						//undoAddTile(tile);
+					}
+				}
+				
+				//ADDING TILE AFTER A MELD
+				else if (x > 0 && board.getSpot(x - 1, y).isTaken && board.getSpot(x + 1, y).isTaken == false) {
+					System.out.println("Adding after a meld");
+					Spot prevSpot = board.getSpot(x - 1, y);
+					Tile prevTile = prevSpot.getTile();
+					Meld prevTileMeld = prevTile.getMemberOfMeld();
+					//prevTileMeld.addTile(tile);
+					//if (prevTileMeld.checkIfValidMeld() == true) {
+					
+					//Checking if possible run
+					if (tile.getValue() - prevTile.getValue() == 1) {
+						Spot spot = board.getSpot(x, y);
+						spot.playTile(tile);
+						tile.setSpot(spot);
+						prevTileMeld.addTile(tile);
+						board.numberOfTilesOnBoard++;
+						board.filledSpots.add(spot);
+						turnTiles.add(tile);
+						h.removeTile(tile);
+						this.setTilesBeenPlayed(true);
+					}
+					//checking if possible set
+					else if(prevTile.getValue() == tile.getValue() && tile.getColour()!= prevTile.getColour()) {
+						Spot spot = board.getSpot(x, y);
+						spot.playTile(tile);
+						tile.setSpot(spot);
+						prevTileMeld.addTile(tile);
+						board.numberOfTilesOnBoard++;
+						board.filledSpots.add(spot);
+						turnTiles.add(tile);
+						h.removeTile(tile);
+						this.setTilesBeenPlayed(true);
+					}
+					else {
+						System.out.println("ERROR: You cannot play this here.");
+					}
+				}	
+
+				//ADDING TILE BEFORE A MELD
+				else if (x >= 0 && board.getSpot(x + 1, y).isTaken) {
+					System.out.println("Adding before an existing meld");
+					Spot nextSpot = board.getSpot(x + 1, y);
+					Tile nextTile = nextSpot.getTile();
+					Meld nextTileMeld = nextTile.getMemberOfMeld();
+					//Checking if possible run
+					if (nextTile.getValue() - tile.getValue() == 1) {
+						Spot spot = board.getSpot(x, y);
+						spot.playTile(tile);
+						tile.setSpot(spot);
+						nextTileMeld.addTileFront(tile);
+						board.numberOfTilesOnBoard++;
+						board.filledSpots.add(spot);
+						turnTiles.add(tile);
+						h.removeTile(tile);
+						this.setTilesBeenPlayed(true);
+					} 
+					//checking if possible set
+					else if(nextTile.getValue() == tile.getValue() && tile.getColour()!= nextTile.getColour()) {
+						Spot spot = board.getSpot(x, y);
+						spot.playTile(tile);
+						tile.setSpot(spot);
+						nextTileMeld.addTileFront(tile);
+						board.numberOfTilesOnBoard++;
+						board.filledSpots.add(spot);
+						turnTiles.add(tile);
+						h.removeTile(tile);
+						this.setTilesBeenPlayed(true);	
+					}
+					else {
+						System.out.println("ERROR: You cannot play this here.");
+						//nextTileMeld.removeTile(tile);
+					}	
+				}
+				//Creating a new meld
+				else {
+					Spot spot = board.getSpot(x, y);
+					spot.playTile(tile);
+					tile.setSpot(spot);
+					System.out.println("Creating a New meld");
+					Meld meld = new Meld();
+					meld.addTile(tile);
+					board.meldsOnBoard.add(meld);
+					board.numberOfMelds++;
+					turnMelds.add(meld);
+					board.numberOfTilesOnBoard++;
+					board.filledSpots.add(spot);
+					//turnTiles.add(tile);
+					h.removeTile(tile);
+					this.setTilesBeenPlayed(true);
+				}
+		
+		/*
+		// Adding a tile between two melds
+		if (x > 2 && x < 12 && board.getSpot(x - 1, y).isTaken && board.getSpot(x - 2, y).isTaken && board.getSpot(x - 3, y).isTaken && board.getSpot(x + 1, y).isTaken && board.getSpot(x + 2, y).isTaken && board.getSpot(x + 3, y).isTaken && !(board.getSpot(x, y).isTaken)) {
 			System.out.println("Adding between two melds");
 			
 			// Left Meld
@@ -250,60 +408,34 @@ public class Human implements PlayerType {
 				tempMeld.addTile(nextTileMeld.getTileInMeld(i));
 			}
 			
-			if (tempMeld.isValidRun() || tempMeld.isValidSet()) {
-				board.deleteMeld(prevTileMeld);
-				board.deleteMeld(nextTileMeld);
-				for (int i = 0; i < tempMeld.getNumberOfTiles(); i++) {
-					Tile newTile = tempMeld.getTileInMeld(i);
-					Spot spot = board.getSpot(newX + i, y);
-					spot.playTile(newTile);
-					newTile.setSpot(spot);
-					board.numberOfTilesOnBoard++;
-					board.filledSpots.add(spot);
+			if (tempMeld.getMeldSize() > 3) {
+				if (tempMeld.isValidRun() || tempMeld.isValidSet()) {
+					board.deleteMeld(prevTileMeld);
+					board.deleteMeld(nextTileMeld);
+					for (int i = 0; i < tempMeld.getNumberOfTiles(); i++) {
+						Tile newTile = tempMeld.getTileInMeld(i);
+						Spot spot = board.getSpot(newX + i, y);
+						spot.playTile(newTile);
+						newTile.setSpot(spot);
+						board.numberOfTilesOnBoard++;
+						board.filledSpots.add(spot);
+					}
+					board.meldsOnBoard.add(tempMeld);
+					board.numberOfMelds++;
+					turnTiles.add(tile);
+					h.removeTile(tile);
+					this.setTilesBeenPlayed(true);
+				} else {
+					System.out.println("ERROR: You can't play this here. ");
 				}
-				board.meldsOnBoard.add(tempMeld);
-				board.numberOfMelds++;
-				turnTiles.add(tile);
-				h.removeTile(tile);
-				this.setTilesBeenPlayed(true);
-			}
-			
-			/*
-			Spot prevSpot = board.getSpot(x - 1, y);
-			Tile prevTile = prevSpot.getTile();
-			Meld prevTileMeld = prevTile.getMemberOfMeld();
-			Spot beginningOfMeld = prevTileMeld.getTiles().get(0).getSpot();
-			Spot nextSpot = board.getSpot(x + 1, y);
-			int newX = beginningOfMeld.getSpotX();
-			Tile nextTile = nextSpot.getTile();
-			Meld nextTileMeld = nextTile.getMemberOfMeld();
-			Meld newMeld = combineMelds(prevTileMeld, nextTileMeld, tile);
-			if (newMeld.checkIfValidMeld() == true) {
-				board.deleteMeld(prevTileMeld);
-				//board.deleteMeld(nextTileMeld);
-				for (int i = 0; i < newMeld.getNumberOfTiles(); i++) {
-					Tile newTile = newMeld.getTileInMeld(i);
-					Spot spot = board.getSpot(newX + i, y);
-					spot.playTile(newTile);
-					newTile.setSpot(spot);
-					board.numberOfTilesOnBoard++;
-					board.filledSpots.add(spot);
-				}
-				board.meldsOnBoard.add(newMeld);
-				board.numberOfMelds++;
-				turnTiles.add(tile);
-				h.removeTile(tile);
-				//board.deleteMeld(prevTileMeld);
-				//board.deleteMeld(nextTileMeld);
-				this.setTilesBeenPlayed(true);
-			
-			}*/
-			else {
-				System.out.println("ERROR: You can't play this here. ");
 			}
 		}
+		//}
 		//ADDING TILE AFTER A MELD
-		else if (x > 0 && board.getSpot(x - 1, y).isTaken && board.getSpot(x + 1, y).isTaken == false) {
+		//else if(x>0 &&x<14&& board.getSpot(x-1, y).isTaken && !(board.getSpot(x+1, y).isTaken)) {
+		//if (x > 0 && board.getSpot(x - 1, y).isTaken && board.getSpot(x - 2, y).isTaken && board.getSpot(x - 3, y).isTaken) {
+		else if ((x >= 2 && board.getSpot(x - 1, y).isTaken && board.getSpot(x - 2, y).isTaken && board.getSpot(x - 3, y).isTaken) ||
+				 (x <= 14 && board.getSpot(x - 1, y).isTaken && board.getSpot(x - 2, y).isTaken && board.getSpot(x - 3, y).isTaken)) {
 			System.out.println("Adding after a meld");
 			
 			Spot prevSpot = board.getSpot(x - 1, y);
@@ -317,57 +449,29 @@ public class Human implements PlayerType {
 			}
 			
 			tempMeld.addTile(tile);
-						
-			if (tempMeld.isValidRun() || tempMeld.isValidSet()) {
-				Spot spot = board.getSpot(x, y);
-				spot.playTile(tile);
-				tile.setSpot(spot);
-				prevTileMeld.addTile(tile);
-				board.numberOfTilesOnBoard++;
-				board.filledSpots.add(spot);
-				turnTiles.add(tile);
-				h.removeTile(tile);
-				this.setTilesBeenPlayed(true);
-			}
 			
-			/*
-			Spot prevSpot = board.getSpot(x - 1, y);
-			Tile prevTile = prevSpot.getTile();
-			Meld prevTileMeld = prevTile.getMemberOfMeld();
-			//prevTileMeld.addTile(tile);
-			//if (prevTileMeld.checkIfValidMeld() == true) {
-			
-			//Checking if possible run
-			if (tile.getJoker() == true||tile.getValue() - prevTile.getValue() == 1) {
-				Spot spot = board.getSpot(x, y);
-				spot.playTile(tile);
-				tile.setSpot(spot);
-				prevTileMeld.addTile(tile);
-				board.numberOfTilesOnBoard++;
-				board.filledSpots.add(spot);
-				turnTiles.add(tile);
-				h.removeTile(tile);
-				this.setTilesBeenPlayed(true);
+			if (tempMeld.getMeldSize() > 3) {
+				if (tempMeld.isValidRun() || tempMeld.isValidSet()) {
+					Spot spot = board.getSpot(x, y);
+					spot.playTile(tile);
+					tile.setSpot(spot);
+					prevTileMeld.addTile(tile);
+					board.numberOfTilesOnBoard++;
+					board.filledSpots.add(spot);
+					turnTiles.add(tile);
+					h.removeTile(tile);
+					this.setTilesBeenPlayed(true);
+				} else {
+					System.out.println("ERROR: You cannot play this here.");
+				}
 			}
-			//checking if possible set
-			else if(tile.getJoker() == true||prevTile.getValue() == tile.getValue() && tile.getColour()!= prevTile.getColour()) {
-				Spot spot = board.getSpot(x, y);
-				spot.playTile(tile);
-				tile.setSpot(spot);
-				prevTileMeld.addTile(tile);
-				board.numberOfTilesOnBoard++;
-				board.filledSpots.add(spot);
-				turnTiles.add(tile);
-				h.removeTile(tile);
-				this.setTilesBeenPlayed(true);
-			}*/
-			else {
-				System.out.println("ERROR: You cannot play this here.");
-			}
-		}	
+		}
 
 		//ADDING TILE BEFORE A MELD
-		else if (x >= 0 && board.getSpot(x + 1, y).isTaken) {
+		//else if (x >= 0 && board.getSpot(x + 1, y).isTaken && board.getSpot(x + 2, y).isTaken && board.getSpot(x + 3, y).isTaken) {
+		else if ((x >= 0 && board.getSpot(x + 1, y).isTaken && board.getSpot(x + 2, y).isTaken && board.getSpot(x + 3, y).isTaken) ||
+				 (x <= 11 && board.getSpot(x + 1, y).isTaken && board.getSpot(x + 2, y).isTaken && board.getSpot(x + 3, y).isTaken)) {
+			
 			System.out.println("Adding before an existing meld");
 			
 			Spot nextSpot = board.getSpot(x + 1, y);
@@ -381,54 +485,31 @@ public class Human implements PlayerType {
 			for (int i = 0; i < nextTileMeld.getMeldSize(); i++) {
 				tempMeld.addTile(nextTileMeld.getTileInMeld(i));
 			}
-						
-			if (tempMeld.isValidRun() || tempMeld.isValidSet()) {
-				Spot spot = board.getSpot(x, y);
-				spot.playTile(tile);
-				tile.setSpot(spot);
-				nextTileMeld.addTileFront(tile);
-				board.numberOfTilesOnBoard++;
-				board.filledSpots.add(spot);
-				turnTiles.add(tile);
-				h.removeTile(tile);		
-				this.setTilesBeenPlayed(true);
-			}
 			
-			/*
-			Spot nextSpot = board.getSpot(x + 1, y);
-			Tile nextTile = nextSpot.getTile();
-			Meld nextTileMeld = nextTile.getMemberOfMeld();
-			//Checking if possible run
-			if (tile.getJoker() == true||nextTile.getValue() - tile.getValue() == 1) {
-				Spot spot = board.getSpot(x, y);
-				spot.playTile(tile);
-				tile.setSpot(spot);
-				nextTileMeld.addTileFront(tile);
-				board.numberOfTilesOnBoard++;
-				board.filledSpots.add(spot);
-				turnTiles.add(tile);
-				h.removeTile(tile);
-				this.setTilesBeenPlayed(true);
-			} 
-			//checking if possible set
-			else if(tile.getJoker() == true||nextTile.getValue() == tile.getValue() && tile.getColour()!= nextTile.getColour()) {
-				Spot spot = board.getSpot(x, y);
-				spot.playTile(tile);
-				tile.setSpot(spot);
-				nextTileMeld.addTileFront(tile);
-				board.numberOfTilesOnBoard++;
-				board.filledSpots.add(spot);
-				turnTiles.add(tile);
-				h.removeTile(tile);
-				this.setTilesBeenPlayed(true);	
-			}*/
-			else {
-				System.out.println("ERROR: You cannot play this here.");
-				//nextTileMeld.removeTile(tile);
-			}	
+			if (tempMeld.getMeldSize() > 3) {			
+				if (tempMeld.isValidRun() || tempMeld.isValidSet()) {
+					Spot spot = board.getSpot(x, y);
+					spot.playTile(tile);
+					tile.setSpot(spot);
+					nextTileMeld.addTileFront(tile);
+					board.numberOfTilesOnBoard++;
+					board.filledSpots.add(spot);
+					turnTiles.add(tile);
+					h.removeTile(tile);		
+					this.setTilesBeenPlayed(true);
+				} else {
+					System.out.println("ERROR: You cannot play this here.");
+				}
+			}
+
 		}
+		
 		//Creating a new meld
-		else {
+		//else if (x >= 1 &&  !(board.getSpot(x + 1, y).isTaken) && !(board.getSpot(x - 1, y).isTaken)) {
+		
+		else if ((x >= 0 && x <= 12 && !(board.getSpot(x + 1, y).isTaken) && !(board.getSpot(x + 2, y).isTaken)) ||
+				 (x >= 1 && x <= 12 && !(board.getSpot(x + 1, y).isTaken) && !(board.getSpot(x - 1, y).isTaken) ||
+				 (x <= 12 && !(board.getSpot(x + 1, y).isTaken)) && !(board.getSpot(x + 2, y).isTaken))) {
 			Spot spot = board.getSpot(x, y);
 			spot.playTile(tile);
 			tile.setSpot(spot);
@@ -443,7 +524,40 @@ public class Human implements PlayerType {
 			//turnTiles.add(tile);
 			h.removeTile(tile);
 			this.setTilesBeenPlayed(true);
+		} else {
+			// finished a meld
+			System.out.println("Trying to finish a meld");
+			Spot spot = board.getSpot(x, y);
+			spot.playTile(tile);
+			tile.setSpot(spot);
+
+			if (board.getSpot(x - 1, y).isTaken) {
+				// get left meld
+				
+				Spot prevSpot = board.getSpot(x - 1, y);
+				Tile prevTile = prevSpot.getTile();
+				Meld prevTileMeld = prevTile.getMemberOfMeld();
+				
+				prevTileMeld.addTile(tile);
+				board.numberOfTilesOnBoard++;
+				board.filledSpots.add(spot);
+				h.removeTile(tile);
+			}
+			
+			if (board.getSpot(x + 1, y).isTaken) {
+				// get right meld
+				
+				Spot nextSpot = board.getSpot(x + 1, y);
+				Tile nextTile = nextSpot.getTile();
+				Meld nextTileMeld = nextTile.getMemberOfMeld();
+				
+				nextTileMeld.addTile(tile);
+				board.numberOfTilesOnBoard++;
+				board.filledSpots.add(spot);
+				h.removeTile(tile);
+			}
 		}
+		*/
 	}
 	
 	@Override

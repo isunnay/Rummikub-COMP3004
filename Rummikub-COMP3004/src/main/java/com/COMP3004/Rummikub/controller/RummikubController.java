@@ -129,17 +129,12 @@ public class RummikubController implements Subject{
 	        	});
 	        }
 	   }
-	   Tile tile = new Tile("R", 2);
-	   board.getSpot(1, 0).playTile(tile);
-	   GridPane.setConstraints(tile, 1, 0);
-	   gridPane.getChildren().addAll(tile);
-	  //gridPane.getChildren().remove(tile);
-	   System.out.println(tile.getParent());
-	   
+	   //notifyObservers();
 	}
 	
 	@FXML
 	public void setUpPlayerHand(int player) {
+		notifyObservers();
 		System.out.println("Showing players hand: " + (player+1));
    
         tilePane.setVgap(50);
@@ -178,9 +173,10 @@ public class RummikubController implements Subject{
         int x = getSpotX(node);
         int y = getSpotY(node);
         
-        board.getSpot(x, y).playTile((Tile)node);
- 	   GridPane.setConstraints(tile, x, y);
-
+        //board.getSpot(x, y).playTile((Tile)node);
+ 	    GridPane.setConstraints(tile, x, y);
+ 	    allPlayers.get(whosTurn()-1).addTile(tile, x, y);
+ 	    
         if(test) {
         	mg.moveToSource(node);
         }
@@ -230,7 +226,17 @@ public class RummikubController implements Subject{
 	
 
 	private boolean isValidPlay() {
-		return false;
+		boolean everythingValid = true;
+		
+		for (int i = 0; i < board.meldsOnBoard.size(); i++) {
+			System.out.println("Melds: " + board.getMeld(i).meldToString());
+			if (!(board.meldsOnBoard.get(i).checkIfValidMeld())) {
+				everythingValid = false;
+			}
+		}
+		
+		
+		return everythingValid;
 	}
 	
 
@@ -239,13 +245,22 @@ public class RummikubController implements Subject{
 	public void drawTile() {
 		int who = whosTurn()-1;
 		
+		board.boardToString();
+		
+		if (!(isValidPlay())) {
+			System.out.println("Invalid Turn");
+			allPlayers.get(who).undoTurn();
+		}
+		
 		if (allPlayers.get(who).hasTilesBeenPlayed() == false) {
 			Tile t = allPlayers.get(who).getHand().dealTile(deck);
 			tilePane.getChildren().addAll(t);
 			tilePane.getChildren().clear();
+			notifyObservers();
 			nextPlayersTurn(who);
 		} else {
 			tilePane.getChildren().clear();
+			notifyObservers();
 			nextPlayersTurn(who);
 		}
 	}
