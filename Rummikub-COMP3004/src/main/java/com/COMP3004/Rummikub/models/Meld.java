@@ -195,6 +195,9 @@ public class Meld {
 			}
 		}
 		
+		System.out.println(sameNum);
+		System.out.println(sameNum);
+		
 		return sameNum && diffColour;
 	}
 	
