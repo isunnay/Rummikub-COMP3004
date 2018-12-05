@@ -133,7 +133,6 @@ public class RummikubController implements Subject{
 	   board.getSpot(1, 0).playTile(tile);
 	   GridPane.setConstraints(tile, 1, 0);
 	   gridPane.getChildren().addAll(tile);
-	  //gridPane.getChildren().remove(tile);
 	   System.out.println(tile.getParent());
 	   
 	}
@@ -248,6 +247,12 @@ public class RummikubController implements Subject{
 			tilePane.getChildren().clear();
 			nextPlayersTurn(who);
 		}
+	}
+	
+	@FXML
+	public void reorganizeTiles() {
+		tilePane.getChildren().clear();
+		setUpPlayerHand(whosTurn()-1);
 	}
 
 
