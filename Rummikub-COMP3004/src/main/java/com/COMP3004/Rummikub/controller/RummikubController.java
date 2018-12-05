@@ -155,17 +155,16 @@ public class RummikubController implements Subject{
 		for(int i=0;i<allPlayers.get(player).getHand().size;i++) {
 			Tile tile = allPlayers.get(player).getHand().getTile(i);
 			
-        	tilePane.getChildren().forEach(item -> {
-        		item.setOnMouseReleased(e->{
-        			handleDrop(e);
-        			//item.setStyle("-fx-background-color: #cf1020;");
-        			
-	        	});
-        	});
-        	
 			tilePane.getChildren().addAll(tile);
 			
 		}
+		
+    	tilePane.getChildren().forEach(item -> {
+    		item.setOnMouseReleased(e->{
+    			handleDrop(e);
+
+        	});
+    	});
 	}
 	
 
