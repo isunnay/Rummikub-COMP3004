@@ -213,38 +213,100 @@ public class Human implements PlayerType {
 				}
 				return true;	
 	}
-
-	@Override
+	
 	public void addTile(Tile tile, int x, int y) {
-		if (x == 0) {
-			//adding before a meld
-			//new meld
-			//finishing meld
+		if(x>=0 && x<=14) {
+			//Adding between Melds
+			if (x > 0 && x < 14 && board.getSpot(x - 1, y).isTaken && board.getSpot(x + 1, y).isTaken && board.getSpot(x, y).isTaken == false) {
+				Spot prevSpot = board.getSpot(x - 1, y);
+				Tile prevTile = prevSpot.getTile();
+				Meld prevTileMeld = prevTile.getMemberOfMeld();
+				Spot beginningOfMeld = prevTileMeld.getTiles().get(0).getSpot();
+				Spot nextSpot = board.getSpot(x + 1, y);
+				int newX = beginningOfMeld.getSpotX();
+				Tile nextTile = nextSpot.getTile();
+				Meld nextTileMeld = nextTile.getMemberOfMeld();
+				Meld newMeld = combineMelds(prevTileMeld, nextTileMeld, tile);
+				if (newMeld.checkIfValidMeld() == true) {
+					board.deleteMeld(prevTileMeld);
+					board.deleteMeld(nextTileMeld);
+					for (int i = 0; i < newMeld.getNumberOfTiles(); i++) {
+						Tile newTile = newMeld.getTileInMeld(i);
+						Spot spot = board.getSpot(newX + i, y);
+						spot.playTile(newTile);
+						newTile.setSpot(spot);
+						board.numberOfTilesOnBoard++;
+						board.filledSpots.add(spot);
+					}
+					board.meldsOnBoard.add(newMeld);
+					board.numberOfMelds++;
+					turnTiles.add(tile);
+					h.removeTile(tile);
+					//board.deleteMeld(prevTileMeld);
+					//board.deleteMeld(nextTileMeld);
+					this.setTilesBeenPlayed(true);
+				}
+			}
+			//ADDING TILE AFTER A MELD
+			else if (x > 0 && board.getSpot(x - 1, y).isTaken && board.getSpot(x + 1, y).isTaken == false) {
+				System.out.println("Adding after a meld");
+				Spot prevSpot = board.getSpot(x - 1, y);
+				Tile prevTile = prevSpot.getTile();
+				Meld prevTileMeld = prevTile.getMemberOfMeld();
+				//prevTileMeld.addTile(tile);
+				//if (prevTileMeld.checkIfValidMeld() == true) {
+					Spot spot = board.getSpot(x, y);
+					spot.playTile(tile);
+					tile.setSpot(spot);
+					prevTileMeld.addTile(tile);
+					board.numberOfTilesOnBoard++;
+					board.filledSpots.add(spot);
+					turnTiles.add(tile);
+					h.removeTile(tile);
+					this.setTilesBeenPlayed(true);
+			}
+			//ADDING TILE BEFORE A MELD
+			else if (x >= 0 && board.getSpot(x + 1, y).isTaken) {
+				System.out.println("Adding before an existing meld");
+				Spot nextSpot = board.getSpot(x + 1, y);
+				Tile nextTile = nextSpot.getTile();
+				Meld nextTileMeld = nextTile.getMemberOfMeld();
+				Spot spot = board.getSpot(x, y);
+				spot.playTile(tile);
+				tile.setSpot(spot);
+				nextTileMeld.addTileFront(tile);
+				board.numberOfTilesOnBoard++;
+				board.filledSpots.add(spot);
+				turnTiles.add(tile);
+				h.removeTile(tile);
+				this.setTilesBeenPlayed(true);
+			}
+			//Creating a new meld
+			else {
+				Spot spot = board.getSpot(x, y);
+				spot.playTile(tile);
+				tile.setSpot(spot);
+				System.out.println("Creating a New meld");
+				Meld meld = new Meld();
+				meld.addTile(tile);
+				board.meldsOnBoard.add(meld);
+				board.numberOfMelds++;
+				turnMelds.add(meld);
+				board.numberOfTilesOnBoard++;
+				board.filledSpots.add(spot);
+				turnTiles.add(tile);
+				h.removeTile(tile);
+				this.setTilesBeenPlayed(true);
+			}
+		}
+		else {
+			System.out.println("Try playing somewhere else");
 		}
 		
-		if (x == 1) {
-			//adding before a meld
-			//new meld
-			//finishing meld
-		}
-		
-		if (x >= 2 && x <= 12) {
-			//adding before a meld
-			//adding after a meld
-			//new meld
-			//finishing meld
-			//adding between melds
-		}
-		
-		if (x == 13) {
-			//adding after a meld
-			//finishing meld
-		}
-		
-		if (x == 14) {
-			//adding after a meld
-			//finishing meld
-		}
+	}
+
+	//@Override
+	/*public void addTile(Tile tile, int x, int y) {
 		
 		// Adding a tile between two melds
 				//System.out.println("Adding between two melds");
@@ -368,10 +430,10 @@ public class Human implements PlayerType {
 					turnMelds.add(meld);
 					board.numberOfTilesOnBoard++;
 					board.filledSpots.add(spot);
-					//turnTiles.add(tile);
+					turnTiles.add(tile);
 					h.removeTile(tile);
 					this.setTilesBeenPlayed(true);
-				}
+				}*/
 		
 		/*
 		// Adding a tile between two melds
@@ -557,8 +619,9 @@ public class Human implements PlayerType {
 				h.removeTile(tile);
 			}
 		}
-		*/
-	}
+		
+	}*/
+	
 	
 	@Override
 	public void moveTile(Tile tile, Spot newSpot) {

@@ -198,6 +198,7 @@ public class Board {
 	
 	public boolean checkIfValidMelds() {
 		for(int i=0;i<meldsOnBoard.size(); i++) {
+			System.out.println(meldsOnBoard.get(i).meldToString());
 			if(meldsOnBoard.get(i).checkIfValidMeld() == false) {
 				System.out.println("We got a false in board");
 				return false;
