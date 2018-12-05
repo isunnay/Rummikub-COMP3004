@@ -123,6 +123,8 @@ public class RummikubController implements Subject{
 	        	gridPane.getChildren().forEach(item -> {
 	        		item.setOnMousePressed(e->{
 		        		System.out.println(((Spot) item.getUserData()));
+		        		System.out.println(item.getLayoutX());
+		        		System.out.println(item.getLayoutY());
 		        	});
 	        	});
 	        }
@@ -164,32 +166,67 @@ public class RummikubController implements Subject{
 		
 
         Node node = (Node) event.getSource();
-       double x =  event.getSceneX();
-       double y = event.getSceneY();
-       System.out.println(node.getParent().getBoundsInLocal());
-       System.out.println(node.getParent().getBoundsInParent());
-       System.out.println("Event: "+node.getBoundsInLocal());
-       System.out.println(node.getParent().getBoundsInLocal().contains(node.getBoundsInLocal()));
-       System.out.println(node.getParent().getBoundsInParent().contains(node.getBoundsInLocal()));
-        
-      //  if(tilePane.getChildren().contains(node)) {
+        Tile tile = (Tile)node;
         mg.fixPosition(node);
-	     //   tilePane.getChildren().remove(node);
-	   //     gridPane.getChildren().addAll(node);
-        //}
+        node.setManaged(true);
         
+        if(tilePane.getChildren().contains(node)) {
+        	tilePane.getChildren().remove(tile);
+            gridPane.getChildren().addAll(tile);
+        }
         
-       // Bounds bounds = node.localToScene(node.getBoundsInLocal());
-       // System.out.println(bounds);
-       // System.out.println(bounds.getMinX());
+        int x = getSpotX(node);
+        int y = getSpotY(node);
+        
+        board.getSpot(x, y).playTile((Tile)node);
+ 	   GridPane.setConstraints(tile, x, y);
 
         if(test) {
         	mg.moveToSource(node);
         }
-
-        // if you find out that the cards are on a valid position, you need to fix it, ie invoke relocate and set the translation to 0
       
 	}
+	
+	private int getSpotX(Node node) {
+		System.out.println("Node LayoutX: " + node.getLayoutX());
+		
+		int start = 10;
+		int end = 92;
+		
+		for(int i=0;i<15;i++) {
+			System.out.println(i);
+
+			if(node.getLayoutX()>=start && node.getLayoutX()<end) {	
+				return i;
+			}
+			else {
+				start+=82;
+				end+=82;	
+			}
+		}
+		return -1;
+	}
+	
+	private int getSpotY(Node node) {
+		System.out.println("Node LayoutY: " + node.getLayoutY());
+		
+		int start = -595;
+		int end = -558;
+		
+		for(int i=0;i<15;i++) {
+			System.out.println(i);
+
+			if(node.getLayoutY()>=start && node.getLayoutY()<end) {	
+				return i;
+			}
+			else {
+				start+=37;
+				end+=37;	
+			}
+		}
+		return -1;
+	}
+	
 	
 
 	private boolean isValidPlay() {

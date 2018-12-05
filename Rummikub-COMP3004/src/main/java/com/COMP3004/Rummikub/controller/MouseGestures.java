@@ -64,8 +64,6 @@ public class MouseGestures {
 
             node.setTranslateX(offsetX);
             node.setTranslateY(offsetY);
-
-
         }
     };
 
@@ -120,8 +118,13 @@ public class MouseGestures {
 
         double x = node.getTranslateX();
         double y = node.getTranslateY();
-
+        
         node.relocate(node.getLayoutX() + x, node.getLayoutY() + y);
+        
+        System.out.println(node.getLayoutX());
+        
+       // node.setLayoutX(node.getLayoutX() + x);
+       // node.setLayoutY(node.getLayoutY() + y);
 
         node.setTranslateX(0);
         node.setTranslateY(0);
