@@ -73,28 +73,21 @@ public class Meld {
 		boolean sameNum = true;
 		boolean diffColour = true;
 		String red = "", blue = "", green = "", orange = "";
-		ArrayList<Tile> temp = new ArrayList<Tile>();
+		ArrayList<String> temp = new ArrayList<String>();
 		
 		// Automatic failure if not within bounds
 		if (tiles.size() < 3 || tiles.size() > 13) { return false; }
 		
 		// Check if all tile colours are unique
 		for (int i = 0; i < tiles.size(); i++) {
-			for (int j = 0; j < temp.size(); j++) {
-				if (temp.get(j).getColour().equals(tiles.get(i).getColour())) {
-					diffColour = false;
-				} else if (j == tiles.size() - 1) {
-					newColour = true;
-				}
-			}
-			
-			if (newColour) {
-				temp.add(tiles.get(i).getTile());
-				if (tiles.get(i).getTile().getColour().equals("Red")) { red = "taken"; }
-				else if (tiles.get(i).getTile().getColour().equals("Green")) { green = "taken"; }
-				else if (tiles.get(i).getTile().getColour().equals("Blue")) { blue = "taken"; }
-				else if (tiles.get(i).getTile().getColour().equals("Orange")) { orange = "taken"; }
-				newColour = false;
+			if (!(temp.contains(tiles.get(i).getColour()))) {
+				temp.add(tiles.get(i).getTile().getColour());
+				if (tiles.get(i).getTile().getColour().equals("Red") && !(red.equals("taken"))) { red = "taken"; }
+				else if (tiles.get(i).getTile().getColour().equals("Green") && !(green.equals("taken"))) { green = "taken"; }
+				else if (tiles.get(i).getTile().getColour().equals("Blue") && !(blue.equals("taken"))) { blue = "taken"; }
+				else if (tiles.get(i).getTile().getColour().equals("Orange") && !(orange.equals("taken"))) { orange = "taken"; }
+			} else {
+				diffColour = false;
 			}
 		}
 		

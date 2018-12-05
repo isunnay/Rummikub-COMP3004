@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 public class Tile extends StackPane{
 	// Variables
 	private int colour, value;
+	public boolean justSwitched;
 	private MouseGestures mg;
 	private int jokerColour, jokerValue;
 	private Spot spot, oldSpot;
@@ -22,6 +23,7 @@ public class Tile extends StackPane{
 	
 	// Constructor for string & int
 	public Tile (String colour, int value) {
+		justSwitched = false;
 	//	this.setManaged(false);
 		mg = new MouseGestures();
 		// Make the string uppercase
@@ -92,6 +94,7 @@ public class Tile extends StackPane{
 	
 	//Constructor to pass in two ints
 	public Tile (int colour, int value) {
+		justSwitched = false;
 		//this.setManaged(false);
 		mg = new MouseGestures();
 		this.colour = colour;
@@ -197,6 +200,10 @@ public class Tile extends StackPane{
 
 	public int getIntColor() {
 		return this.colour;
+	}
+	
+	public void setOldSpot(Spot spot) {
+		this.oldSpot = spot;
 	}
 
 
