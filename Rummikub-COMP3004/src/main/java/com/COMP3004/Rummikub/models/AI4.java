@@ -122,6 +122,7 @@ public class AI4 implements PlayerType{
 		
 		System.out.println(this.h.handToString());
 		System.out.println(this.initialMeldPlayed);
+		System.out.println("AI4 dbdbsbsdh");
 		//System.out.println("Play");
 				this.findAllMelds();
 				//System.out.println(melds.size());
@@ -135,6 +136,7 @@ public class AI4 implements PlayerType{
 								for(int i=0;i<melds.size();i++) {
 									playMeld(melds.get(i),reader);
 									this.hasTileBeenPlaced = true;
+									
 								}
 								this.setHasInitialMeldBeenPlayed(true);
 						}
@@ -178,7 +180,7 @@ public class AI4 implements PlayerType{
 		 
 		 */
 				
-					if(melds.size()>0) {
+				else if(melds.size()>0) {
 						for(int i=0;i<melds.size();i++) {
 							playMeld(melds.get(i),reader);
 							//this.hasTileBeenPlaced = true;

@@ -14,6 +14,7 @@ public class Human implements PlayerType {
 	private boolean myTurn = true;
 	private boolean hasTileBeenPlaced = false;
 	public Subject game;
+	public ArrayList<Meld> melds;
 	public ArrayList<Spot> spotsTaken;
 	public ArrayList<Tile> turnTiles;
 	public ArrayList<Meld> turnMelds;
@@ -88,6 +89,7 @@ public class Human implements PlayerType {
 		// turnTiles.clear();
 		this.spotsTaken = board.filledSpots;
 		this.board = board;
+		
 		
 	}
 
@@ -523,8 +525,9 @@ public class Human implements PlayerType {
 			String tileChoice = "";
 			Meld meld = new Meld();
 			this.getHand().createMeld();
-			
+				
 			while (!tileChoice.equals("D")) {
+				if(getTurnPoints()>=0) {
 				if (this.getHand().size == 0) { break; }
 				System.out.println("Current Meld: " + meld.meldToString());
 				System.out.println("Hand: " + this.getHand().handToString());
@@ -540,6 +543,7 @@ public class Human implements PlayerType {
 						System.out.println("It seems that the tile " + tileChoice + " isn't in your posession. Please try again.");
 					}
 				}
+				}
 			}
 			if (tileChoice.equals("D")) {
 				if (meld.getMeldSize() >= 3 && meld.checkIfValidMeld() == true) {
@@ -550,7 +554,8 @@ public class Human implements PlayerType {
 					
 					this.playMeld(meld, reader);
 					turnValue = turnValue + meld.getMeldValue();
-				} else {
+				}
+				else {
 					System.out.println("Invalid meld. Please try again.");
 					for (int i = 0; i < meld.getMeldSize(); i++) {
 						this.getHand().addTile(meld.getTileInMeld(i));
@@ -630,6 +635,7 @@ public class Human implements PlayerType {
 		}
 		//return false;
 	}
+	
 
 	public void play(Scanner reader, Deck deck) throws InterruptedException {
 		turnValue = 0;
@@ -639,6 +645,7 @@ public class Human implements PlayerType {
 			System.out.println(" - 'P' to play your turn.");
 			System.out.println(" - 'S' to skip your turn & draw a tile.");
 			System.out.println(" - 'E' to end your turn if you've already played atleast one tile.");
+			System.out.println("getturnpoints " + getTurnPoints());
 			char decision = reader.next().toUpperCase().charAt(0);		
 			
 			if (decision == 'P') {
@@ -667,6 +674,7 @@ public class Human implements PlayerType {
 						this.setTilesBeenPlayed(false);
 						this.undoTurn();
 						turnValue = 0;
+						
 					}
 				} else if (initialMeldPlayed == true) {
 					if (hasTileBeenPlaced == true) {

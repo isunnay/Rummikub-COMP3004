@@ -144,6 +144,123 @@ public class RummikubController implements Subject{
 	public void setUpPlayerHand(int player) {
 		notifyObservers();
 		System.out.println("Showing players hand: " + (player+1));
+		
+		//Level 3: simple1.m4v test
+				Tile tile9 = new Tile(2,10);
+				Tile tile1 = new Tile(2,11);
+				Tile tile2 = new Tile(2,12);
+				Tile tile3 = new Tile(0,10);
+				Tile tile4 = new Tile(1,10);
+				Tile tile5 = new Tile(3,10);
+				Tile tile6 = new Tile(2,13);
+				Tile tile7 = new Tile(3,11);
+				Tile tile8 = new Tile(3,12);
+				allPlayers.get(0).getHand().addTile(tile9);
+				allPlayers.get(0).getHand().addTile(tile1);
+				allPlayers.get(0).getHand().addTile(tile2);
+				allPlayers.get(0).getHand().addTile(tile3);
+				allPlayers.get(0).getHand().addTile(tile4);
+				allPlayers.get(0).getHand().addTile(tile5);
+				allPlayers.get(0).getHand().addTile(tile6);
+				allPlayers.get(0).getHand().addTile(tile7);
+				allPlayers.get(0).getHand().addTile(tile8);
+				
+				/*Level 3: simple1.m4v test
+				Tile tile = new Tile(2,10);
+				Tile tile1 = new Tile(2,11);
+				Tile tile2 = new Tile(2,12);
+				Tile tile3 = new Tile(0,10);
+				Tile tile4 = new Tile(1,10);
+				Tile tile5 = new Tile(3,10);
+				Tile tile6 = new Tile(2,13);
+				Tile tile7 = new Tile(3,11);
+				Tile tile8 = new Tile(3,12);
+				allPlayers.get(0).getHand().addTile(tile);
+				allPlayers.get(0).getHand().addTile(tile1);
+				allPlayers.get(0).getHand().addTile(tile2);
+				allPlayers.get(0).getHand().addTile(tile3);
+				allPlayers.get(0).getHand().addTile(tile4);
+				allPlayers.get(0).getHand().addTile(tile5);
+				allPlayers.get(0).getHand().addTile(tile6);
+				allPlayers.get(0).getHand().addTile(tile7);
+				allPlayers.get(0).getHand().addTile(tile8);
+				/*
+				
+				Tile tile = new Tile(0,7);
+				Tile tile1 = new Tile(0,8);
+				Tile tile2 = new Tile(0,9);
+				Tile tile3 = new Tile(0,10);
+				Tile tile4 = new Tile(0,11);
+				Tile tile5 = new Tile(0,12);
+				Tile tile6 = new Tile(0,13);
+				Tile tile7 = new Tile(2,10);
+				Tile tile8 = new Tile(3,10);
+				allPlayers.get(0).getHand().addTile(tile);
+				allPlayers.get(0).getHand().addTile(tile1);
+				allPlayers.get(0).getHand().addTile(tile2);
+				allPlayers.get(0).getHand().addTile(tile3);
+				allPlayers.get(0).getHand().addTile(tile4);
+				allPlayers.get(0).getHand().addTile(tile5);
+				allPlayers.get(0).getHand().addTile(tile6);
+				allPlayers.get(0).getHand().addTile(tile7);
+				allPlayers.get(0).getHand().addTile(tile8);
+				
+				
+				
+				
+				/*
+				
+				 Level 3: complex.m4v test
+				Tile tile = new Tile(0,2);
+				Tile tile1 = new Tile(0,3);
+				Tile tile2 = new Tile(1,2);
+				Tile tile3 = new Tile(1,3);
+				Tile tile4 = new Tile(3,2);
+				Tile tile5 = new Tile(3,3);
+				Tile tile6 = new Tile(2,3);
+				Tile tile7 = new Tile(0,4);
+				Tile tile8 = new Tile(1,4);
+				Tile tile9 = new Tile(2,4);
+				Tile tile10 = new Tile(3,4);
+				Tile tile11 = new Tile(2,5);
+				Tile tile12 = new Tile(2,6);
+				Tile tile13 = new Tile(2,7);
+				allPlayers.get(0).getHand().addTile(tile);
+				allPlayers.get(0).getHand().addTile(tile1);
+				allPlayers.get(0).getHand().addTile(tile2);
+				allPlayers.get(0).getHand().addTile(tile3);
+				allPlayers.get(0).getHand().addTile(tile4);
+				allPlayers.get(0).getHand().addTile(tile5);
+				allPlayers.get(0).getHand().addTile(tile6);
+				allPlayers.get(0).getHand().addTile(tile7);
+				allPlayers.get(0).getHand().addTile(tile8);
+				allPlayers.get(0).getHand().addTile(tile9);
+				allPlayers.get(0).getHand().addTile(tile10);
+				allPlayers.get(0).getHand().addTile(tile11);
+				allPlayers.get(0).getHand().addTile(tile12);
+				allPlayers.get(0).getHand().addTile(tile13);
+				 
+				 
+				
+				Tile tilea = new Tile(0,7);
+				Tile tileb = new Tile(0,8);
+				Tile tilec = new Tile(0,9);
+				Tile tiled = new Tile(3,10);
+				Tile tilee = new Tile(2,4);
+				Tile tilef = new Tile(1,1);
+				Tile tileg = new Tile(0,2);
+				Tile tileh = new Tile(1,13);
+				Tile tilei = new Tile(2,9);
+				allPlayers.get(3).getHand().addTile(tilea);
+				allPlayers.get(3).getHand().addTile(tileb);
+				allPlayers.get(3).getHand().addTile(tilec);
+				allPlayers.get(3).getHand().addTile(tiled);
+				allPlayers.get(3).getHand().addTile(tilee);
+				allPlayers.get(3).getHand().addTile(tilef);
+				allPlayers.get(3).getHand().addTile(tileg);
+				allPlayers.get(3).getHand().addTile(tileh);
+				allPlayers.get(3).getHand().addTile(tilei);
+			*/
    
         tilePane.setVgap(50);
         tilePane.setHgap(50);
