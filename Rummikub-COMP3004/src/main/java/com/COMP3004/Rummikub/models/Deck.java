@@ -3,7 +3,10 @@ package com.COMP3004.Rummikub.models;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import com.COMP3004.Rummikub.controller.MouseGestures;
+
 public class Deck {
+	
 	private ArrayList<Tile> tileDeck;
 	//private int size;
 	
@@ -14,9 +17,11 @@ public class Deck {
 	}
 	
 	private void generateDeck() {
+		
 		for(int colour=0;colour<4;colour++) {
 			for(int value=1;value<14;value++) {
 				Tile tile = new Tile(colour,value);
+			
 				tile.setJoker(false);
 				tileDeck.add(tile);
 			}

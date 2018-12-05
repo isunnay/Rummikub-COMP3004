@@ -27,6 +27,10 @@ public class Board {
 		numberOfMelds = 0;
 		//this.observers = new ArrayList<>();
 	}
+	
+	public Spot[][] getSpotsArray(){
+		return spots;
+	}
 
 	public int getNumberOfBoardSpots() { return boardX * boardY; }
 	
