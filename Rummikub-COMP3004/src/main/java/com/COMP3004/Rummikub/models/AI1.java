@@ -9,6 +9,9 @@ import java.util.Scanner;
 import com.COMP3004.Rummikub.controller.RummikubController;
 import com.COMP3004.Rummikub.models.Hand.SortByValue;
 
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
+
 public class AI1 implements PlayerType {
 	Hand h;
 	private boolean initialMeldPlayed = false;
@@ -70,7 +73,7 @@ public class AI1 implements PlayerType {
 		turnPoints = 0;
 	}
 	@Override
-	public void play(Scanner reader) {
+	/*public void play(Scanner reader) {
 		//System.out.println("Play");
 		this.findAllMelds();
 		//System.out.println(melds.size());
@@ -100,6 +103,42 @@ public class AI1 implements PlayerType {
 				this.setTurnStatus(false);
 			}
 		}
+	}*/
+	
+	public boolean play(GridPane pane) {
+		this.findAllMelds();
+		setTurnPoints();
+		System.out.println(getTurnPoints());
+		if(this.hasInitialMeldBeenPlayed() == false) {
+			if(getTurnPoints()>=5) {
+				if(melds.size()>0) {
+					for(int i=0;i<melds.size();i++) {
+						playMeld(melds.get(i), pane);
+						
+						//this.hasTileBeenPlaced = true;
+						this.setTilesBeenPlayed(true);
+					}
+					this.setHasInitialMeldBeenPlayed(true);
+					this.setTurnStatus(false);
+					return true;
+				}
+				
+			}
+		}
+		else {
+			if(melds.size()>0) {
+				for(int i=0;i<melds.size();i++) {
+					playMeld(melds.get(i), pane);
+					//this.hasTileBeenPlaced = true;
+					this.setTilesBeenPlayed(true);
+				}
+				this.setTurnStatus(false);
+				return true;
+			}
+		}
+		return false;
+		
+		
 	}
 	
 	public void setTurnPoints() {
@@ -114,7 +153,7 @@ public class AI1 implements PlayerType {
 	}
 	
 	
-	public void playMeld(Meld meld, Scanner reader) {
+	/*public void playMeld(Meld meld, Scanner reader) {
 		System.out.println("Playing1");
 		int x = ThreadLocalRandom.current().nextInt(0, 12 + 1);
 		int y = ThreadLocalRandom.current().nextInt(0, 12 + 1);
@@ -142,6 +181,42 @@ public class AI1 implements PlayerType {
 			else {
 				System.out.println("Meld cannot be placed here. Please try a different Location. ");
 				playMeld(meld, reader);
+			}
+		}
+		
+	}*/
+	public void playMeld(Meld meld, GridPane pane) {
+		System.out.println("Playing1");
+		int x = ThreadLocalRandom.current().nextInt(0, 12 + 1);
+		int y = ThreadLocalRandom.current().nextInt(0, 12 + 1);
+	//	System.out.println(x);
+	//	System.out.println(y);
+		Spot beginningSpot = board.getSpot(x, y);
+		System.out.println("Playing2");
+		if(beginningSpot!=null) {
+			if(canWePlaceMeld(meld,x,y)==true) {
+				for(int i=0;i<meld.getNumberOfTiles();i++) {
+					
+					Tile tile = meld.getTileInMeld(i);
+					Spot spot = board.getSpot(x+i,y);
+					spot.playTile(tile);
+					TilePane tilePane = (TilePane) tile.getParent();
+					tilePane.getChildren().remove(tile);
+					GridPane.setColumnIndex(tile, i);
+					GridPane.setRowIndex(tile, y);
+					tile.setSpot(spot);
+					board.numberOfTilesOnBoard++;
+					board.filledSpots.add(spot);
+					h.removeTile(tile);
+				}
+				System.out.println("Playing3");
+				board.meldsOnBoard.add(meld);
+				board.numberOfMelds++;	
+				turnMelds.add(meld);
+			}
+			else {
+				System.out.println("Meld cannot be placed here. Please try a different Location. ");
+				playMeld(meld,pane);
 			}
 		}
 		
@@ -752,10 +827,17 @@ public class AI1 implements PlayerType {
 	public boolean isAI() { return isAI; }
 
 	@Override
-	public void play() {
+	public void play(Scanner reader) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void playMeld(Meld meld, Scanner reader) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 	
 	

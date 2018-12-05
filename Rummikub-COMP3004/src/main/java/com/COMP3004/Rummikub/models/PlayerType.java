@@ -2,6 +2,8 @@ package com.COMP3004.Rummikub.models;
 
 import java.util.*;
 
+import javafx.scene.layout.GridPane;
+
 public interface PlayerType extends Observer {
 	
 	public Hand getHand();
@@ -35,6 +37,6 @@ public interface PlayerType extends Observer {
 	public int getTurnPoints();
 	public void play(Scanner reader, Deck deck) throws InterruptedException;
 	public boolean isAI();
-	public void play();
+	public boolean play(GridPane gridPane);
 	
 }

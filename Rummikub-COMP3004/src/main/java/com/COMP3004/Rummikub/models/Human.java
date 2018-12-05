@@ -720,7 +720,8 @@ public class Human implements PlayerType {
 
 
 	@Override
-	public void play() {
+	public boolean play(GridPane gridPane) {
+		return false;
 		// TODO Auto-generated method stub
 		
 	}
