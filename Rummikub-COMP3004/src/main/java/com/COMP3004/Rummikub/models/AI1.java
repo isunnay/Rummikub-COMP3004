@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
 
+import com.COMP3004.Rummikub.controller.RummikubController;
 import com.COMP3004.Rummikub.models.Hand.SortByValue;
 
 public class AI1 implements PlayerType {
@@ -25,12 +26,13 @@ public class AI1 implements PlayerType {
 	private boolean isAI = true;
 
 	
-	public AI1(Deck deck, Game game) {
+	public AI1(Deck deck, RummikubController rummikubController) {
+		System.out.println("We got an AI1");
 		h = new Hand();
 		h.createHand(deck);
 		//h.sortHand();
 		melds = new ArrayList<Meld>();
-		game.registerObserver(this);
+		rummikubController.registerObserver(this);
 		spotsTaken = new ArrayList<Spot>();
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
@@ -60,7 +62,7 @@ public class AI1 implements PlayerType {
 		// TODO Auto-generated method stub
 		this.spotsTaken = board.filledSpots;
 		this.board = board;	
-		turnTiles.clear();;
+		turnTiles.clear();
 		turnMelds.clear();
 		turnMoves.clear();
 		melds.clear();
@@ -75,7 +77,7 @@ public class AI1 implements PlayerType {
 		setTurnPoints();
 		System.out.println(getTurnPoints());
 		if(this.hasInitialMeldBeenPlayed() == false) {
-			if(getTurnPoints()>=30) {
+			if(getTurnPoints()>=5) {
 				if(melds.size()>0) {
 					for(int i=0;i<melds.size();i++) {
 						playMeld(melds.get(i),reader);
@@ -113,12 +115,13 @@ public class AI1 implements PlayerType {
 	
 	
 	public void playMeld(Meld meld, Scanner reader) {
+		System.out.println("Playing1");
 		int x = ThreadLocalRandom.current().nextInt(0, 12 + 1);
 		int y = ThreadLocalRandom.current().nextInt(0, 12 + 1);
 	//	System.out.println(x);
 	//	System.out.println(y);
 		Spot beginningSpot = board.getSpot(x, y);
-		
+		System.out.println("Playing2");
 		if(beginningSpot!=null) {
 			if(canWePlaceMeld(meld,x,y)==true) {
 				for(int i=0;i<meld.getNumberOfTiles();i++) {
@@ -131,6 +134,7 @@ public class AI1 implements PlayerType {
 					board.filledSpots.add(spot);
 					h.removeTile(tile);
 				}
+				System.out.println("Playing3");
 				board.meldsOnBoard.add(meld);
 				board.numberOfMelds++;	
 				turnMelds.add(meld);
@@ -746,6 +750,12 @@ public class AI1 implements PlayerType {
 	}
 
 	public boolean isAI() { return isAI; }
+
+	@Override
+	public void play() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	
 	

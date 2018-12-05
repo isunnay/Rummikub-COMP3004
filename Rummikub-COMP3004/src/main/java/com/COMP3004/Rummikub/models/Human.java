@@ -718,4 +718,11 @@ public class Human implements PlayerType {
 	
 	public boolean isAI() { return isAI; }
 
+
+	@Override
+	public void play() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
