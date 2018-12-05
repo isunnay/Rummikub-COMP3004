@@ -9,6 +9,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -30,7 +32,7 @@ public class MouseGestures {
 
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
-        node.setOnMouseReleased(onMouseReleasedEventHandler);
+        //node.setOnMouseReleased(onMouseReleasedEventHandler);
 
     }
 
@@ -39,7 +41,7 @@ public class MouseGestures {
         @Override
         public void handle(MouseEvent event) {
         	Node node = (Node) event.getSource();
-        	System.out.println(node);
+        	System.out.println("pressed");
 
             dragContext.x = event.getSceneX();
             dragContext.y = event.getSceneY();
@@ -89,7 +91,7 @@ public class MouseGestures {
         }
     };
 
-    private void moveToSource( Node node) {
+    public void moveToSource( Node node) {
         double sourceX = node.getLayoutX() + node.getTranslateX();
         double sourceY = node.getLayoutY() + node.getTranslateY();
 
@@ -114,7 +116,7 @@ public class MouseGestures {
      * Relocate card to current position and set translate to 0.
      * @param node
      */
-    private void fixPosition( Node node) {
+    public void fixPosition( Node node) {
 
         double x = node.getTranslateX();
         double y = node.getTranslateY();

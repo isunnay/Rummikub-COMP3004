@@ -16,6 +16,7 @@ import com.COMP3004.Rummikub.models.Tile;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -34,6 +35,7 @@ import javafx.scene.shape.Rectangle;
 
 
 public class RummikubController implements Subject{
+	private MouseGestures mg;
 	private int numberOfPlayers;
 	private boolean gameInProgress = false;
 	private Deck deck;
@@ -44,9 +46,9 @@ public class RummikubController implements Subject{
 	
 	
 	@FXML
-	private GridPane gridPane;
+	public GridPane gridPane;
 	@FXML
-	private TilePane tilePane;
+	public TilePane tilePane;
 	//private Group boardSpots;
 	
 	public RummikubController() {
@@ -69,6 +71,7 @@ public class RummikubController implements Subject{
 		deck = new Deck();
 		// Shuffle the deck
 		deck.shuffleTiles();
+		mg=new MouseGestures();
 		
 		allPlayers = new ArrayList<PlayerType>();
 		observers = new ArrayList<Observer>();
@@ -112,21 +115,21 @@ public class RummikubController implements Subject{
 	        	stackPane.getChildren().add(spot);
 	        	stackPane.setUserData(spot);
 	        	gridPane.getChildren().addAll(stackPane);
-	        	GridPane.setRowIndex(stackPane, i);
-	        	GridPane.setColumnIndex(stackPane, j);
+	        	GridPane.setRowIndex(stackPane, j);
+	        	GridPane.setColumnIndex(stackPane, i);
 	        	GridPane.setFillWidth(stackPane, true);
 	        	GridPane.setFillHeight(stackPane, true);
 	        	
 	        	gridPane.getChildren().forEach(item -> {
 	        		item.setOnMousePressed(e->{
-		        		System.out.println(((Spot) item.getUserData()).getSpot());
+		        		System.out.println(((Spot) item.getUserData()));
 		        	});
 	        	});
 	        }
 	   }
 	   Tile tile = new Tile("R", 2);
-	   board.getSpot(0, 0).playTile(tile);
-	   GridPane.setConstraints(tile, 0, 0);
+	   board.getSpot(1, 0).playTile(tile);
+	   GridPane.setConstraints(tile, 1, 0);
 	   gridPane.getChildren().addAll(tile);
 	  //gridPane.getChildren().remove(tile);
 	   System.out.println(tile.getParent());
@@ -144,14 +147,48 @@ public class RummikubController implements Subject{
 		for(int i=0;i<allPlayers.get(player).getHand().size;i++) {
 			Tile tile = allPlayers.get(player).getHand().getTile(i);
 			
-      /*  	tilePane.getChildren().forEach(item -> {
-        		item.setOnMousePressed(e->{
-        			//handleDrop();
+        	tilePane.getChildren().forEach(item -> {
+        		item.setOnMouseReleased(e->{
+        			handleDrop(e);
 	        	});
-        	});*/
+        	});
+        	
 			tilePane.getChildren().addAll(tile);
 			
 		}
+	}
+	
+
+	private void handleDrop(MouseEvent event) {
+		boolean test = false;
+		
+
+        Node node = (Node) event.getSource();
+       double x =  event.getSceneX();
+       double y = event.getSceneY();
+       System.out.println(node.getParent().getBoundsInLocal());
+       System.out.println(node.getParent().getBoundsInParent());
+       System.out.println("Event: "+node.getBoundsInLocal());
+       System.out.println(node.getParent().getBoundsInLocal().contains(node.getBoundsInLocal()));
+       System.out.println(node.getParent().getBoundsInParent().contains(node.getBoundsInLocal()));
+        
+      //  if(tilePane.getChildren().contains(node)) {
+        mg.fixPosition(node);
+	     //   tilePane.getChildren().remove(node);
+	   //     gridPane.getChildren().addAll(node);
+        //}
+        
+        
+       // Bounds bounds = node.localToScene(node.getBoundsInLocal());
+       // System.out.println(bounds);
+       // System.out.println(bounds.getMinX());
+
+        if(test) {
+        	mg.moveToSource(node);
+        }
+
+        // if you find out that the cards are on a valid position, you need to fix it, ie invoke relocate and set the translation to 0
+      
 	}
 	
 
