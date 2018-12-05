@@ -14,6 +14,7 @@ import com.COMP3004.Rummikub.models.Spot;
 import com.COMP3004.Rummikub.models.Subject;
 import com.COMP3004.Rummikub.models.Tile;
 
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
@@ -45,6 +46,7 @@ public class RummikubController implements Subject{
 	Scanner reader;
 	private ArrayList<Node> nodesOnTurnTileToGrid;
 	private ArrayList<Node> nodesOnTurnGridToGrid;
+	private Board snapshot;
 	
 	
 	
@@ -111,6 +113,7 @@ public class RummikubController implements Subject{
 	@FXML
 	public void setUpBoard() {
 		board = new Board();
+		snapshot = new Board();
 
 	   for(int i=0; i<board.getSpotsArray().length; i++) {
 	        for(int j=0; j<board.getSpotsArray()[i].length; j++) {
@@ -126,6 +129,7 @@ public class RummikubController implements Subject{
 	        	GridPane.setFillHeight(stackPane, true);
 	        	
 	        	gridPane.getChildren().forEach(item -> {
+	        		item.setStyle("-fx-background-color: white; -fx-border-color: black");
 	        		item.setOnMousePressed(e->{
 		        		System.out.println(((Spot) item.getUserData()));
 		        		System.out.println(item.getLayoutX());
@@ -134,10 +138,6 @@ public class RummikubController implements Subject{
 	        	});
 	        }
 	   }
-	   
-
-	   //notifyObservers();
-
 	}
 	
 	@FXML
@@ -155,6 +155,8 @@ public class RummikubController implements Subject{
         	tilePane.getChildren().forEach(item -> {
         		item.setOnMouseReleased(e->{
         			handleDrop(e);
+        			//item.setStyle("-fx-background-color: #cf1020;");
+        			
 	        	});
         	});
         	
@@ -170,7 +172,6 @@ public class RummikubController implements Subject{
         Tile tile = (Tile)node;
         
         node.setManaged(true);
-        //boolean justSwitched = false;
         
         //From Hand to board
         if(tilePane.getChildren().contains(node)) {
@@ -179,6 +180,11 @@ public class RummikubController implements Subject{
         	tilePane.getChildren().remove(tile);
             gridPane.getChildren().addAll(tile);
             
+            /*
+            gridPane.getChildren().forEach(item -> {
+        		item.setStyle("-fx-background-color: lightgrey; -fx-border-color: black");
+        	});
+        	*/
             
             int x = getSpotX(node);
             int y = getSpotY(node);
@@ -189,6 +195,7 @@ public class RummikubController implements Subject{
 	     	    this.nodesOnTurnTileToGrid.add(node);
 	     	    Spot spot = board.getSpot(x, y);
 	     	    tile.setOldSpot(spot);
+	     	    
             }
             else {
             	this.nodesOnTurnTileToGrid.remove(node);
@@ -306,8 +313,9 @@ public class RummikubController implements Subject{
 	
 	
 
+	/*
 	private boolean isValidPlay() {
-		boolean everythingValid = true;
+		boolean everythingValid = true;	
 		
 		for (int i = 0; i < board.meldsOnBoard.size(); i++) {
 			System.out.println("Melds: " + board.getMeld(i).meldToString());
@@ -316,8 +324,23 @@ public class RummikubController implements Subject{
 			}
 		}
 		
-		
 		return everythingValid;
+	}*/
+	
+	public Node getNodeByRowColumnIndex (final int row, final int column) {
+	    Node result = null;
+	    ObservableList<Node> childrens = gridPane.getChildren();
+	    
+	    System.out.println(childrens);
+
+	    for (Node node : childrens) {
+	        if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
+	            result = node;
+	            break;
+	        }
+	    }
+
+	    return result;
 	}
 	
 //Having problems when we move things around a bit
@@ -326,7 +349,26 @@ public class RummikubController implements Subject{
 	public void drawTile() {
 		int who = whosTurn()-1;
 		
+		//board.boardToString();
+		
+		System.out.println("Board:");
 		board.boardToString();
+		
+		System.out.println("Snapshot:");
+		snapshot.boardToString();
+		
+		gridPane.getChildren().forEach(item -> {
+			for (int row = 0; row < 14; row++) {
+				for (int col = 0; col < 14; col++) {
+					if (board.isSpotFilled(row, col) && !(snapshot.isSpotFilled(row, col))) {
+						System.out.println("new tiles in play at: " + row + "," + col);
+						item.setStyle("-fx-background-color: lightgrey; -fx-border-color: black");
+						System.out.println(getNodeByRowColumnIndex(row, col));
+					}
+				}
+			}snapshot = board;
+    		
+    	});
 
 	    if(board.checkIfValidMelds()==false) {
 	    	System.out.println("Wrong turn");
@@ -375,6 +417,7 @@ public class RummikubController implements Subject{
 			tilePane.getChildren().clear();
 			notifyObservers();
 			nextPlayersTurn(who);
+			snapshot = board;
 		}
 	}
 	

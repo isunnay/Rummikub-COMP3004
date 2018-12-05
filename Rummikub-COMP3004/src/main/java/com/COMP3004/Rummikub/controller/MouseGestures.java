@@ -58,6 +58,11 @@ public class MouseGestures {
 
             Node node = (Node) event.getSource();
             node.setManaged(false);
+            
+            /*
+            if (!(node.getParent().getId().equals("tilePane"))) {
+            	node.getParent().setStyle("");
+            }*/
 
             double offsetX = event.getSceneX() - dragContext.x;
             double offsetY = event.getSceneY() - dragContext.y;
