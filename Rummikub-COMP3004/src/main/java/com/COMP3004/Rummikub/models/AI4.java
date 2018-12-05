@@ -1,49 +1,41 @@
 package com.COMP3004.Rummikub.models;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.COMP3004.Rummikub.models.Hand.SortByValue;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Scanner;
-
-public class AI3 implements PlayerType {
+public class AI4 implements PlayerType{
+	
 	Hand h;
-	private boolean myTurn = false;
-	//private boolean isTurn = false;
-	private boolean hasTileBeenPlaced = false;
 	private boolean initialMeldPlayed = false;
-	public ArrayList<Meld> melds;
-	public ArrayList<Meld> sets;
+	private boolean myTurn = false;
+	private boolean hasTileBeenPlaced = false;
 	public Subject game;
 	public int turnPoints;
+	private Board board;
+	public ArrayList<Meld> melds;
 	public ArrayList<Spot> spotsTaken;
 	public ArrayList<Tile> turnTiles;
 	public ArrayList<Meld> turnMelds;
 	public ArrayList<Tile> turnMoves;
-	private Board board;
 	public ArrayList<Tile> usedInMeld;
-	public ArrayList<Tile> meldTiles = new ArrayList<Tile>(); 
+	//int numberOfMelds;
 	private boolean isAI = true;
-	int allPlayersHand[];
-	//Game allPlayersGame;
+	//new
+	public ArrayList<Tile> meldTiles = new ArrayList<Tile>();
 	
-	public AI3(Deck deck, Game game) {
+	public AI4(Deck deck, Game game) {
 		h = new Hand();
 		h.createHand(deck);
 		h.sortHand();
 		melds = new ArrayList<Meld>();
 		game.registerObserver(this);
-		allPlayersHand= game.getPlayerHandSize();
-		
-		usedInMeld = new ArrayList<Tile>();
 		spotsTaken = new ArrayList<Spot>();
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
 		turnMoves = new ArrayList<Tile>();
-		sets = new ArrayList<Meld>();
+		usedInMeld = new ArrayList<Tile>();
+		//meldTiles = new ArrayList<Tile>();
 	}
 	
 	public Hand getHand() { return this.h; }
@@ -57,86 +49,23 @@ public class AI3 implements PlayerType {
 	public void setTilesBeenPlayed(boolean b) { this.hasTileBeenPlaced = b; }
 
 	public boolean turnComplete(Hand h) {
-		// Initial Meld: ASAP
-		// Gameplay: Plays all tiles when possible
-		//h.meldExists();
+		// Initial Meld: After another played has placed tiles
+		// Gameplay: Only uses existing melds on the board. Keeps melds not do not require current tiles on board.
 		return false;
 	}
-	
-	public boolean oneMeldFirstTurn() {
-		if (h.numberOfMelds()==1)
-			return true;
-		else
-			return false;
+
+	@Override
+	public boolean hasInitialMeldBeenPlayed() {
+		// TODO Auto-generated method stub
+		return this.initialMeldPlayed;
 	}
 
-	public boolean severalMeldsFirstTurn() {
-		if (h.numberOfMelds()>1)
-			return true;
-		else
-			return false;
-	}
-	
-	public Hand drawsOnFirstTurn() {
-		//System.out.println("first in draw " + h.handToString());
-		if (! (h.meldExists()) ) {
-			Deck deck = new Deck();
-			//h.createHand(deck);
-			h.dealTile(deck);
-			//System.out.println("in draw " + h.handToString());
-		}
-		
-		return h;
+	@Override
+	public void setHasInitialMeldBeenPlayed(boolean b) {
+		// TODO Auto-generated method stub
+		this.initialMeldPlayed = b;
 		
 	}
-	
-	  public boolean doesAnyoneHave3LessTiles() {
-		 //int allPlayersHand[] = allPlayersGame.getPlayerHandSize();
-		  
-	//	allPlayersHand[0] = human Hand Size  [1] = ai1, [2] = ai2. [3]= ai3
-
-	  
-	  		for (int i = 0; i < 3; i++) {
-	  			System.out.println("Ai3 execute");
-	  			
-	  			//if (allPlayersHand[3] - allPlayersHand[i] >= 3) {
-	  			if (this.getHand().size - allPlayersHand[i] >= 3) {
-	  				return true;
-	  			}
-	  		}
-	  		return false;
-	  	}
-	  
-	  
-	public boolean oneMeldSubsequentTurn(){
-		Deck deck = new Deck();
-		h.dealTile(deck);
-		return this.oneMeldFirstTurn();
-		
-	}
-	
-	public boolean severaltMeldsSubsequentTurn(){
-		Deck deck = new Deck();
-		h.dealTile(deck);
-		return this.severalMeldsFirstTurn();
-		
-	}
-
-	public Hand drawsOnSubsequentTurn() {
-		//System.out.println("first in draw " + h.handToString());
-				if (! (h.meldExists()) ) {
-					Deck deck1 = new Deck();
-					h.dealTile(deck1);
-					if (! (h.meldExists()) ) {
-						Deck deck2 = new Deck();
-						h.dealTile(deck2);
-					}
-				}
-					//System.out.println("in draw " + h.handToString());
-				
-				return h;
-				
-			}
 
 	@Override
 	public void update(Board board) {
@@ -149,7 +78,6 @@ public class AI3 implements PlayerType {
 			usedInMeld.clear();
 			turnPoints = 0;		
 	}
-	
 /*
 	@Override
 	public void play(Scanner reader) {
@@ -194,21 +122,13 @@ public class AI3 implements PlayerType {
 		
 		System.out.println(this.h.handToString());
 		System.out.println(this.initialMeldPlayed);
-		
-	
-		
-		  System.out.println("Human " + allPlayersHand[0]);
-		  System.out.println("AI1 " + allPlayersHand[1]);
-		  System.out.println("AI2 " + allPlayersHand[2]);
-		  System.out.println("AI3 " + allPlayersHand[3]);
-		  
-		  //System.out.println("Play");
+		//System.out.println("Play");
 				this.findAllMelds();
 				//System.out.println(melds.size());
 				setTurnPoints();
 				System.out.println(getTurnPoints());
 				if(this.hasInitialMeldBeenPlayed() == false) {
-					//if(board.numberOfMelds > 0) {
+					if(board.numberOfMelds > 2) {
 						//CHANGE THIS VALUE
 						if(getTurnPoints()>=0) {
 							if(melds.size()>0) {
@@ -219,8 +139,9 @@ public class AI3 implements PlayerType {
 								this.setHasInitialMeldBeenPlayed(true);
 						}
 					  }
-					//}
+					}
 				}
+				/*
 				else {
 					
 					//add melds from hand into meldTiles
@@ -249,24 +170,26 @@ public class AI3 implements PlayerType {
 							this.setTurnStatus(false);
 						}
 					}
-					
-					  
-					 //new: if any other player has 3 less tiles than ai3
-					   if (this.doesAnyoneHave3LessTiles()) {
-						  if(melds.size()>0) {
-								for(int i=0;i<melds.size();i++) {
-									playMeld(melds.get(i),reader);
-									this.setTilesBeenPlayed(true);
-								}
-								this.setTurnStatus(false);
-							}						  						  
-					  }
-					  
 					else { //play single tiles if there are tiles not including melds
 						this.placeSingleTile();
 					}
 			}
 		// TODO Auto-generated method stub
+		 
+		 */
+				
+					if(melds.size()>0) {
+						for(int i=0;i<melds.size();i++) {
+							playMeld(melds.get(i),reader);
+							//this.hasTileBeenPlaced = true;
+							this.setTilesBeenPlayed(true);
+						}
+						this.setTurnStatus(false);
+					}
+				
+				else  { //play single tiles if there are tiles not including melds
+					this.placeSingleTile();
+				}
 	}
 	
 	
@@ -1316,19 +1239,5 @@ public class AI3 implements PlayerType {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public boolean hasInitialMeldBeenPlayed() {
-		// TODO Auto-generated method stub
-		return this.initialMeldPlayed;
-	}
-
-	@Override
-	public void setHasInitialMeldBeenPlayed(boolean b) {
-		// TODO Auto-generated method stub
-		this.initialMeldPlayed = b;
-		
-	}
-	
 
 }

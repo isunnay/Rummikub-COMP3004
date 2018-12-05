@@ -25,7 +25,8 @@ public class AI2 implements PlayerType {
 	public ArrayList<Tile> usedInMeld;
 	//int numberOfMelds;
 	private boolean isAI = true;
-
+	//new
+	public ArrayList<Tile> meldTiles = new ArrayList<Tile>(); 
 
 	
 	public AI2(Deck deck, Game game) {
@@ -33,12 +34,13 @@ public class AI2 implements PlayerType {
 		h.createHand(deck);
 		h.sortHand();
 		melds = new ArrayList<Meld>();
-		//game.registerObserver(this);
+		game.registerObserver(this);
 		spotsTaken = new ArrayList<Spot>();
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
 		turnMoves = new ArrayList<Tile>();
 		usedInMeld = new ArrayList<Tile>();
+		//meldTiles = new ArrayList<Tile>();
 	}
 	
 	public Hand getHand() { return this.h; }
@@ -81,7 +83,7 @@ public class AI2 implements PlayerType {
 			usedInMeld.clear();
 			turnPoints = 0;		
 	}
-
+/*
 	@Override
 	public void play(Scanner reader) {
 		
@@ -118,8 +120,68 @@ public class AI2 implements PlayerType {
 				}
 			}
 		// TODO Auto-generated method stub
+		*/
+	
+	@Override
+	public void play(Scanner reader) {
 		
-		
+		System.out.println(this.h.handToString());
+		System.out.println(this.initialMeldPlayed);
+		//System.out.println("Play");
+				this.findAllMelds();
+				//System.out.println(melds.size());
+				setTurnPoints();
+				System.out.println(getTurnPoints());
+				if(this.hasInitialMeldBeenPlayed() == false) {
+					if(board.numberOfMelds > 0) {
+						//CHANGE THIS VALUE
+						if(getTurnPoints()>=0) {
+							if(melds.size()>0) {
+								for(int i=0;i<melds.size();i++) {
+									playMeld(melds.get(i),reader);
+									this.hasTileBeenPlaced = true;
+								}
+								this.setHasInitialMeldBeenPlayed(true);
+						}
+					  }
+					}
+				}
+				else {
+					
+					//add melds from hand into meldTiles
+					//ArrayList<Tile> meldTiles = new ArrayList<Tile>();
+					Meld handMeld;
+					//meldTiles.clear();
+					System.out.println("HandMeldSize " + melds.size());
+				
+						
+					for(int x=0; x<melds.size(); x++ ) {
+						handMeld = melds.get(x);
+						System.out.println("*****");
+						System.out.println(handMeld.meldToString());
+						for(int y=0; y<handMeld.getNumberOfTiles(); y++) {
+							meldTiles.add(handMeld.getTileInMeld(y));
+						}						
+				    }
+					
+					//if player only has melds left, play all melds 
+					  if(h.getPlayerHand().size() == meldTiles.size()) { //when both count is equal means only melds left 
+						if(melds.size()>0) {
+							for(int i=0;i<melds.size();i++) {
+								playMeld(melds.get(i),reader);
+								this.setTilesBeenPlayed(true);
+							}
+							this.setTurnStatus(false);
+						}
+					}
+					else { //play single tiles if there are tiles not including melds
+						this.placeSingleTile();
+					}
+			}
+		// TODO Auto-generated method stub
+	}
+	
+	
 	
 
 	@Override
@@ -152,7 +214,7 @@ public class AI2 implements PlayerType {
 				playMeld(meld, reader);
 			}
 		}
-		this.placeSingleTile();
+		//this.placeSingleTile();
 	}
 		
 	
@@ -775,6 +837,7 @@ public class AI2 implements PlayerType {
 				turnTiles.add(tile);
 				h.removeTile(tile);
 				this.setTilesBeenPlayed(true);
+			
 			} 
 			//checking if possible set
 			else if(nextTile.getValue() == tile.getValue() && tile.getColour()!= nextTile.getColour()) {
@@ -810,7 +873,7 @@ public class AI2 implements PlayerType {
 			h.removeTile(tile);
 			this.setTilesBeenPlayed(true);
 		}
-		this.placeSingleTile();
+		
 	}
 	
 	@Override
@@ -1018,6 +1081,7 @@ public class AI2 implements PlayerType {
 	
 			if (bMeld.isValidRun()) // same colour, different values
 			{
+				System.out.println("ehjbfdsb");
 				//bf = boardFirst AKA first tile of the meld
 				Tile bfTile = bMeld.getTiles().get(0);
 				int bfColor = bfTile.getIntColor();
@@ -1031,6 +1095,10 @@ public class AI2 implements PlayerType {
 				for (int j=0; j<h.size; j++)
 				{
 					Tile hTile = h.getPlayerHand().get(j);
+					
+					if (!(meldTiles.contains(hTile))) { // avoid placing melds in hand
+						
+					
 					if (hTile.getIntColor() == bfColor)
 					{
 						if (hTile.getValue() == bfValue - 1) 
@@ -1039,11 +1107,12 @@ public class AI2 implements PlayerType {
 							int x = bSpot.x;
 							int y = bSpot.y;
 							//place hTile at x-1,y
-							if(this.canWePlaceTile(hTile, x-1, y) == true) {	
+							if(!(board.isSpotFilled(x-1, y))) {
+							//if(this.canWePlaceTile(hTile, x-1, y) == true) {	
 								this.addTile(hTile, x-1, y);
 							}
 							else {
-								System.out.println("A tile cannot be placed here");
+								System.out.println("Spot is not empty"+ (x-1) +","+y);
 							}
 						}				
 						
@@ -1053,14 +1122,17 @@ public class AI2 implements PlayerType {
 							int x = bSpot.x;
 							int y = bSpot.y;
 							//place hTile at x+1,y
-							if(this.canWePlaceTile(hTile, x+1, y) == true) {	
+							//if(this.canWePlaceTile(hTile, x+1, y) == true) {	
+							if(!(board.isSpotFilled(x+1, y))) {
 								this.addTile(hTile, x+1, y);
 							}
 							else {
-								System.out.println("A tile cannot be placed here");
+								System.out.println("Spot is not empty"+ (x+1) +","+y);
 							}
 						}
 					}
+					
+					} //if (!(meldTiles.contains(hTile))) 
 				} //for (int j=0; j<h.size; j++)
 				
 			}//if (bMeld.isValidRun())
@@ -1098,9 +1170,7 @@ public class AI2 implements PlayerType {
 							Spot bSpot = board.getLocationOfTile(bTile);
 							int x = bSpot.x;
 							int y = bSpot.y;
-							//place hTile at x+1,y
-							//this.addTile(hTile, x+1, y);
-							//this.addTile(hTile, x-1, y);
+							/*
 							if(this.canWePlaceTile(hTile, x+1, y) == true) {	
 								this.addTile(hTile, x+1, y);
 								iPlaced = true;
@@ -1113,8 +1183,30 @@ public class AI2 implements PlayerType {
 							else {
 								System.out.println("A tile cannot be placed in this meld");
 							}
+							
+							*/
+							if(!(board.isSpotFilled(x+1, y))) {
+								this.addTile(hTile, x+1, y);
+							}
+							else {
+								bTile = bMeld.getTiles().get(0);
+								bValue = bTile.getValue();
+								bSpot = board.getLocationOfTile(bTile);
+								x = bSpot.x;
+								y = bSpot.y;
+								
+								if(!(board.isSpotFilled(x-1, y))) {
+									this.addTile(hTile, x-1, y);
+								}
+								else {
+									System.out.println("Both beginning and end sports are not empty");
+								}
+							}
+							
 						}	
+						
 					}
+					
 				}	//for (int j=0; j<h.size; j++)
 				
 			}	//if (bMeld.isValidSet())

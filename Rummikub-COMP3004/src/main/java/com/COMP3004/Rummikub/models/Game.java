@@ -10,6 +10,7 @@ public class Game implements Subject {
 	private Deck deck;
 	private Board board;
 	private ArrayList<PlayerType> allPlayers;
+	//public ArrayList<PlayerType> allPlayers;
 	private ArrayList<Observer> observers;
 	Scanner reader;
 
@@ -20,6 +21,7 @@ public class Game implements Subject {
 
 	// Initialize the game
 	private void initializeGame() {
+		
 		// Start the game
 		gameInProgress = true;
 
@@ -57,19 +59,60 @@ public class Game implements Subject {
 		}
 	
 		// Fill in the rest with AI (random chance of each AI strategy)
+		
 		for (int i = allPlayers.size(); i < 4; i++) {
 			int foo = (int) (Math.random() * 100);
 			if (foo < 34) {
-				allPlayers.add(new AI2(deck, this));
+				allPlayers.add(new AI3(deck, this));
 			} else if (foo < 67){
 				//allPlayers.add(new AI2(deck)); /* Uncomment when other strategies are complete */
-				allPlayers.add(new AI2(deck, this)); /* Remove when above strategy line is uncommented */
+				allPlayers.add(new AI3(deck, this)); /* Remove when above strategy line is uncommented */
 			} else {
 				//allPlayers.add(new AI3(deck, this)); /* Uncomment when other strategies are complete */
-				allPlayers.add(new AI2(deck, this)); /* Remove when above strategy line is uncommented */
+				allPlayers.add(new AI3(deck, this)); /* Remove when above strategy line is uncommented */
 			}
 			observers.add(allPlayers.get(i));
 		}
+
+	
+		System.out.println("in initializeGame " + allPlayers.size());
+		/*
+		Tile tile = new Tile(0,1);
+		Tile tile1 = new Tile(0,2);
+		Tile tile2 = new Tile(0,3);
+		Tile tile3 = new Tile(0,5);
+		Tile tile4 = new Tile(0,6);
+		Tile tile5 = new Tile(0,7);
+		//Tile tile6 = new Tile("JKR",0);
+		allPlayers.get(0).getHand().addTile(tile);
+		allPlayers.get(0).getHand().addTile(tile1);
+		allPlayers.get(0).getHand().addTile(tile2);
+		allPlayers.get(0).getHand().addTile(tile3);
+		allPlayers.get(0).getHand().addTile(tile4);
+		allPlayers.get(0).getHand().addTile(tile5);
+		//allPlayers.get(0).getHand().addTile(tile6);
+		 
+		 
+		
+		Tile tilea = new Tile(0,7);
+		Tile tileb = new Tile(0,8);
+		Tile tilec = new Tile(0,9);
+		Tile tiled = new Tile(3,10);
+		Tile tilee = new Tile(2,4);
+		Tile tilef = new Tile(1,1);
+		Tile tileg = new Tile(0,2);
+		Tile tileh = new Tile(1,13);
+		Tile tilei = new Tile(2,9);
+		allPlayers.get(3).getHand().addTile(tilea);
+		allPlayers.get(3).getHand().addTile(tileb);
+		allPlayers.get(3).getHand().addTile(tilec);
+		allPlayers.get(3).getHand().addTile(tiled);
+		allPlayers.get(3).getHand().addTile(tilee);
+		allPlayers.get(3).getHand().addTile(tilef);
+		allPlayers.get(3).getHand().addTile(tileg);
+		allPlayers.get(3).getHand().addTile(tileh);
+		allPlayers.get(3).getHand().addTile(tilei);
+	*/
 		
 		// Determine who starts
 		determineStarter();
@@ -323,5 +366,21 @@ public class Game implements Subject {
 			observer.update(board);
 		}
 	}
-
+	 
+	//new for ai3
+	  public int[] getPlayerHandSize() {
+		  System.out.println("in getPlayerHandSize " + allPlayers.size());
+		  int[] handSize = new int[4];
+		  //for (int i=0; i<=this.getPlayerCount(); i++) {
+		  for (int i=0; i<allPlayers.size(); i++) {
+		 			  handSize[i] = getPlayer(i).getHand().getNumTiles();
+				  
+		  }
+		 System.out.println("getPlayerHandSize getplayercount " + this.getPlayerCount());
+		  		  
+		return handSize;
+		  
+		  
+	  }
+	  
 }
