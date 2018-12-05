@@ -16,4 +16,6 @@ public class BoardCareTaker {
 	public boolean momentoExists(BoardMomento momento) {
 		return boardMomentos.contains(momento);
 	}
+	
+	public ArrayList<BoardMomento> getMomentos() { return boardMomentos; }
 }

@@ -29,6 +29,8 @@ public class Human implements PlayerType {
 	private char decision;
 	private char decision2;
 	private boolean returned;
+	private BoardOriginator originator;
+	private BoardCareTaker careTaker;
 
 	public Human(Deck deck, Game game) {
 		h = new Hand();
@@ -39,6 +41,14 @@ public class Human implements PlayerType {
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
 		turnMoves = new ArrayList<Tile>();
+		
+		originator = new BoardOriginator();
+		originator.setBoardState(game.getBoard());
+		
+		careTaker = new BoardCareTaker();
+		careTaker.addMomento(originator.saveStateToMomento());
+		
+		originator.getStateFromMomento(careTaker.getMomento(careTaker.getMomentos().size() - 1));
 	}
 
 
@@ -707,9 +717,15 @@ public class Human implements PlayerType {
 			if (board.checkIfValidMelds() == false) {
 				System.out.println("That wasn't a valid move. Please try again.");
 				this.setTilesBeenPlayed(false);
-				this.undoTurn();
+				//this.undoTurn();
+				board = originator.getState();
+				board.boardToString();
 				return false;
 			} else {
+				originator.setBoardState(board);
+				careTaker.addMomento(originator.saveStateToMomento());
+				board = careTaker.getMomentos().get(careTaker.getMomentos().size() - 1).getBoardState();
+				board.boardToString();
 				return false;
 			}
 		}
@@ -807,20 +823,32 @@ public class Human implements PlayerType {
 						this.setTilesBeenPlayed(true);
 						this.setTurnStatus(false);
 						timer.stop();
+						originator.setBoardState(board);
+						careTaker.addMomento(originator.saveStateToMomento());
+						board = careTaker.getMomentos().get(careTaker.getMomentos().size() - 1).getBoardState();
+						board.boardToString();
 					} else {
 						System.out.println("Your Initial Meld total must be greater than or equal to 30 points.");
 						System.out.println("You played: " + turnValue + ". Please try again.");	
 						this.setHasInitialMeldBeenPlayed(false);
 						this.setTilesBeenPlayed(false);
-						this.undoTurn();
+						//this.undoTurn();
+						board = originator.getState();
 						turnValue = 0;
+						board.boardToString();
 					}
 				} else if (initialMeldPlayed == true) {
 					if (hasTileBeenPlaced == true) {
 						this.setTurnStatus(false);
 						timer.stop();
+						originator.setBoardState(board);
+						careTaker.addMomento(originator.saveStateToMomento());
+						board = careTaker.getMomentos().get(careTaker.getMomentos().size() - 1).getBoardState();
+						board.boardToString();
 					} else {
-						this.undoTurn();
+						//this.undoTurn();
+						board = originator.getState();
+						board.boardToString();
 						System.out.println("You must either play your turn or draw a tile.");
 					}
 				}

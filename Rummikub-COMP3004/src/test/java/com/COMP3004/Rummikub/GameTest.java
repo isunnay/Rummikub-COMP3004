@@ -61,24 +61,4 @@ public class GameTest extends TestCase {
 		// Check if first player won (returns 1)
 		assertEquals(1, g.getWinner());
 	}
-	
-	public void testBoardState() {
-		Game g = new Game();
-		
-		g.getBoardOriginator().setBoardState(g.getBoard());
-		
-		assertEquals(g.getBoard(), g.getBoardOriginator().getState());
-	}
-	
-	public void testOriginatorExists() {
-		Game g = new Game();
-		
-		assertNotNull(g.getBoardOriginator());
-	}
-	
-	public void testCareTakerExists() {
-		Game g = new Game();
-		
-		assertNotNull(g.getBoarCareTaker());
-	}
 }

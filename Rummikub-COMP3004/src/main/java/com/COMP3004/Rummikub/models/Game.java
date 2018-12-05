@@ -14,7 +14,8 @@ public class Game implements Subject {
 	private ArrayList<PlayerType> allPlayers;
 	private ArrayList<Observer> observers;
 	Scanner reader;
-	private Board boardState;
+	BoardCareTaker careTaker;
+	BoardOriginator originator;
 
 	// Constructor
 	public Game() {
@@ -28,9 +29,6 @@ public class Game implements Subject {
 
 		// Initialize the game board
 		board = new Board();
-		
-		// Initialize the baord state
-		boardState = board;
 
 		// Initialize the deck
 		deck = new Deck();
@@ -79,10 +77,6 @@ public class Game implements Subject {
 		
 		// Determine who starts
 		determineStarter();
-	}
-	
-	public Board getBoardState() {
-		return boardState;
 	}
 
 	private int anyWinners() {
