@@ -16,6 +16,7 @@ import com.COMP3004.Rummikub.models.Spot;
 import com.COMP3004.Rummikub.models.Subject;
 import com.COMP3004.Rummikub.models.Tile;
 
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
@@ -48,6 +49,8 @@ public class RummikubController implements Subject{
 	Scanner reader;
 	private ArrayList<Node> nodesOnTurnTileToGrid;
 	private ArrayList<Node> nodesOnTurnGridToGrid;
+	private ArrayList<Spot> tempArrayList = new ArrayList<Spot>();
+	private Board snapshot;
 	
 	
 	
@@ -123,6 +126,7 @@ public class RummikubController implements Subject{
 	@FXML
 	public void setUpBoard() {
 		board = new Board();
+		snapshot = new Board();
 
 	   for(int i=0; i<board.getSpotsArray().length; i++) {
 	        for(int j=0; j<board.getSpotsArray()[i].length; j++) {
@@ -139,6 +143,7 @@ public class RummikubController implements Subject{
 	        
 	        	
 	        	gridPane.getChildren().forEach(item -> {
+	        		item.setStyle("-fx-background-color: white; -fx-border-color: black");
 	        		item.setOnMousePressed(e->{
 		        		System.out.println(((Spot) item.getUserData()));
 		        		System.out.println(item.getLayoutX());
@@ -163,16 +168,11 @@ public class RummikubController implements Subject{
 		for(int i=0;i<allPlayers.get(player).getHand().size;i++) {
 			Tile tile = allPlayers.get(player).getHand().getTile(i);
 			
-        	tilePane.getChildren().forEach(item -> {
-        		item.setOnMouseReleased(e->{
-        			handleDrop(e);
-	        	});
-        	});
-        	
 			tilePane.getChildren().addAll(tile);
 			
 		}
 		
+
 	}
 	
 	@FXML
@@ -209,6 +209,14 @@ public class RummikubController implements Subject{
 	
 	private void gameLogic() {
 		
+
+    	tilePane.getChildren().forEach(item -> {
+    		item.setOnMouseReleased(e->{
+    			handleDrop(e);
+
+        	});
+    	});
+
 	}
 	
 
@@ -218,7 +226,6 @@ public class RummikubController implements Subject{
         Tile tile = (Tile)node;
         
         node.setManaged(true);
-        //boolean justSwitched = false;
         
         //From Hand to board
         if(tilePane.getChildren().contains(node)) {
@@ -227,12 +234,19 @@ public class RummikubController implements Subject{
         	tilePane.getChildren().remove(tile);
             gridPane.getChildren().addAll(tile);
             
+            /*
+            gridPane.getChildren().forEach(item -> {
+        		item.setStyle("-fx-background-color: lightgrey; -fx-border-color: black");
+        	});
+        	*/
             
             int x = getSpotX(node);
             int y = getSpotY(node);
             if(x!=-1 && y!=-1) {
             	tile.justSwitched = true;
-	     	    GridPane.setConstraints(tile, x, y);
+	     	    //GridPane.setConstraints(tile, x, y);
+	     	    GridPane.setColumnIndex(tile, x);
+	     	    GridPane.setRowIndex(tile, y);
 	     	    allPlayers.get(whosTurn()-1).addTile(tile, x, y);
 	     	    this.nodesOnTurnTileToGrid.add(node);
 	     	   // Spot spot = board.getSpot(x, y);
@@ -354,9 +368,47 @@ public class RummikubController implements Subject{
 		return -1;
 	}
 	
+    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+        for (Node node : gridPane.getChildren())
+            if (GridPane.getColumnIndex(node) != null
+                    && GridPane.getColumnIndex(node) != null
+                    && GridPane.getRowIndex(node) == row
+                    && GridPane.getColumnIndex(node) == col)
+                return node;
+        return null;
+    }
 	
-	
-//Having problems when we move things around a bit
+
+    
+    public void highlightRecent() {
+    	
+    	for (int col = 0; col < 15; col++) {
+			for (int row = 0; row < 15; row++) {
+				if (board.isSpotFilled(col, row)) {
+					System.out.println("Board Spot filled");
+					System.out.println(snapshot.isSpotFilled(col, row));
+					//if (snapshot.isSpotFilled(col, row) == false) {
+					if(!(tempArrayList.contains(board.getSpot(col, row)))) {
+						tempArrayList.add(board.getSpot(col, row));
+						System.out.println("new tiles in play at: " + col + "," + row);
+						getNodeFromGridPane(gridPane, col, row).setStyle("-fx-background-color: lightgrey; -fx-border-color: black");
+					}
+				}
+			}
+		}
+    }
+    
+    public void removeHighlight() {
+		for (int row = 0; row < 15; row++) {
+			for (int col = 0; col < 15; col++) {
+				if (board.isSpotFilled(row, col) && snapshot.isSpotFilled(row, col) && board.getTileAtSpot(row, col).equals(snapshot.getTileAtSpot(row, col))) {
+					System.out.println("old tiles in play at: " + row + "," + col);
+					getNodeFromGridPane(gridPane, row, col).setStyle("-fx-background-color: white; -fx-border-color: black");
+				}
+			}
+		}
+    }
+
 	
 	@FXML
 	public void drawTile() {
@@ -366,6 +418,7 @@ public class RummikubController implements Subject{
 		
 		if (allPlayers.get(who).hasTilesBeenPlayed()) { nextPlayersTurn(who); }
 		//if (allPlayers.)
+
 
 	    if(board.checkIfValidMelds()==false) {
 	    	System.out.println("Wrong turn");
@@ -380,6 +433,7 @@ public class RummikubController implements Subject{
 	 	 	        	gridPane.getChildren().remove(nodesOnTurnTileToGrid.get(i));
 	 	 	            tilePane.getChildren().addAll(nodesOnTurnTileToGrid.get(i));
 	 	 	          allPlayers.get(who).undoTurn();
+	 	 	          allPlayers.get(who).setTilesBeenPlayed(false);
 	 	 	        }
 	 	    		//mg.moveToSource(nodesOnTurn.get(i));
 	 	    	}
@@ -423,11 +477,37 @@ public class RummikubController implements Subject{
 			tilePane.getChildren().clear();
 			notifyObservers();
 			nextPlayersTurn(who);
+			takeSnap(true);
 		} else {
 			tilePane.getChildren().clear();
 			notifyObservers();
 			nextPlayersTurn(who);
+			takeSnap(false);
 		}
+	}
+	
+	public void takeSnap(boolean drew) {
+		System.out.println("Board:");
+		board.boardToString();
+		
+		System.out.println("Snapshot:");
+		snapshot.boardToString();
+		
+    	highlightRecent();
+		
+		if (!drew) {
+			System.out.println("========================== Taking Snapshot ==========================");
+			removeHighlight();
+			//snapshot = new Board();
+			snapshot.clearBoard();
+			for (int row = 0; row < 15; row++) {
+				for (int col = 0; col < 15; col++) {
+					Tile t = board.getSpot(row, col).getTile();
+					snapshot.setTile(t, row, col);
+				}
+			}
+		}
+		//highlightRecent();
 	}
 	
 	@FXML
