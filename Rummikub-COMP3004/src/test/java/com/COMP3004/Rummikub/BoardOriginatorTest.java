@@ -9,23 +9,25 @@ import com.COMP3004.Rummikub.models.BoardOriginator;;
 public class BoardOriginatorTest extends TestCase {
 	public void testBoardOriginator() {
 		Board board = new Board();
-		BoardOriginator originator = new BoardOriginator(board);
+		BoardOriginator originator = new BoardOriginator();
 	
 		assertNotNull(originator);
 	}
 	
 	public void testStateSavedToMomento() {
 		Board board = new Board();
-		BoardOriginator originator = new BoardOriginator(board);
+		BoardOriginator originator = new BoardOriginator();
 		
-		BoardMomento momento = new BoardMomento(baord);
+		BoardMomento momento = new BoardMomento(board);
 		
-		assertEquals(momento, originator.saveStateToMomento());
+		originator.saveStateToMomento();
+		
+		assertEquals(momento.getBoardState(), originator.getState());
 	}
 	
 	public void testGetStateFromMomento() {
 		Board board = new Board();
-		BoardOriginator originator = new BoardOriginator(board);
+		BoardOriginator originator = new BoardOriginator();
 		
 		Board board2 = new Board();
 		
