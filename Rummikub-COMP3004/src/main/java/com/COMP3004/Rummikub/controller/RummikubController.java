@@ -124,12 +124,14 @@ public class RummikubController implements Subject{
 	        	GridPane.setColumnIndex(stackPane, i);
 	        	GridPane.setFillWidth(stackPane, true);
 	        	GridPane.setFillHeight(stackPane, true);
+	        
 	        	
 	        	gridPane.getChildren().forEach(item -> {
 	        		item.setOnMousePressed(e->{
 		        		System.out.println(((Spot) item.getUserData()));
 		        		System.out.println(item.getLayoutX());
 		        		System.out.println(item.getLayoutY());
+		        		//item.setStyle("-fx-background-color: #cf1020");
 		        	});
 	        	});
 	        }
@@ -187,8 +189,8 @@ public class RummikubController implements Subject{
 	     	    GridPane.setConstraints(tile, x, y);
 	     	    allPlayers.get(whosTurn()-1).addTile(tile, x, y);
 	     	    this.nodesOnTurnTileToGrid.add(node);
-	     	    Spot spot = board.getSpot(x, y);
-	     	    tile.setOldSpot(spot);
+	     	   // Spot spot = board.getSpot(x, y);
+	     	    //tile.setOldSpot(spot);
             }
             else {
             	this.nodesOnTurnTileToGrid.remove(node);
@@ -206,13 +208,15 @@ public class RummikubController implements Subject{
         	int y = getSpotOnGridY(node);
         	Spot oldSpot = tile.getOldSpot();
         	oldSpot.setIsTaken(false);
+        	System.out.println(oldSpot);
+        	
         	if(x!=-1 && y!=-1) {
 	        	GridPane.setConstraints(node, x, y);
 	        	Spot spot = board.getSpot(x, y);
 	        	//if(oldSpot.)
 	        	allPlayers.get(whosTurn()-1).moveTile(tile,spot);
 	        	this.nodesOnTurnGridToGrid.add(node);
-	        	tile.setOldSpot(spot);
+	        	//tile.setOldSpot(oldSpot);
         	 }
         	 else {
              	//mg.moveToSource(node);
@@ -330,7 +334,7 @@ public class RummikubController implements Subject{
 
 	    if(board.checkIfValidMelds()==false) {
 	    	System.out.println("Wrong turn");
- 	    	allPlayers.get(who).undoTurn();
+ 	   
  	    	
  	    	//Adding back to hand
  	    	if(nodesOnTurnTileToGrid.size()>0) {
@@ -340,27 +344,40 @@ public class RummikubController implements Subject{
 	 	 	        	System.out.println("IntheSwitch");
 	 	 	        	gridPane.getChildren().remove(nodesOnTurnTileToGrid.get(i));
 	 	 	            tilePane.getChildren().addAll(nodesOnTurnTileToGrid.get(i));
+	 	 	          allPlayers.get(who).undoTurn();
 	 	 	        }
 	 	    		//mg.moveToSource(nodesOnTurn.get(i));
 	 	    	}
+	 	    	nodesOnTurnTileToGrid.clear();
  	    	}
  	    	//Adding back to old board location
  	    	else if(nodesOnTurnGridToGrid.size()>0) {
  	    		System.out.println("NodesOnTurnGridToGrid: "+ nodesOnTurnGridToGrid.size());
 	 	    	for(int i=0;i<nodesOnTurnGridToGrid.size();i++) {
 	 	    		Tile tile = (Tile) this.nodesOnTurnGridToGrid.get(i);
-	 	    		System.out.println(tile);
+	 	    		//System.out.println(tile);
+	 	    		System.out.println(nodesOnTurnGridToGrid.get(i));
+	 	    		System.out.println(tile.justSwitched);
 	 	 	        if(tile.justSwitched == false && gridPane.getChildren().contains(nodesOnTurnGridToGrid.get(i))) {
-	 	 	        	gridPane.getChildren().remove(nodesOnTurnGridToGrid.get(i));
+	 	 	        	System.out.println("ARE WE IN HERE");
+	 	 	        	//gridPane.getChildren().setAll(nodesOnTurnGridToGrid.get(i));
 	 	 	        	//Tile tile = (Tile) this.nodesOnTurnGridToGrid.get(i).getUserData();
+	 	 	        	System.out.println(tile.getOldSpot());
 	 	 	        	int anX = tile.getOldSpot().getSpotX();
 	 	 	        	int aY = tile.getOldSpot().getSpotY();
-	 	 	        	
-	 	 	        	GridPane.setConstraints(tile,anX,aY);
-	 	 	        	gridPane.getChildren().addAll(tile);
+	 	 	        	System.out.println(anX);
+	 	 	        	System.out.println(aY);
+
+	 	 	        	GridPane.setColumnIndex(tile, anX);
+	 	 	        	GridPane.setRowIndex(tile, aY);
+	 	 	        	allPlayers.get(who).undoTurn();
+	 	 	        	//gridPane.add(nodesOnTurnGridToGrid.get(i),anX, aY);
+	 	 	        	//gridPane.getChildren().add(tile);
+	 	 	        	//gridPane.add(tile, anX, aY);
 	 	 	        }
 	 	    		//mg.moveToSource(nodesOnTurn.get(i));
 	 	    	}
+	 	    	nodesOnTurnGridToGrid.clear();
  	    		//MAke sure we add to an available spot
  	    	}
  	    	
