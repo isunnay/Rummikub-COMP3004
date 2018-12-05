@@ -51,6 +51,25 @@ public class Board {
 		
 		//boardChanged(tile);
 	}*/
+    
+    public void setTile(Tile t, int x, int y) {
+    	Spot spot = this.getSpot(x, y);
+    	spot.playTile(t);
+    	numberOfTilesOnBoard++;
+    }
+    
+    public void clearBoard() {
+    	
+    	for(int row=0; row<spots.length; row++){
+            for(int column=0; column<spots[row].length; column++){
+                this.spots[column][row] = new Spot(column, row);
+            }
+        }
+		meldsOnBoard = new ArrayList<Meld>();
+		filledSpots = new ArrayList<Spot>();
+		numberOfTilesOnBoard = 0;
+		numberOfMelds = 0;
+    }
 	
 
 	public void removeTile(int x, int y) {

@@ -21,6 +21,8 @@ public class Spot extends Rectangle{
 		setHeight(0);
 		setX(x);
 		setY(y);
+		setStyle("-fx-background-color: #C0C0C0;");
+		setFill(Color.BLACK);
 	}
 	
 	
