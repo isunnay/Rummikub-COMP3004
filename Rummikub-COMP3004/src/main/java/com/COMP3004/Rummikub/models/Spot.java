@@ -71,6 +71,12 @@ public class Spot extends Rectangle{
 		return this.tile;
 	}
 	
+	public void setIsTaken(boolean bool) {
+		this.isTaken = bool;
+	}
+	
+
+	
 	/*public void spotToString() {
 		System.out.println(x);
 	}*/
