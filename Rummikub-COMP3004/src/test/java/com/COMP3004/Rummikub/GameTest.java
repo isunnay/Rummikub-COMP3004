@@ -62,11 +62,23 @@ public class GameTest extends TestCase {
 		assertEquals(1, g.getWinner());
 	}
 	
-	public void testInitialBoardStateExists() {
+	public void testBoardState() {
 		Game g = new Game();
 		
-		Board board = g.getBoard();
+		g.getBoardOriginator().setBoardState(g.getBoard());
 		
-		assertEquals(board, g.getBoardState());
+		assertEquals(g.getBoard(), g.getBoardOriginator().getState());
+	}
+	
+	public void testOriginatorExists() {
+		Game g = new Game();
+		
+		assertNotNull(g.getBoardOriginator());
+	}
+	
+	public void testCareTakerExists() {
+		Game g = new Game();
+		
+		assertNotNull(g.getBoarCareTaker());
 	}
 }
