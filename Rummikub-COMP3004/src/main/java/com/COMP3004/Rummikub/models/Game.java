@@ -57,6 +57,9 @@ public class Game implements Subject {
 			allPlayers.add(new Human(deck, this));
 			observers.add(allPlayers.get(i));
 		}
+		
+
+		
 	
 		// Fill in the rest with AI (random chance of each AI strategy)
 		
@@ -204,10 +207,6 @@ public class Game implements Subject {
 			} else if (p1MV >= 10 || p2MV >= 10 || p3MV >= 10 || p4MV >= 10) {
 				break;
 			} else {
-				/*System.out.println(allPlayers.get(0).getHand().getTile(p1TD).tileToString() + " - " + p1TD);
-				System.out.println(allPlayers.get(1).getHand().getTile(p2TD).tileToString() + " - " + p2TD);
-				System.out.println(allPlayers.get(2).getHand().getTile(p3TD).tileToString() + " - " + p3TD);
-				System.out.println(allPlayers.get(3).getHand().getTile(p4TD).tileToString() + " - " + p4TD);*/
 				p1TD++; p2TD++; p3TD++; p4TD++;
 				break;
 			}
@@ -230,7 +229,6 @@ public class Game implements Subject {
 		}
 		
 		for (int i = 0; i < 4; i++) {
-			//System.out.println(allPlayers.get(i).getHand().handToString());
 			allPlayers.get(i).getHand().sortHand();
 		}
 	}
@@ -259,6 +257,7 @@ public class Game implements Subject {
 		}
 		// Play if AI
 		if (allPlayers.get(i).isAI() == true && allPlayers.get(i).myTurnStatus() == true) {
+			System.out.println("Player " + (i+1) + "'s Hand[" + allPlayers.get(i).getHand().size + "]: " + allPlayers.get(i).getHand().handToString());
 			allPlayers.get(i).play(reader);
 			
 			if (allPlayers.get(i).hasTilesBeenPlayed() == false) {
