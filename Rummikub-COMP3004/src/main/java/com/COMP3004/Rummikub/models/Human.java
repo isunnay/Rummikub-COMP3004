@@ -262,15 +262,18 @@ public class Human implements PlayerType {
 					for (int i = 0; i < newMeld.getNumberOfTiles(); i++) {
 						Tile newTile = newMeld.getTileInMeld(i);
 						Spot spot = board.getSpot(newX + i, y);
+						tile.setOldSpot(spot);
 						spot.playTile(newTile);
 						newTile.setSpot(spot);
 						board.numberOfTilesOnBoard++;
 						board.filledSpots.add(spot);
+						
 					}
 					board.meldsOnBoard.add(newMeld);
 					board.numberOfMelds++;
 					turnTiles.add(tile);
 					h.removeTile(tile);
+					
 					//board.deleteMeld(prevTileMeld);
 					//board.deleteMeld(nextTileMeld);
 					this.setTilesBeenPlayed(true);
@@ -287,11 +290,13 @@ public class Human implements PlayerType {
 					Spot spot = board.getSpot(x, y);
 					spot.playTile(tile);
 					tile.setSpot(spot);
+					tile.setOldSpot(spot);
 					prevTileMeld.addTile(tile);
 					board.numberOfTilesOnBoard++;
 					board.filledSpots.add(spot);
 					turnTiles.add(tile);
 					h.removeTile(tile);
+					tile.setOldSpot(spot);
 					this.setTilesBeenPlayed(true);
 			}
 			//ADDING TILE BEFORE A MELD
@@ -301,6 +306,7 @@ public class Human implements PlayerType {
 				Tile nextTile = nextSpot.getTile();
 				Meld nextTileMeld = nextTile.getMemberOfMeld();
 				Spot spot = board.getSpot(x, y);
+				tile.setOldSpot(spot);
 				spot.playTile(tile);
 				tile.setSpot(spot);
 				nextTileMeld.addTileFront(tile);
@@ -308,11 +314,13 @@ public class Human implements PlayerType {
 				board.filledSpots.add(spot);
 				turnTiles.add(tile);
 				h.removeTile(tile);
+				
 				this.setTilesBeenPlayed(true);
 			}
 			//Creating a new meld
 			else {
 				Spot spot = board.getSpot(x, y);
+				tile.setOldSpot(spot);
 				spot.playTile(tile);
 				tile.setSpot(spot);
 				System.out.println("Creating a New meld");
@@ -325,6 +333,7 @@ public class Human implements PlayerType {
 				board.filledSpots.add(spot);
 				turnTiles.add(tile);
 				h.removeTile(tile);
+				
 				this.setTilesBeenPlayed(true);
 			}
 		}
@@ -377,6 +386,7 @@ public class Human implements PlayerType {
 						board.meldsOnBoard.add(newMeld);
 						board.numberOfMelds++;
 						turnMoves.add(tile);
+						System.out.println("Old X: " +oldX);
 					} else {
 						System.out.println("ERROR: You can't play this here. ");
 						// undoMoveTile();
@@ -402,6 +412,7 @@ public class Human implements PlayerType {
 					board.filledSpots.add(spot);
 					turnMoves.add(tile);
 					// h.removeTile(tile);
+					System.out.println("Old X: " +oldX);
 					// this.setTilesBeenPlayed(true);
 					
 		
@@ -422,6 +433,7 @@ public class Human implements PlayerType {
 							board.numberOfTilesOnBoard++;
 							board.filledSpots.add(spot);
 							turnMoves.add(tile);
+							System.out.println("Old X: " +oldX);
 				}
 							
 						//Creating a new meld
@@ -439,6 +451,7 @@ public class Human implements PlayerType {
 							turnMelds.add(meld);
 							board.numberOfTilesOnBoard++;
 							board.filledSpots.add(newSpot);
+							System.out.println("Old X: " +oldX);
 							//turnMoves.add(tile);
 						//	h.removeTile(tile);
 							//this.setTilesBeenPlayed(true);
@@ -836,5 +849,12 @@ public class Human implements PlayerType {
 	}
 	
 	public boolean isAI() { return isAI; }
+
+
+	@Override
+	public void play() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

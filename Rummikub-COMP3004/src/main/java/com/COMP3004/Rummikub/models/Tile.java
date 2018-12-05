@@ -82,7 +82,7 @@ public class Tile extends StackPane{
 		if(this.isJoker == true){
 		//	rectangle = new Rectangle(40,20);
 			text = new Text("JKR");
-			System.out.println(text);
+			//System.out.println(text);
 			rectangle.setFill(null);
 			rectangle.setStrokeWidth(5);
 			rectangle.setStroke(Color.BLACK);
@@ -135,7 +135,7 @@ public class Tile extends StackPane{
 		if(this.isJoker == true){
 		//	rectangle = new Rectangle(40,20);
 			text = new Text("JKR");
-			System.out.println(text);
+			//System.out.println(text);
 			rectangle.setFill(null);
 			rectangle.setStrokeWidth(5);
 			rectangle.setStroke(Color.BLACK);

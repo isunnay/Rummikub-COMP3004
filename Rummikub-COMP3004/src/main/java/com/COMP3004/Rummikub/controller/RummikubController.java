@@ -1,9 +1,11 @@
 package com.COMP3004.Rummikub.controller;
 
+import java.awt.Label;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import com.COMP3004.Rummikub.models.AI1;
 import com.COMP3004.Rummikub.models.AI2;
 import com.COMP3004.Rummikub.models.Board;
 import com.COMP3004.Rummikub.models.Deck;
@@ -14,6 +16,7 @@ import com.COMP3004.Rummikub.models.Spot;
 import com.COMP3004.Rummikub.models.Subject;
 import com.COMP3004.Rummikub.models.Tile;
 
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
@@ -32,6 +35,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 
 public class RummikubController implements Subject{
@@ -45,6 +49,8 @@ public class RummikubController implements Subject{
 	Scanner reader;
 	private ArrayList<Node> nodesOnTurnTileToGrid;
 	private ArrayList<Node> nodesOnTurnGridToGrid;
+	private ArrayList<Spot> tempArrayList = new ArrayList<Spot>();
+	private Board snapshot;
 	
 	
 	
@@ -52,6 +58,8 @@ public class RummikubController implements Subject{
 	public GridPane gridPane;
 	@FXML
 	public TilePane tilePane;
+	//@FXML
+	//private Label whosTurnLabel;
 	//private Group boardSpots;
 	
 	public RummikubController() {
@@ -89,28 +97,36 @@ public class RummikubController implements Subject{
 		}
 		
 		// Fill in the rest with AI (random chance of each AI strategy)
-	/*	for (int i = allPlayers.size(); i < 4; i++) {
+		for (int i = allPlayers.size(); i < 4; i++) {
 			int foo = (int) (Math.random() * 100);
 			if (foo < 34) {
 				allPlayers.add(new AI1(deck, this));
-			} else if (foo < 67){
+			}
+		else if (foo < 67){
 				//allPlayers.add(new AI2(deck)); 
-				allPlayers.add(new AI2(deck, this));
+				allPlayers.add(new AI1(deck, this));
 			} else {
 				//allPlayers.add(new AI3(deck, this));
-				allPlayers.add(new AI3(deck, this));
+				allPlayers.add(new AI1(deck, this));
 			}
 			observers.add(allPlayers.get(i));
-		}*/
+		}
 		
 		// Determine who starts
 		determineStarter();
-		setUpPlayerHand(whosTurn()-1);
+		if(allPlayers.get(whosTurn()-1).isAI() == true) {
+			setUpAIHand(whosTurn()-1);
+			drawTile();
+		}
+		else {
+			setUpPlayerHand(whosTurn()-1);
+		}
 	}
 	
 	@FXML
 	public void setUpBoard() {
 		board = new Board();
+		snapshot = new Board();
 
 	   for(int i=0; i<board.getSpotsArray().length; i++) {
 	        for(int j=0; j<board.getSpotsArray()[i].length; j++) {
@@ -124,25 +140,45 @@ public class RummikubController implements Subject{
 	        	GridPane.setColumnIndex(stackPane, i);
 	        	GridPane.setFillWidth(stackPane, true);
 	        	GridPane.setFillHeight(stackPane, true);
+	        
 	        	
 	        	gridPane.getChildren().forEach(item -> {
+	        		item.setStyle("-fx-background-color: white; -fx-border-color: black");
 	        		item.setOnMousePressed(e->{
 		        		System.out.println(((Spot) item.getUserData()));
 		        		System.out.println(item.getLayoutX());
 		        		System.out.println(item.getLayoutY());
+		        		//item.setStyle("-fx-background-color: #cf1020");
 		        	});
 	        	});
 	        }
 	   }
-	   
 
-	   //notifyObservers();
+	}
+	
+	@FXML void setUpAIHand(int player) {
+		notifyObservers();
+		System.out.println("Showing players hand: " + (player+1));
+   
+        tilePane.setVgap(50);
+        tilePane.setHgap(50);
+        tilePane.setStyle("-fx-background-color: lightgrey;");
+        tilePane.setVisible(false);
+
+		for(int i=0;i<allPlayers.get(player).getHand().size;i++) {
+			Tile tile = allPlayers.get(player).getHand().getTile(i);
+			
+			tilePane.getChildren().addAll(tile);
+			
+		}
+		
 
 	}
 	
 	@FXML
 	public void setUpPlayerHand(int player) {
 		notifyObservers();
+		tilePane.setVisible(true);
 		System.out.println("Showing players hand: " + (player+1));
    
         tilePane.setVgap(50);
@@ -152,15 +188,35 @@ public class RummikubController implements Subject{
 		for(int i=0;i<allPlayers.get(player).getHand().size;i++) {
 			Tile tile = allPlayers.get(player).getHand().getTile(i);
 			
-        	tilePane.getChildren().forEach(item -> {
-        		item.setOnMouseReleased(e->{
-        			handleDrop(e);
-	        	});
-        	});
+        
         	
 			tilePane.getChildren().addAll(tile);
 			
 		}
+		tilePane.getChildren().forEach(item -> {
+    		item.setOnMouseReleased(e->{
+    			handleDrop(e);
+    			
+        	});
+    	});
+	}
+	
+	private void handleAI(int i) {
+		
+		
+		
+	}
+	
+	private void gameLogic() {
+		
+
+    	tilePane.getChildren().forEach(item -> {
+    		item.setOnMouseReleased(e->{
+    			handleDrop(e);
+
+        	});
+    	});
+
 	}
 	
 
@@ -170,7 +226,6 @@ public class RummikubController implements Subject{
         Tile tile = (Tile)node;
         
         node.setManaged(true);
-        //boolean justSwitched = false;
         
         //From Hand to board
         if(tilePane.getChildren().contains(node)) {
@@ -179,16 +234,23 @@ public class RummikubController implements Subject{
         	tilePane.getChildren().remove(tile);
             gridPane.getChildren().addAll(tile);
             
+            /*
+            gridPane.getChildren().forEach(item -> {
+        		item.setStyle("-fx-background-color: lightgrey; -fx-border-color: black");
+        	});
+        	*/
             
             int x = getSpotX(node);
             int y = getSpotY(node);
             if(x!=-1 && y!=-1) {
             	tile.justSwitched = true;
-	     	    GridPane.setConstraints(tile, x, y);
+	     	    //GridPane.setConstraints(tile, x, y);
+	     	    GridPane.setColumnIndex(tile, x);
+	     	    GridPane.setRowIndex(tile, y);
 	     	    allPlayers.get(whosTurn()-1).addTile(tile, x, y);
 	     	    this.nodesOnTurnTileToGrid.add(node);
-	     	    Spot spot = board.getSpot(x, y);
-	     	    tile.setOldSpot(spot);
+	     	   // Spot spot = board.getSpot(x, y);
+	     	    //tile.setOldSpot(spot);
             }
             else {
             	this.nodesOnTurnTileToGrid.remove(node);
@@ -206,13 +268,15 @@ public class RummikubController implements Subject{
         	int y = getSpotOnGridY(node);
         	Spot oldSpot = tile.getOldSpot();
         	oldSpot.setIsTaken(false);
+        	System.out.println(oldSpot);
+        	
         	if(x!=-1 && y!=-1) {
 	        	GridPane.setConstraints(node, x, y);
 	        	Spot spot = board.getSpot(x, y);
 	        	//if(oldSpot.)
 	        	allPlayers.get(whosTurn()-1).moveTile(tile,spot);
 	        	this.nodesOnTurnGridToGrid.add(node);
-	        	tile.setOldSpot(spot);
+	        	//tile.setOldSpot(oldSpot);
         	 }
         	 else {
              	//mg.moveToSource(node);
@@ -304,33 +368,61 @@ public class RummikubController implements Subject{
 		return -1;
 	}
 	
+    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+        for (Node node : gridPane.getChildren())
+            if (GridPane.getColumnIndex(node) != null
+                    && GridPane.getColumnIndex(node) != null
+                    && GridPane.getRowIndex(node) == row
+                    && GridPane.getColumnIndex(node) == col)
+                return node;
+        return null;
+    }
 	
 
-	private boolean isValidPlay() {
-		boolean everythingValid = true;
-		
-		for (int i = 0; i < board.meldsOnBoard.size(); i++) {
-			System.out.println("Melds: " + board.getMeld(i).meldToString());
-			if (!(board.meldsOnBoard.get(i).checkIfValidMeld())) {
-				everythingValid = false;
+    
+    public void highlightRecent() {
+    	
+    	for (int col = 0; col < 15; col++) {
+			for (int row = 0; row < 15; row++) {
+				if (board.isSpotFilled(col, row)) {
+					System.out.println("Board Spot filled");
+					System.out.println(snapshot.isSpotFilled(col, row));
+					//if (snapshot.isSpotFilled(col, row) == false) {
+					if(!(tempArrayList.contains(board.getSpot(col, row)))) {
+						tempArrayList.add(board.getSpot(col, row));
+						System.out.println("new tiles in play at: " + col + "," + row);
+						getNodeFromGridPane(gridPane, col, row).setStyle("-fx-background-color: lightgrey; -fx-border-color: black");
+					}
+				}
 			}
 		}
-		
-		
-		return everythingValid;
-	}
-	
-//Having problems when we move things around a bit
+    }
+    
+    public void removeHighlight() {
+		for (int row = 0; row < 15; row++) {
+			for (int col = 0; col < 15; col++) {
+				if (board.isSpotFilled(row, col) && snapshot.isSpotFilled(row, col) && board.getTileAtSpot(row, col).equals(snapshot.getTileAtSpot(row, col))) {
+					System.out.println("old tiles in play at: " + row + "," + col);
+					getNodeFromGridPane(gridPane, row, col).setStyle("-fx-background-color: white; -fx-border-color: black");
+				}
+			}
+		}
+    }
+
 	
 	@FXML
 	public void drawTile() {
 		int who = whosTurn()-1;
 		
 		board.boardToString();
+		
+		if (allPlayers.get(who).hasTilesBeenPlayed()) { nextPlayersTurn(who); }
+		//if (allPlayers.)
+
 
 	    if(board.checkIfValidMelds()==false) {
 	    	System.out.println("Wrong turn");
- 	    	allPlayers.get(who).undoTurn();
+ 	   
  	    	
  	    	//Adding back to hand
  	    	if(nodesOnTurnTileToGrid.size()>0) {
@@ -340,27 +432,41 @@ public class RummikubController implements Subject{
 	 	 	        	System.out.println("IntheSwitch");
 	 	 	        	gridPane.getChildren().remove(nodesOnTurnTileToGrid.get(i));
 	 	 	            tilePane.getChildren().addAll(nodesOnTurnTileToGrid.get(i));
+	 	 	          allPlayers.get(who).undoTurn();
+	 	 	          allPlayers.get(who).setTilesBeenPlayed(false);
 	 	 	        }
 	 	    		//mg.moveToSource(nodesOnTurn.get(i));
 	 	    	}
+	 	    	nodesOnTurnTileToGrid.clear();
  	    	}
  	    	//Adding back to old board location
  	    	else if(nodesOnTurnGridToGrid.size()>0) {
  	    		System.out.println("NodesOnTurnGridToGrid: "+ nodesOnTurnGridToGrid.size());
 	 	    	for(int i=0;i<nodesOnTurnGridToGrid.size();i++) {
 	 	    		Tile tile = (Tile) this.nodesOnTurnGridToGrid.get(i);
-	 	    		System.out.println(tile);
+	 	    		//System.out.println(tile);
+	 	    		System.out.println(nodesOnTurnGridToGrid.get(i));
+	 	    		System.out.println(tile.justSwitched);
 	 	 	        if(tile.justSwitched == false && gridPane.getChildren().contains(nodesOnTurnGridToGrid.get(i))) {
-	 	 	        	gridPane.getChildren().remove(nodesOnTurnGridToGrid.get(i));
+	 	 	        	System.out.println("ARE WE IN HERE");
+	 	 	        	//gridPane.getChildren().setAll(nodesOnTurnGridToGrid.get(i));
 	 	 	        	//Tile tile = (Tile) this.nodesOnTurnGridToGrid.get(i).getUserData();
+	 	 	        	System.out.println(tile.getOldSpot());
 	 	 	        	int anX = tile.getOldSpot().getSpotX();
 	 	 	        	int aY = tile.getOldSpot().getSpotY();
-	 	 	        	
-	 	 	        	GridPane.setConstraints(tile,anX,aY);
-	 	 	        	gridPane.getChildren().addAll(tile);
+	 	 	        	System.out.println(anX);
+	 	 	        	System.out.println(aY);
+
+	 	 	        	GridPane.setColumnIndex(tile, anX);
+	 	 	        	GridPane.setRowIndex(tile, aY);
+	 	 	        	allPlayers.get(who).undoTurn();
+	 	 	        	//gridPane.add(nodesOnTurnGridToGrid.get(i),anX, aY);
+	 	 	        	//gridPane.getChildren().add(tile);
+	 	 	        	//gridPane.add(tile, anX, aY);
 	 	 	        }
 	 	    		//mg.moveToSource(nodesOnTurn.get(i));
 	 	    	}
+	 	    	nodesOnTurnGridToGrid.clear();
  	    		//MAke sure we add to an available spot
  	    	}
  	    	
@@ -371,11 +477,37 @@ public class RummikubController implements Subject{
 			tilePane.getChildren().clear();
 			notifyObservers();
 			nextPlayersTurn(who);
+			takeSnap(true);
 		} else {
 			tilePane.getChildren().clear();
 			notifyObservers();
 			nextPlayersTurn(who);
+			takeSnap(false);
 		}
+	}
+	
+	public void takeSnap(boolean drew) {
+		System.out.println("Board:");
+		board.boardToString();
+		
+		System.out.println("Snapshot:");
+		snapshot.boardToString();
+		
+    	highlightRecent();
+		
+		if (!drew) {
+			System.out.println("========================== Taking Snapshot ==========================");
+			removeHighlight();
+			//snapshot = new Board();
+			snapshot.clearBoard();
+			for (int row = 0; row < 15; row++) {
+				for (int col = 0; col < 15; col++) {
+					Tile t = board.getSpot(row, col).getTile();
+					snapshot.setTile(t, row, col);
+				}
+			}
+		}
+		//highlightRecent();
 	}
 	
 	@FXML
@@ -439,14 +571,49 @@ public class RummikubController implements Subject{
 		allPlayers.get(i).setTurnStatus(false);
 		
 		if (i <= 2) {
+			if (allPlayers.get(i+1).isAI()) {
+				setUpAIHand(i+1);
+				allPlayers.get(i+1).play(reader);
+			}
 			allPlayers.get(i+1).setTilesBeenPlayed(false);
 			allPlayers.get(i+1).setTurnStatus(true);
-			setUpPlayerHand(i+1);
+
+		} else {
+			if (allPlayers.get(0).isAI()) {
+				setUpAIHand(0);
+				allPlayers.get(0).play(reader);
+			}
+			allPlayers.get(0).setTilesBeenPlayed(false);
+			allPlayers.get(0).setTurnStatus(true);
+		}
+		
+		/*
+		allPlayers.get(i).setTurnStatus(false);
+		
+		if (i <= 2) {
+			allPlayers.get(i+1).setTilesBeenPlayed(false);
+			allPlayers.get(i+1).setTurnStatus(true);
+			if(allPlayers.get(i+1).isAI() == true) {
+				setUpAIHand(i+1);
+				allPlayers.get(i+1).play(reader);
+				nextPlayersTurn(i+1);				
+				
+			}
+			else {
+				setUpPlayerHand(i+1);
+			}
 		} else {
 			allPlayers.get(0).setTilesBeenPlayed(false);
 			allPlayers.get(0).setTurnStatus(true);
-			setUpPlayerHand(0);
-		}
+			if(allPlayers.get(0).isAI() == true) {
+				setUpAIHand(0);
+				allPlayers.get(0).play(reader);
+			}
+			else {
+				setUpPlayerHand(0);
+				
+			}
+		}*/
 	}
 	
 	public void determineStarter() {
@@ -568,17 +735,34 @@ public class RummikubController implements Subject{
 
 	public int whosTurn() {
 		if (allPlayers.get(0).myTurnStatus() == true) {
+//			whosTurnLabel.setText("Player 1");
 			return 1;
 		} else if (allPlayers.get(1).myTurnStatus() == true) {
+//			whosTurnLabel.setText("Player 2");
 			return 2;
 		} else if (allPlayers.get(2).myTurnStatus() == true) {
+//			whosTurnLabel.setText("Player 3");
 			return 3;
 		} else if (allPlayers.get(3).myTurnStatus() == true) {
+//			whosTurnLabel.setText("Player 4");
 			return 4;
 		} else {
 			return -1;
 		}
 	}
+	/*public void getWhosTurn() {
+		if (allPlayers.get(0).myTurnStatus() == true) {
+			whosTurnLabel.setText("Player 1");
+		} else if (allPlayers.get(1).myTurnStatus() == true) {
+			whosTurnLabel.setText("Player 2");
+		} else if (allPlayers.get(2).myTurnStatus() == true) {
+			whosTurnLabel.setText("Player 3");
+		} else if (allPlayers.get(3).myTurnStatus() == true) {
+			whosTurnLabel.setText("Player 4");
+		} 
+		
+	}*/
+	
 	
 	public boolean inProgress() {
 		return this.gameInProgress;

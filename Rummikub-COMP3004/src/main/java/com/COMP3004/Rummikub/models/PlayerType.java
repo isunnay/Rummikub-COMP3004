@@ -35,5 +35,6 @@ public interface PlayerType extends Observer {
 	public int getTurnPoints();
 	public void play(Scanner reader, Deck deck) throws InterruptedException;
 	public boolean isAI();
+	public void play();
 	
 }
