@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.COMP3004.Rummikub.models.AI1;
 import com.COMP3004.Rummikub.models.AI2;
+import com.COMP3004.Rummikub.models.AI3;
+import com.COMP3004.Rummikub.models.AI4;
 import com.COMP3004.Rummikub.models.Board;
 import com.COMP3004.Rummikub.models.Deck;
 import com.COMP3004.Rummikub.models.Human;
@@ -107,14 +109,14 @@ public class RummikubController implements Subject{
 		for (int i = allPlayers.size(); i < 4; i++) {
 			int foo = (int) (Math.random() * 100);
 			if (foo < 34) {
-				allPlayers.add(new AI1(deck, this));
+				allPlayers.add(new AI4(deck, this));
 			}
 		else if (foo < 67){
 				//allPlayers.add(new AI2(deck)); 
-				allPlayers.add(new AI1(deck, this));
+				allPlayers.add(new AI4(deck, this));
 			} else {
 				//allPlayers.add(new AI3(deck, this));
-				allPlayers.add(new AI1(deck, this));
+				allPlayers.add(new AI4(deck, this));
 			}
 			observers.add(allPlayers.get(i));
 		}
@@ -418,7 +420,7 @@ public class RummikubController implements Subject{
 		//if (allPlayers.)
 
 
-		 if(board.checkIfValidMelds()==false) {	
+		 if(allPlayers.get(who).hasTilesBeenPlayed() == true && board.checkIfValidMelds()==false) {	
  	    	//Adding back to hand
  	    	if(nodesOnTurnTileToGrid.size()>0) {
  	    		System.out.println("NodesOnTurnTileToGrid: "+ nodesOnTurnTileToGrid.size());
@@ -574,12 +576,12 @@ public class RummikubController implements Subject{
 					setUpAIHand(i+1);
 					allPlayers.get(i+1).play(reader);
 					drawTile();
-					try {
+			/*		try {
 						TimeUnit.SECONDS.sleep(3);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					}*/
 
 					
 				}
@@ -598,12 +600,12 @@ public class RummikubController implements Subject{
 				allPlayers.get(0).play(reader);
 
 				drawTile();
-				try {
+			/*	try {
 					TimeUnit.SECONDS.sleep(3);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				}*/
 
 				//nextPlayersTurn(whosTurn()-1);
 			}
@@ -796,6 +798,20 @@ public class RummikubController implements Subject{
 	public int getWinner() {
 		return anyWinners();
 	}
+	
+	//new for ai3
+	  public int[] getPlayerHandSize() {
+		  int[] handSize = new int[4];
+		  //for (int i=0; i<=this.getPlayerCount(); i++) {
+		  for (int i=0; i<allPlayers.size(); i++) {
+		 			  handSize[i] = getPlayer(i).getHand().getNumTiles();
+				  
+		  }
+
+		return handSize;
+		  
+		  
+	  }
 	
 	public void registerObserver(Observer o) {
 		observers.add(o);

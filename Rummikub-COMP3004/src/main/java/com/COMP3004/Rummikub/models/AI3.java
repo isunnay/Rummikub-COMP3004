@@ -3,6 +3,7 @@ package com.COMP3004.Rummikub.models;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.COMP3004.Rummikub.controller.RummikubController;
 import com.COMP3004.Rummikub.models.Hand.SortByValue;
 
 import java.util.Collections;
@@ -17,7 +18,7 @@ public class AI3 implements PlayerType {
 	private boolean initialMeldPlayed = false;
 	public ArrayList<Meld> melds;
 	public ArrayList<Meld> sets;
-	public Subject game;
+	//public Subject game;
 	public int turnPoints;
 	public ArrayList<Spot> spotsTaken;
 	public ArrayList<Tile> turnTiles;
@@ -30,13 +31,13 @@ public class AI3 implements PlayerType {
 	int allPlayersHand[];
 	//Game allPlayersGame;
 	
-	public AI3(Deck deck, Game game) {
+	public AI3(Deck deck, RummikubController rummikubController) {
 		h = new Hand();
 		h.createHand(deck);
 		h.sortHand();
 		melds = new ArrayList<Meld>();
-		game.registerObserver(this);
-		allPlayersHand= game.getPlayerHandSize();
+		rummikubController.registerObserver(this);
+		allPlayersHand= rummikubController.getPlayerHandSize();
 		
 		usedInMeld = new ArrayList<Tile>();
 		spotsTaken = new ArrayList<Spot>();
@@ -192,7 +193,7 @@ public class AI3 implements PlayerType {
 	@Override
 	public void play(Scanner reader) {
 		
-		System.out.println(this.h.handToString());
+	/*	System.out.println(this.h.handToString());
 		System.out.println(this.initialMeldPlayed);
 		
 	
@@ -200,13 +201,13 @@ public class AI3 implements PlayerType {
 		  System.out.println("Human " + allPlayersHand[0]);
 		  System.out.println("AI1 " + allPlayersHand[1]);
 		  System.out.println("AI2 " + allPlayersHand[2]);
-		  System.out.println("AI3 " + allPlayersHand[3]);
+		  System.out.println("AI3 " + allPlayersHand[3]);*/
 		  
 		  //System.out.println("Play");
 				this.findAllMelds();
 				//System.out.println(melds.size());
 				setTurnPoints();
-				System.out.println(getTurnPoints());
+				//System.out.println(getTurnPoints());
 				if(this.hasInitialMeldBeenPlayed() == false) {
 					//if(board.numberOfMelds > 0) {
 						//CHANGE THIS VALUE
@@ -227,7 +228,7 @@ public class AI3 implements PlayerType {
 					//ArrayList<Tile> meldTiles = new ArrayList<Tile>();
 					Meld handMeld;
 					//meldTiles.clear();
-					System.out.println("HandMeldSize " + melds.size());
+					//System.out.println("HandMeldSize " + melds.size());
 				
 						
 					for(int x=0; x<melds.size(); x++ ) {
@@ -246,7 +247,7 @@ public class AI3 implements PlayerType {
 								playMeld(melds.get(i),reader);
 								this.setTilesBeenPlayed(true);
 							}
-							this.setTurnStatus(false);
+							//this.setTurnStatus(false);
 						}
 					}
 					
@@ -258,7 +259,7 @@ public class AI3 implements PlayerType {
 									playMeld(melds.get(i),reader);
 									this.setTilesBeenPlayed(true);
 								}
-								this.setTurnStatus(false);
+							//	this.setTurnStatus(false);
 							}						  						  
 					  }
 					  

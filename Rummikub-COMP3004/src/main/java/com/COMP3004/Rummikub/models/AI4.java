@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.COMP3004.Rummikub.controller.RummikubController;
+
 public class AI4 implements PlayerType{
 	
 	Hand h;
@@ -24,12 +26,12 @@ public class AI4 implements PlayerType{
 	//new
 	public ArrayList<Tile> meldTiles = new ArrayList<Tile>();
 	
-	public AI4(Deck deck, Game game) {
+	public AI4(Deck deck, RummikubController rummikubController) {
 		h = new Hand();
 		h.createHand(deck);
 		h.sortHand();
 		melds = new ArrayList<Meld>();
-		game.registerObserver(this);
+		rummikubController.registerObserver(this);
 		spotsTaken = new ArrayList<Spot>();
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
@@ -141,42 +143,6 @@ public class AI4 implements PlayerType{
 					  }
 					}
 				}
-				/*
-				else {
-					
-					//add melds from hand into meldTiles
-					//ArrayList<Tile> meldTiles = new ArrayList<Tile>();
-					Meld handMeld;
-					//meldTiles.clear();
-					System.out.println("HandMeldSize " + melds.size());
-				
-						
-					for(int x=0; x<melds.size(); x++ ) {
-						handMeld = melds.get(x);
-						System.out.println("*****");
-						System.out.println(handMeld.meldToString());
-						for(int y=0; y<handMeld.getNumberOfTiles(); y++) {
-							meldTiles.add(handMeld.getTileInMeld(y));
-						}						
-				    }
-					
-					//if player only has melds left, play all melds 
-					  if(h.getPlayerHand().size() == meldTiles.size()) { //when both count is equal means only melds left 
-						if(melds.size()>0) {
-							for(int i=0;i<melds.size();i++) {
-								playMeld(melds.get(i),reader);
-								this.setTilesBeenPlayed(true);
-							}
-							this.setTurnStatus(false);
-						}
-					}
-					else { //play single tiles if there are tiles not including melds
-						this.placeSingleTile();
-					}
-			}
-		// TODO Auto-generated method stub
-		 
-		 */
 				
 					if(melds.size()>0) {
 						for(int i=0;i<melds.size();i++) {
@@ -184,7 +150,7 @@ public class AI4 implements PlayerType{
 							//this.hasTileBeenPlaced = true;
 							this.setTilesBeenPlayed(true);
 						}
-						this.setTurnStatus(false);
+						//this.setTurnStatus(false);
 					}
 				
 				else  { //play single tiles if there are tiles not including melds
@@ -1196,25 +1162,27 @@ public class AI4 implements PlayerType{
 							}
 							
 							*/
-							if(!(board.isSpotFilled(x+1, y))) {
-								this.addTile(hTile, x+1, y);
-							}
-							else {
-								bTile = bMeld.getTiles().get(0);
-								bValue = bTile.getValue();
-								bSpot = board.getLocationOfTile(bTile);
-								x = bSpot.x;
-								y = bSpot.y;
-								
-								if(!(board.isSpotFilled(x-1, y))) {
-									this.addTile(hTile, x-1, y);
+							if(x<14 && x>1) {
+								if(!(board.isSpotFilled(x+1, y))) {
+									this.addTile(hTile, x+1, y);
 								}
 								else {
-									System.out.println("Both beginning and end sports are not empty");
+									bTile = bMeld.getTiles().get(0);
+									bValue = bTile.getValue();
+									bSpot = board.getLocationOfTile(bTile);
+									x = bSpot.x;
+									y = bSpot.y;
+									
+									if(!(board.isSpotFilled(x-1, y))) {
+										this.addTile(hTile, x-1, y);
+									}
+									else {
+										System.out.println("Both beginning and end sports are not empty");
+									}
 								}
-							}
-							
-						}	
+								
+							}	
+						}
 						
 					}
 					

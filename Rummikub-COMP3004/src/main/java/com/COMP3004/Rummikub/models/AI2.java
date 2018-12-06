@@ -2,6 +2,9 @@ package com.COMP3004.Rummikub.models;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+
+import com.COMP3004.Rummikub.controller.RummikubController;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -29,12 +32,12 @@ public class AI2 implements PlayerType {
 	public ArrayList<Tile> meldTiles = new ArrayList<Tile>(); 
 
 	
-	public AI2(Deck deck, Game game) {
+	public AI2(Deck deck, RummikubController rummikubController) {
 		h = new Hand();
 		h.createHand(deck);
 		h.sortHand();
 		melds = new ArrayList<Meld>();
-		game.registerObserver(this);
+		rummikubController.registerObserver(this);
 		spotsTaken = new ArrayList<Spot>();
 		turnTiles = new ArrayList<Tile>();
 		turnMelds = new ArrayList<Meld>();
@@ -83,55 +86,17 @@ public class AI2 implements PlayerType {
 			usedInMeld.clear();
 			turnPoints = 0;		
 	}
-/*
-	@Override
-	public void play(Scanner reader) {
-		
-		System.out.println(this.h.handToString());
-		System.out.println(this.initialMeldPlayed);
-		//System.out.println("Play");
-				this.findAllMelds();
-				//System.out.println(melds.size());
-				setTurnPoints();
-				System.out.println(getTurnPoints());
-				if(this.hasInitialMeldBeenPlayed() == false) {
-					if(board.numberOfMelds > 0) {
-						//CHANGE THIS VALUE
-						if(getTurnPoints()>=0) {
-							if(melds.size()>0) {
-								for(int i=0;i<melds.size();i++) {
-									playMeld(melds.get(i),reader);
-									this.hasTileBeenPlaced = true;
-								}
-								this.setHasInitialMeldBeenPlayed(true);
-						}
-					  }
-					}
-				}
-				else {
-					if(melds.size()>0) {
-						for(int i=0;i<melds.size();i++) {
-							playMeld(melds.get(i),reader);
-							this.hasTileBeenPlaced = true;
-						}
-					}
-					
-					
-				}
-			}
-		// TODO Auto-generated method stub
-		*/
 	
 	@Override
 	public void play(Scanner reader) {
 		
-		System.out.println(this.h.handToString());
-		System.out.println(this.initialMeldPlayed);
+		//System.out.println(this.h.handToString());
+		//System.out.println(this.initialMeldPlayed);
 		//System.out.println("Play");
 				this.findAllMelds();
 				//System.out.println(melds.size());
 				setTurnPoints();
-				System.out.println(getTurnPoints());
+				//System.out.println(getTurnPoints());
 				if(this.hasInitialMeldBeenPlayed() == false) {
 					if(board.numberOfMelds > 0) {
 						//CHANGE THIS VALUE
@@ -171,7 +136,7 @@ public class AI2 implements PlayerType {
 								playMeld(melds.get(i),reader);
 								this.setTilesBeenPlayed(true);
 							}
-							this.setTurnStatus(false);
+							//this.setTurnStatus(false);
 						}
 					}
 					else { //play single tiles if there are tiles not including melds
