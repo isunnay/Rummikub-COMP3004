@@ -1228,6 +1228,12 @@ public class AI2 implements PlayerType {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void play() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

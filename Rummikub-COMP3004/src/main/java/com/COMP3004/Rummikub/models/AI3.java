@@ -1329,6 +1329,12 @@ public class AI3 implements PlayerType {
 		this.initialMeldPlayed = b;
 		
 	}
+
+	@Override
+	public void play() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

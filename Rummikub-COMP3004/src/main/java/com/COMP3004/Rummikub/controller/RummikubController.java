@@ -171,6 +171,7 @@ public class RummikubController implements Subject{
         tilePane.setVgap(50);
         tilePane.setHgap(50);
         tilePane.setStyle("-fx-background-color: lightgrey;");
+        System.out.println("IS AI HAND VISIBLE: " + tilePane.isVisible());
         //tilePane.setVisible(false);
 
 		for(int i=0;i<allPlayers.get(player).getHand().size;i++) {
@@ -202,6 +203,7 @@ public class RummikubController implements Subject{
 		notifyObservers();
 		//tilePane.setVisible(true);
 		System.out.println("Showing players hand: " + (player+1));
+		System.out.println("IS Player HAND VISIBLE: " + tilePane.isVisible());
    
         tilePane.setVgap(50);
         tilePane.setHgap(50);

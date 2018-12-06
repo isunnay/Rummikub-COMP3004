@@ -1240,4 +1240,10 @@ public class AI4 implements PlayerType{
 		
 	}
 
+	@Override
+	public void play() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
