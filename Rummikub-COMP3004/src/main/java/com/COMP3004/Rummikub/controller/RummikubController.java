@@ -1,6 +1,8 @@
 package com.COMP3004.Rummikub.controller;
 
-import java.awt.Label;
+//import java.awt.Label;
+import javafx.scene.control.Label;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -17,13 +19,18 @@ import com.COMP3004.Rummikub.models.Subject;
 import com.COMP3004.Rummikub.models.Tile;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
@@ -53,14 +60,14 @@ public class RummikubController implements Subject{
 	private Board snapshot;
 	
 	
-	
 	@FXML
 	public GridPane gridPane;
 	@FXML
 	public TilePane tilePane;
-	//@FXML
-	//private Label whosTurnLabel;
-	//private Group boardSpots;
+	@FXML
+	private Label whosTurnLabel;
+	@FXML
+	private Label initialMeld;
 	
 	public RummikubController() {
 		System.out.println("Testing Constructor");
@@ -114,6 +121,7 @@ public class RummikubController implements Subject{
 		
 		// Determine who starts
 		determineStarter();
+		updateCurrentPlayer();
 		if(allPlayers.get(whosTurn()-1).isAI() == true) {
 			setUpAIHand(whosTurn()-1);
 			drawTile();
@@ -163,7 +171,7 @@ public class RummikubController implements Subject{
         tilePane.setVgap(50);
         tilePane.setHgap(50);
         tilePane.setStyle("-fx-background-color: lightgrey;");
-        tilePane.setVisible(false);
+        //tilePane.setVisible(false);
 
 		for(int i=0;i<allPlayers.get(player).getHand().size;i++) {
 			Tile tile = allPlayers.get(player).getHand().getTile(i);
@@ -175,10 +183,24 @@ public class RummikubController implements Subject{
 
 	}
 	
+	 @FXML
+	 public void updateCurrentPlayer() {
+		 boolean aiOrNaw = allPlayers.get(whosTurn()-1).isAI();
+		 String whosPlaying = "";
+		 if (aiOrNaw) { whosPlaying = "(AI)"; } else { whosPlaying = "(Human)"; }
+		 whosTurnLabel.setText(String.valueOf(whosTurn()) + whosPlaying);
+		 
+		 
+		 boolean initDoneOrNaw = allPlayers.get(whosTurn()-1).hasInitialMeldBeenPlayed();
+		 String displayText = "";
+		 if (initDoneOrNaw) { displayText = "Complete"; } else { displayText = "Incomplete"; }
+		 initialMeld.setText(displayText);
+	 }
+	
 	@FXML
 	public void setUpPlayerHand(int player) {
 		notifyObservers();
-		tilePane.setVisible(true);
+		//tilePane.setVisible(true);
 		System.out.println("Showing players hand: " + (player+1));
    
         tilePane.setVgap(50);
@@ -585,7 +607,7 @@ public class RummikubController implements Subject{
 			}
 			allPlayers.get(0).setTilesBeenPlayed(false);
 			allPlayers.get(0).setTurnStatus(true);
-		}
+		}updateCurrentPlayer();
 		
 		/*
 		allPlayers.get(i).setTurnStatus(false);

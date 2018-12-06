@@ -91,8 +91,10 @@
                <children>
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Label layoutX="14.0" layoutY="27.0" prefHeight="18.0" prefWidth="33.0" text="Turn:" />
-                        <Label fx:id="whosTurnLabel" layoutX="47.0" layoutY="27.0" onMouseMoved="#whosTurn" />
+                        <Label layoutX="10.0" layoutY="30.0" text="Current Players Turn:" />
+                        <Label fx:id="whosTurnLabel" layoutX="145.0" layoutY="30.0" text="No one yet" />
+                        <Label layoutX="10.0" layoutY="60.0" text="Initial Meld:" />
+                        <Label fx:id="initialMeld" layoutX="110.0" layoutY="60.0" text="Not sure" />
                      </children>
                   </Pane>
                </children>
