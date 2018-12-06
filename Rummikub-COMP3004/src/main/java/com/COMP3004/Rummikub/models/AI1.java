@@ -85,7 +85,7 @@ public class AI1 implements PlayerType {
 						this.setTilesBeenPlayed(true);
 					}
 					this.setHasInitialMeldBeenPlayed(true);
-					this.setTurnStatus(false);
+					//this.setTurnStatus(false);
 				}
 				
 			}
@@ -97,7 +97,7 @@ public class AI1 implements PlayerType {
 					//this.hasTileBeenPlaced = true;
 					this.setTilesBeenPlayed(true);
 				}
-				this.setTurnStatus(false);
+				//this.setTurnStatus(false);
 			}
 		}
 	}

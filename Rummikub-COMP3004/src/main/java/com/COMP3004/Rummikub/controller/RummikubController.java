@@ -121,15 +121,11 @@ public class RummikubController implements Subject{
 		
 		// Determine who starts
 		determineStarter();
-		updateCurrentPlayer();
-		if(allPlayers.get(whosTurn()-1).isAI() == true) {
-			setUpAIHand(whosTurn()-1);
-			drawTile();
-		}
-		else {
-			setUpPlayerHand(whosTurn()-1);
-		}
+		nextPlayersTurn(whosTurn()-1);
+		
 	}
+	
+	
 	
 	@FXML
 	public void setUpBoard() {
@@ -180,8 +176,6 @@ public class RummikubController implements Subject{
 			tilePane.getChildren().addAll(tile);
 			
 		}
-		
-
 	}
 	
 	 @FXML
@@ -211,9 +205,7 @@ public class RummikubController implements Subject{
 
 		for(int i=0;i<allPlayers.get(player).getHand().size;i++) {
 			Tile tile = allPlayers.get(player).getHand().getTile(i);
-			
-        
-        	
+
 			tilePane.getChildren().addAll(tile);
 			
 		}
@@ -223,24 +215,6 @@ public class RummikubController implements Subject{
     			
         	});
     	});
-	}
-	
-	private void handleAI(int i) {
-		
-		
-		
-	}
-	
-	private void gameLogic() {
-		
-
-    	tilePane.getChildren().forEach(item -> {
-    		item.setOnMouseReleased(e->{
-    			handleDrop(e);
-
-        	});
-    	});
-
 	}
 	
 
@@ -440,14 +414,11 @@ public class RummikubController implements Subject{
 		
 		board.boardToString();
 		
-		if (allPlayers.get(who).hasTilesBeenPlayed()) { nextPlayersTurn(who); }
+		//if (allPlayers.get(who).hasTilesBeenPlayed()) { nextPlayersTurn(who); }
 		//if (allPlayers.)
 
 
-	    if(board.checkIfValidMelds()==false) {
-	    	System.out.println("Wrong turn");
- 	   
- 	    	
+		 if(board.checkIfValidMelds()==false) {	
  	    	//Adding back to hand
  	    	if(nodesOnTurnTileToGrid.size()>0) {
  	    		System.out.println("NodesOnTurnTileToGrid: "+ nodesOnTurnTileToGrid.size());
@@ -495,7 +466,7 @@ public class RummikubController implements Subject{
  	    	}
  	    	
  	    }
-	    else if (allPlayers.get(who).hasTilesBeenPlayed() == false) {
+	    else if (allPlayers.get(who).hasTilesBeenPlayed() == false && board.checkIfValidMelds()==true) {
 			Tile t = allPlayers.get(who).getHand().dealTile(deck);
 			tilePane.getChildren().addAll(t);
 			tilePane.getChildren().clear();
@@ -507,6 +478,7 @@ public class RummikubController implements Subject{
 			notifyObservers();
 			nextPlayersTurn(who);
 			takeSnap(false);
+			System.out.println("Hello WE ARE IN THE ELSE");
 		}
 	}
 	
@@ -593,51 +565,56 @@ public class RummikubController implements Subject{
 	public void nextPlayersTurn(int i) {
 		// Sets next players turn
 		allPlayers.get(i).setTurnStatus(false);
+		tilePane.getChildren().clear();
 		
 		if (i <= 2) {
-			if (allPlayers.get(i+1).isAI()) {
-				setUpAIHand(i+1);
-				allPlayers.get(i+1).play(reader);
-			}
-			allPlayers.get(i+1).setTilesBeenPlayed(false);
-			allPlayers.get(i+1).setTurnStatus(true);
+			if (allPlayers.get(i+1).isAI()==true) {
+				allPlayers.get(i+1).setTilesBeenPlayed(false);
+				allPlayers.get(i+1).setTurnStatus(true);
+					setUpAIHand(i+1);
+					allPlayers.get(i+1).play(reader);
+					drawTile();
+					try {
+						TimeUnit.SECONDS.sleep(3);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
-		} else {
-			if (allPlayers.get(0).isAI()) {
+					
+				}
+			else if(allPlayers.get(i+1).isAI()==false) {
+				allPlayers.get(i+1).setTilesBeenPlayed(false);
+				allPlayers.get(i+1).setTurnStatus(true);
+				setUpPlayerHand(i+1);	
+			}
+
+		} 
+		else {
+			if (allPlayers.get(0).isAI()==true) {
+				allPlayers.get(0).setTilesBeenPlayed(false);
+				allPlayers.get(0).setTurnStatus(true);
 				setUpAIHand(0);
 				allPlayers.get(0).play(reader);
+
+				drawTile();
+				try {
+					TimeUnit.SECONDS.sleep(3);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				//nextPlayersTurn(whosTurn()-1);
 			}
-			allPlayers.get(0).setTilesBeenPlayed(false);
-			allPlayers.get(0).setTurnStatus(true);
-		}updateCurrentPlayer();
+			else if(allPlayers.get(0).isAI()==false) {
+				allPlayers.get(0).setTilesBeenPlayed(false);
+				allPlayers.get(0).setTurnStatus(true);
+				setUpPlayerHand(0);	
+			}
+		}
+		updateCurrentPlayer();
 		
-		/*
-		allPlayers.get(i).setTurnStatus(false);
-		
-		if (i <= 2) {
-			allPlayers.get(i+1).setTilesBeenPlayed(false);
-			allPlayers.get(i+1).setTurnStatus(true);
-			if(allPlayers.get(i+1).isAI() == true) {
-				setUpAIHand(i+1);
-				allPlayers.get(i+1).play(reader);
-				nextPlayersTurn(i+1);				
-				
-			}
-			else {
-				setUpPlayerHand(i+1);
-			}
-		} else {
-			allPlayers.get(0).setTilesBeenPlayed(false);
-			allPlayers.get(0).setTurnStatus(true);
-			if(allPlayers.get(0).isAI() == true) {
-				setUpAIHand(0);
-				allPlayers.get(0).play(reader);
-			}
-			else {
-				setUpPlayerHand(0);
-				
-			}
-		}*/
 	}
 	
 	public void determineStarter() {
@@ -759,15 +736,19 @@ public class RummikubController implements Subject{
 
 	public int whosTurn() {
 		if (allPlayers.get(0).myTurnStatus() == true) {
+			System.out.println("Player1 Turn: " + allPlayers.get(0).myTurnStatus());
 //			whosTurnLabel.setText("Player 1");
 			return 1;
 		} else if (allPlayers.get(1).myTurnStatus() == true) {
+			System.out.println("Player2 Turn: " +allPlayers.get(1).myTurnStatus());
 //			whosTurnLabel.setText("Player 2");
 			return 2;
 		} else if (allPlayers.get(2).myTurnStatus() == true) {
+			System.out.println("Player3 Turn: " +allPlayers.get(2).myTurnStatus());
 //			whosTurnLabel.setText("Player 3");
 			return 3;
 		} else if (allPlayers.get(3).myTurnStatus() == true) {
+			System.out.println("Player4 Turn: " + allPlayers.get(3).myTurnStatus());
 //			whosTurnLabel.setText("Player 4");
 			return 4;
 		} else {
@@ -840,10 +821,6 @@ public class RummikubController implements Subject{
 		}
 	}
 	
-   /* private class Delta {
-        public double x;
-        public double y;
-    }*/
 
 
 }
