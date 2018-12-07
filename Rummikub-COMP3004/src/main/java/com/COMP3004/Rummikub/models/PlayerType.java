@@ -36,5 +36,8 @@ public interface PlayerType extends Observer {
 	public void play(Scanner reader, Deck deck) throws InterruptedException;
 	public boolean isAI();
 	public void play();
+	public ArrayList<Tile> getTurnTiles();
+	public int getAiType();
+	
 	
 }

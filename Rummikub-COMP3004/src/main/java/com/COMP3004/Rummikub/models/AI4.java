@@ -40,6 +40,10 @@ public class AI4 implements PlayerType{
 		//meldTiles = new ArrayList<Tile>();
 	}
 	
+	public int getAiType() {
+		return 4;
+	}
+	
 	public Hand getHand() { return this.h; }
 	
 	public boolean myTurnStatus() { return this.myTurn; }
@@ -132,7 +136,7 @@ public class AI4 implements PlayerType{
 				if(this.hasInitialMeldBeenPlayed() == false) {
 					if(board.numberOfMelds > 2) {
 						//CHANGE THIS VALUE
-						if(getTurnPoints()>=0) {
+						if(getTurnPoints()>=30) {
 							if(melds.size()>0) {
 								for(int i=0;i<melds.size();i++) {
 									playMeld(melds.get(i),reader);
@@ -181,6 +185,7 @@ public class AI4 implements PlayerType{
 					board.numberOfTilesOnBoard++;
 					board.filledSpots.add(spot);
 					h.removeTile(tile);
+					turnTiles.add(tile);
 				}
 				board.meldsOnBoard.add(meld);
 				board.numberOfMelds++;	
@@ -1084,9 +1089,10 @@ public class AI4 implements PlayerType{
 							int x = bSpot.x;
 							int y = bSpot.y;
 							//place hTile at x-1,y
-							if(!(board.isSpotFilled(x-1, y))) {
+							if(x>0&&!(board.isSpotFilled(x-1, y))) {
 							//if(this.canWePlaceTile(hTile, x-1, y) == true) {	
 								this.addTile(hTile, x-1, y);
+								//turnTiles.add(hTile);
 							}
 							else {
 								System.out.println("Spot is not empty"+ (x-1) +","+y);
@@ -1100,7 +1106,7 @@ public class AI4 implements PlayerType{
 							int y = bSpot.y;
 							//place hTile at x+1,y
 							//if(this.canWePlaceTile(hTile, x+1, y) == true) {	
-							if(!(board.isSpotFilled(x+1, y))) {
+							if(x<14&&!(board.isSpotFilled(x+1, y))) {
 								this.addTile(hTile, x+1, y);
 							}
 							else {
@@ -1163,7 +1169,7 @@ public class AI4 implements PlayerType{
 							
 							*/
 							if(x<14 && x>1) {
-								if(!(board.isSpotFilled(x+1, y))) {
+								if(x<14&&!(board.isSpotFilled(x+1, y))) {
 									this.addTile(hTile, x+1, y);
 								}
 								else {
@@ -1173,7 +1179,7 @@ public class AI4 implements PlayerType{
 									x = bSpot.x;
 									y = bSpot.y;
 									
-									if(!(board.isSpotFilled(x-1, y))) {
+									if(x>0&&!(board.isSpotFilled(x-1, y))) {
 										this.addTile(hTile, x-1, y);
 									}
 									else {
@@ -1212,6 +1218,12 @@ public class AI4 implements PlayerType{
 	public void play() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public ArrayList<Tile> getTurnTiles() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

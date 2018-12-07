@@ -40,6 +40,10 @@ public class AI1 implements PlayerType {
 		usedInMeld = new ArrayList<Tile>();
 	}
 	
+	public int getAiType() {
+		return 1;
+	}
+	
 	public Hand getHand() { return this.h; }
 	
 	public boolean myTurnStatus() { return this.myTurn; }
@@ -55,6 +59,10 @@ public class AI1 implements PlayerType {
 		// Gameplay: Plays all tiles when possible
 		//h.meldExists();
 		return false;
+	}
+	
+	public ArrayList<Tile> getTurnTiles(){
+		return this.turnTiles;
 	}
 
 	@Override
@@ -77,7 +85,7 @@ public class AI1 implements PlayerType {
 		setTurnPoints();
 		System.out.println(getTurnPoints());
 		if(this.hasInitialMeldBeenPlayed() == false) {
-			if(getTurnPoints()>=5) {
+			if(getTurnPoints()>=30) {
 				if(melds.size()>0) {
 					for(int i=0;i<melds.size();i++) {
 						playMeld(melds.get(i),reader);
@@ -133,6 +141,7 @@ public class AI1 implements PlayerType {
 					board.numberOfTilesOnBoard++;
 					board.filledSpots.add(spot);
 					h.removeTile(tile);
+					turnTiles.add(tile);
 				}
 				System.out.println("Playing3");
 				board.meldsOnBoard.add(meld);
@@ -146,6 +155,7 @@ public class AI1 implements PlayerType {
 		}
 		
 	}
+	
 
 	@Override
 	public void addTile(Tile tile, int x, int y) {
@@ -153,30 +163,6 @@ public class AI1 implements PlayerType {
 		
 	}
 
-	@Override
-	/*public boolean canWePlaceMeld(Meld meld, int x, int y) {
-		for(int a=0;a<meld.getMeldSize();a++) {
-			if(x+a<board.getX()) {
-				//int nextX = x+meld.getMeldsize;
-				if(board.getSpot(x-1, y).isTaken != true && board.getSpot(x+meld.getMeldSize(), y).isTaken != true) {
-					Spot spot = board.getSpot(x+a, y);
-					if(this.spotsTaken.contains(spot)) {
-						return false;
-						}
-				}
-				else {
-					System.out.println("ERROR: Your meld cannot be touching other melds.");
-					return false;
-				}
-			}
-			else {
-				System.out.println("ERROR: Make sure your meld is placed within the board spots.");
-				return false;
-			}
-		}
-		return true;	
-	}*/
-	
 	public boolean canWePlaceMeld(Meld meld, int x, int y) {
 		// Spot beginningSpot = board.getSpot(x, y);
 		for (int a = 0; a < meld.getMeldSize(); a++) {

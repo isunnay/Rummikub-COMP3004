@@ -725,4 +725,18 @@ public class Human implements PlayerType {
 		
 	}
 
+
+	@Override
+	public ArrayList<Tile> getTurnTiles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public int getAiType() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -28,7 +28,7 @@ public class MainController {
 		Parent gameViewParent = loader.load();
 		RummikubController controller = loader.getController();
 		controller.initData(numberOfPlayers);
-		controller.startGame();
+		//controller.startGame();
 		
 		
 		Scene gameViewScene = new Scene(gameViewParent);
