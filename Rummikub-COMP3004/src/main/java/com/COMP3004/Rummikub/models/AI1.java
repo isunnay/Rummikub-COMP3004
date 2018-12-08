@@ -85,7 +85,7 @@ public class AI1 implements PlayerType {
 		setTurnPoints();
 		System.out.println(getTurnPoints());
 		if(this.hasInitialMeldBeenPlayed() == false) {
-			if(getTurnPoints()>=30) {
+			if(getTurnPoints()>=5) {
 				if(melds.size()>0) {
 					for(int i=0;i<melds.size();i++) {
 						playMeld(melds.get(i),reader);

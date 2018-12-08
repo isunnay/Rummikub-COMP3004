@@ -136,7 +136,7 @@ public class AI4 implements PlayerType{
 				if(this.hasInitialMeldBeenPlayed() == false) {
 					if(board.numberOfMelds > 2) {
 						//CHANGE THIS VALUE
-						if(getTurnPoints()>=30) {
+						if(getTurnPoints()>=5) {
 							if(melds.size()>0) {
 								for(int i=0;i<melds.size();i++) {
 									playMeld(melds.get(i),reader);

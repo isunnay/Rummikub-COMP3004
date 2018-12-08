@@ -112,13 +112,85 @@ public class RummikubController implements Subject {
 				allPlayers.add(new AI1(deck, this));
 			} else if (foo < 67) {
 				// allPlayers.add(new AI2(deck));
-				allPlayers.add(new AI2(deck, this));
+				allPlayers.add(new AI1(deck, this));
 			} else {
 				// allPlayers.add(new AI3(deck, this));
-				allPlayers.add(new AI3(deck, this));
+				allPlayers.add(new AI1(deck, this));
 			}
 			observers.add(allPlayers.get(i));
 		}
+	 	//Level 3: complex.m4v test
+		
+		//p2
+		Tile tile8 = new Tile(0,3);
+		Tile tile2 = new Tile(3,3);
+		Tile aTile2 = new Tile (2,3);
+		Tile aTile8 = new Tile (1,3);
+		Tile aTile5 = new Tile ("JKR",6);
+		Tile tile12 = new Tile(0,6);
+		Tile tile6 = new Tile(3,6);
+		Tile tile9 = new Tile(0,4);
+		Tile tile10 = new Tile(0,5);
+		Tile tile11 = new Tile(0,3);	
+		
+		//orange tiles
+		Tile tile0 = new Tile(3,1);
+		Tile tile1 = new Tile(3,2);
+		Tile tile3 = new Tile(3,4);
+		Tile tile4 = new Tile(3,5);
+		Tile tile5 = new Tile(3,4);		
+		Tile tile7 = new Tile(3,3);
+		//red
+
+		//blue
+		Tile tile13 = new Tile(2,1);
+		Tile aTile = new Tile (2,2);		
+		Tile aTile3 = new Tile (2,4);
+		Tile aTile4 = new Tile (2,3);		
+		Tile aTile6 = new Tile (2,4);
+		//Green
+		Tile aTile7 = new Tile (1,4);		
+		Tile aTile9 = new Tile (1,3);
+		Tile aTile10 = new Tile (1,4);
+		Tile aTile11= new Tile (1,5);
+		Tile aTile12 = new Tile ("JKR",7);
+		
+		
+		
+		
+		allPlayers.get(1).getHand().addTile(tile0);
+		allPlayers.get(1).getHand().addTile(tile1);
+
+		allPlayers.get(1).getHand().addTile(tile3);
+		allPlayers.get(1).getHand().addTile(tile4);
+		allPlayers.get(1).getHand().addTile(tile5);
+		allPlayers.get(1).getHand().addTile(tile6);
+		allPlayers.get(1).getHand().addTile(aTile);
+		allPlayers.get(1).getHand().addTile(aTile3);
+		allPlayers.get(1).getHand().addTile(aTile4);
+		allPlayers.get(1).getHand().addTile(aTile6);
+		allPlayers.get(1).getHand().addTile(aTile7);
+		allPlayers.get(1).getHand().addTile(aTile9);
+		allPlayers.get(1).getHand().addTile(aTile10);
+		allPlayers.get(1).getHand().addTile(aTile11);
+		allPlayers.get(1).getHand().addTile(aTile12);
+		//allPlayers.get(1).getHand().addTile(aTile5);*/
+		
+	/*	allPlayers.get(0).getHand().addTile(tile7);
+		allPlayers.get(1).getHand().addTile(tile9);
+		allPlayers.get(1).getHand().addTile(tile10);
+		allPlayers.get(1).getHand().addTile(tile11);
+		allPlayers.get(1).getHand().addTile(tile12);
+		allPlayers.get(0).getHand().addTile(tile13);
+		
+		allPlayers.get(1).getHand().addTile(aTile2);
+		allPlayers.get(1).getHand().addTile(tile8);
+		allPlayers.get(1).getHand().addTile(tile2);
+		allPlayers.get(1).getHand().addTile(aTile8);
+		*/
+		//allPlayers.get(0).getHand().addTile(aTile5);
+		//allPlayers.get(0).getHand().addTile(aTile12);
+		
 
 		// Determine who starts
 		determineStarter();
@@ -167,7 +239,57 @@ public class RummikubController implements Subject {
 		tilePane.setHgap(50);
 		tilePane.setStyle("-fx-background-color: lightgrey;");
 		System.out.println("IS AI HAND VISIBLE: " + tilePane.isVisible());
+		//Level 3: simple1.m4v test
+		/*Tile tile9 = new Tile(2,10);
+		Tile tile1 = new Tile(2,11);
+		Tile tile2 = new Tile(2,12);
+		Tile tile3 = new Tile(0,10);
+		Tile tile4 = new Tile(1,10);
+		Tile tile5 = new Tile(3,10);
+		Tile tile6 = new Tile(2,13);
+		Tile tile7 = new Tile(3,11);
+		Tile tile8 = new Tile(3,12);
+		allPlayers.get(0).getHand().addTile(tile9);
+		allPlayers.get(0).getHand().addTile(tile1);
+		allPlayers.get(0).getHand().addTile(tile2);
+		allPlayers.get(1).getHand().addTile(tile3);
+		allPlayers.get(1).getHand().addTile(tile4);
+		allPlayers.get(1).getHand().addTile(tile5);
+		allPlayers.get(2).getHand().addTile(tile6);
+		allPlayers.get(2).getHand().addTile(tile7);
+		allPlayers.get(2).getHand().addTile(tile8);
+		*/
+		/*
+		
+		//Level 3: simple2.m4v test
+		Tile tile9 = new Tile(0,7);
+		Tile tile1 = new Tile(0,8);
+		Tile tile2 = new Tile(0,9);
+		Tile tile3 = new Tile(0,10);
+		Tile tile4 = new Tile(0,11);
+		Tile tile5 = new Tile(0,12);
+		Tile tile6 = new Tile(0,13);
+		Tile tile7 = new Tile(2,10);
+		Tile tile8 = new Tile(3,10);
+		allPlayers.get(0).getHand().addTile(tile9);
+		allPlayers.get(0).getHand().addTile(tile1);
+		allPlayers.get(0).getHand().addTile(tile2);
+		allPlayers.get(0).getHand().addTile(tile3);
+		allPlayers.get(0).getHand().addTile(tile4);
+		allPlayers.get(0).getHand().addTile(tile5);
+		allPlayers.get(0).getHand().addTile(tile6);
+		allPlayers.get(0).getHand().addTile(tile7);
+		allPlayers.get(0).getHand().addTile(tile8);
+		
+		
+		
+		*/
+		
+		
+
 		// tilePane.setVisible(false);
+		 
+		 
 
 		for (int i = 0; i < allPlayers.get(player).getHand().size; i++) {
 			Tile tile = allPlayers.get(player).getHand().getTile(i);
@@ -496,7 +618,7 @@ public class RummikubController implements Subject {
 		else {
 			System.out.println("INITIAL MELD HAS NOT BEEN PLAYED");
 			if (board.checkIfValidMelds() == true) {
-				if (getTurnScore() >= 30 && onlyMeldsPlayed() == true) {
+				if (getTurnScore() >= 5 && onlyMeldsPlayed() == true) {
 					tilePane.getChildren().clear();
 					notifyObservers();
 					nextPlayersTurn(who);
@@ -661,10 +783,10 @@ public class RummikubController implements Subject {
 
 		System.out.println("Snapshot:");
 		snapshot.boardToString();
-
+		//removeHighlight();
 		highlightRecent();
 
-		if (drew) {
+		if (!drew) {
 			System.out.println("========================== Taking Snapshot ==========================");
 			removeHighlight();
 			// snapshot = new Board();
